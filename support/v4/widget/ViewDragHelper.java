@@ -296,11 +296,15 @@ public class ViewDragHelper {
          * @param dx Proposed change in position for left
          * @return The new clamped position for left
          */
-	//这个方法就是限制View水平移动的范围，left是当前手指的坐标，dx是当前手指坐标相对于前一次手指坐标的插值
-	//child表示当前拖动的view
-	//比如需要让child在移动的时候，不能移出某个屏幕范围，就可以在这个方法中实现。
-	//因为onTouchEvent方法在处理Action Move的时候，child移动的坐标是经过这个方法处理之后得到的。如果不需要限制，
-	//那么直接返回left即可。
+	   /**
+		* 1.对view实际移动的距离进行转换。默认转换为0,即不论手指怎么移动，left均被转换为0。
+		* 2.left: 当前child的x轴坐标(child.getLeft())+dx。所以这里要特别注意，left不是实际手指从down到当前位置的全部距离。
+		* 3.dx: 当前手指坐标相对于前一次手指坐标的插值
+		//child表示当前拖动的view
+		//比如需要让child在移动的时候，不能移出某个屏幕范围，就可以在这个方法中实现。
+		//因为onTouchEvent方法在处理Action Move的时候，child移动的坐标是经过这个方法处理之后得到的。如果不需要限制，
+		//那么直接返回left即可。
+		*/
         public int clampViewPositionHorizontal(View child, int left, int dx) {
             return 0;
         }
@@ -1172,8 +1176,10 @@ public class ViewDragHelper {
                     if (!isValidPointerForActionMove(mActivePointerId)) break;
 
                     final int index = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
+                    //获取当前事件的x/y坐标
                     final float x = MotionEventCompat.getX(ev, index);
                     final float y = MotionEventCompat.getY(ev, index);
+                    //获取本次事件与前一次事件的坐标偏移量
                     final int idx = (int) (x - mLastMotionX[mActivePointerId]);
                     final int idy = (int) (y - mLastMotionY[mActivePointerId]);
 			//调用了clampViewPositonHorizontal和onViewChanged
