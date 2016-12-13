@@ -27,6 +27,10 @@ public interface TextWatcher extends NoCopySpan {
      * are about to be replaced by new text with length <code>after</code>.
      * It is an error to attempt to make changes to <code>s</code> from
      * this callback.
+     * s：输入下一个字符或者粘贴下一个字符(串)前，当前显示的文本内容
+     * start：输入下一个字符或者粘贴下一个字符(串)前，光标所在的位置
+     * count：将要被替换的文本长度
+     * after：新输入文本的长度
      */
     public void beforeTextChanged(CharSequence s, int start,
                                   int count, int after);
@@ -36,6 +40,10 @@ public interface TextWatcher extends NoCopySpan {
      * have just replaced old text that had length <code>before</code>.
      * It is an error to attempt to make changes to <code>s</code> from
      * this callback.
+     * s：输入下一个字符或者粘贴下一个字符(串)后，当前显示的文本内容。结果就是实时输入的结果
+     * start：输入下一个字符或者粘贴下一个字符(串)前，光标所在的位置
+     * before：被替换的文本的长度
+     * count：新输入文本的长度
      */
     public void onTextChanged(CharSequence s, int start, int before, int count);
 
@@ -52,6 +60,8 @@ public interface TextWatcher extends NoCopySpan {
      * you can use {@link Spannable#setSpan} in {@link #onTextChanged}
      * to mark your place and then look up from here where the span
      * ended up.
+     * s：输入下一个字符或者粘贴下一个字符(串)后，当前显示的文本内容。结果就是实时输入的结果。
+     *   同onTextChanged的s。
      */
     public void afterTextChanged(Editable s);
 }
