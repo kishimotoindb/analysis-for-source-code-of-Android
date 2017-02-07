@@ -31,7 +31,7 @@ import java.util.Arrays;
 
 /**
  * Abstract class to represent identity certificates. It represents a way to
- * verify the binding of a Principal and its public key. Examples are X.509,
+ * verify the binding of a Principal(证书持有者) and its public key. Examples are X.509,
  * PGP, and SDSI.
  */
 public abstract class Certificate implements Serializable {
