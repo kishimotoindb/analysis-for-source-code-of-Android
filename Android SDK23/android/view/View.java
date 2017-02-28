@@ -17633,6 +17633,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * @param t Top position, relative to parent
      * @param r Right position, relative to parent
      * @param b Bottom position, relative to parent
+     * 
+     
+       位置参数:屏幕上的位置坐标
+       layout()方法仅仅是将已经计算好的位置参数保存一下,然后调用onLayout方法而已.
+       layout()方法本身并不计算自身的位置参数,当前view的位置参数是由其父容器的onLayout()方法计算
+       得到的.所以如果是自定义ViewGroup,需要重写onLayout方法为其子元素计算位置参数.
      */
     @SuppressWarnings({"unchecked"})
     public void layout(int l, int t, int r, int b) {
@@ -19816,14 +19822,17 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * {@link #onMeasure(int, int)}, called by this method. Therefore, only
      * {@link #onMeasure(int, int)} can and must be overridden by subclasses.
      * </p>
-     *
-     *
+     * 
+     * 
+     *	
      * @param widthMeasureSpec Horizontal space requirements as imposed by the
      *        parent
      * @param heightMeasureSpec Vertical space requirements as imposed by the
      *        parent
      *
      * @see #onMeasure(int, int)
+     * 
+     *
      */
     public final void measure(int widthMeasureSpec, int heightMeasureSpec) {
         boolean optical = isLayoutModeOptical(this);
@@ -19920,7 +19929,13 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * and width ({@link #getSuggestedMinimumHeight()} and
      * {@link #getSuggestedMinimumWidth()}).
      * </p>
-     *
+     * 
+     * 这里的两个MeasureSpec,由Measure(int widthMeasureSpec, int heightMeasureSpec)方法传入,
+     * measure方法的两个MeasureSpec是根据当前view自己的布局参数要求的宽高和当前view所在的容器的
+       剩余的空间最终确定的,能够给予当前view的宽高(空间大小).传到onMeasure方法的时候,MeasureSpec
+       已经经过了一些微调,根据当前view自身的装饰等.
+     * RelativeLayout比LinearLayout损耗性能的原因,估计是因为计算这里的MeasureSpec的时候,更
+     * 难算,即更不容易确定更够提供给当前view的宽高.
      * @param widthMeasureSpec horizontal space requirements as imposed by the parent.
      *                         The requirements are encoded with
      *                         {@link android.view.View.MeasureSpec}.
@@ -19954,11 +19969,9 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * {@link #MEASURED_STATE_TOO_SMALL}.
      */
 	最终确定控件的测量宽高，这时候已经不使用MeasureSpec了，只要size.
-	父容器在获取子元素的measuredWidth时，使用的是父容器不带装饰的边界，所以下面当父容器有修饰时，要相应的减小子元
-	素的可用大小规格，因为父容器需要向里占用一定的位置
+	父容器在获取子元素的measuredWidth时，使用的是父容器不带装饰的边界，所以下面当父容器有修饰时，要相应的减小子元素的可用大小规格，因为父容器需要向里占用一定的位置
     protected final void setMeasuredDimension(int measuredWidth, int measuredHeight) {
-	判断当前View是否是ViewGroup，一般来说也就是判断是不是布局，ListView等也可以算作布局的一种这个Optical Bounds指
-	的是没有修饰的部分，控件本体的位置
+	判断当前View是否是ViewGroup，一般来说也就是判断是不是布局，ListView等也可以算作布局的一种这个Optical Bounds指的是没有修饰的部分，控件本体的位置
         boolean optical = isLayoutModeOptical(this);	//LAYOUT_MODE_OPTICAL_BOUNDS=1
 
 	// This constant is a {@link #setLayoutMode(int) layoutMode}.

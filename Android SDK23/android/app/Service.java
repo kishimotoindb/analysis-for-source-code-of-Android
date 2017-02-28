@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 The Android Open Source Project
+ * copyright (C) 2006 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -347,6 +347,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * service instance; if there are not any pending start commands to be
      * delivered to the service, it will be called with a null intent
      * object, so you must take care to check for this.
+       
      * 
      * <p>This mode makes sense for things that will be explicitly started
      * and stopped to run for arbitrary periods of time, such as a service
@@ -364,6 +365,8 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * service will not receive a {@link #onStartCommand(Intent, int, int)}
      * call with a null Intent because it will not be re-started if there
      * are no pending Intents to deliver.
+       因为这种模式不会自动重新启动,所以不会出现onStartCommand方法的intent参数
+       为null的情况出现.
      * 
      * <p>This mode makes sense for things that want to do some work as a
      * result of being started, but can be stopped when under memory pressure
