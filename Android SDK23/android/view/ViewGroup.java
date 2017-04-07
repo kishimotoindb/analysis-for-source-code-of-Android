@@ -6306,8 +6306,8 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         for (int i = 0; i < size; ++i) {
             final View child = children[i];
             if ((child.mViewFlags & VISIBILITY_MASK) != GONE) {
-		//这里传的是viewGroup的宽高，因为当前方法是遍历所有的子view，这里不应该计算child的measureSpec。而且还有
-		//一点，父亲的MeasureSpec对测量child的MeasureSpec是需要参考的，所以这里传的是viewGroup的MeasureSpec。
+				//这里传的是viewGroup的宽高，因为当前方法是遍历所有的子view，这里不应该计算child的measureSpec。而且还有
+				//一点，父亲的MeasureSpec对测量child的MeasureSpec是需要参考的，所以这里传的是viewGroup的MeasureSpec。
                 measureChild(child, widthMeasureSpec, heightMeasureSpec);
             }
         }
@@ -6327,11 +6327,11 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
 	//margin参数。
     protected void measureChild(View child, int parentWidthMeasureSpec,
             int parentHeightMeasureSpec) {
-	//创建ChildMeasureSpec的时候，需要child的布局参数，所以传给子view的，即view调用measure()->onMeasure()方法时，使用的
-	//MeasureSpec就是根据父容器限制、view自身布局参数、ViewGroup的padding参数，在ViewGroup中创建的。
+		//创建ChildMeasureSpec的时候，需要child的布局参数，所以传给子view的，即view调用measure()->onMeasure()方法时，使用的
+		//MeasureSpec就是根据父容器限制、view自身布局参数、ViewGroup的padding参数，在ViewGroup中创建的。
         final LayoutParams lp = child.getLayoutParams();
 
-	//lp.width就是子view的layout_width参数
+		//lp.width就是子view的layout_width参数
         final int childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,
                 mPaddingLeft + mPaddingRight, lp.width);
         final int childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,
@@ -6369,7 +6369,33 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
     }
 
-    /**
+    /** 
+     * ViewGroup在测量其子View的时候，传给子View的measureSpec是根据三个量确定的
+     * 1.group自己的measureSpec
+     * 2.group的padding参数
+     * 3.子view的layout_height or layout_width
+     * 也就是说，子View的measureSpec中的size和mode不完全取决于自己的layout_height or layout_width。
+     * 这里需要注意一点，即第一个参数(group自己的measureSpec)也不是view group自己能够确定的，并不是根据group自己的layout-params
+     * 确定的。group的spec一样需要考虑其父容器对其的影响。那么最顶层的view group调用getChildMeasureSpec方法的时候，传入的spec
+     * 是从哪里获取的？
+     * 答案就在RootViewImpl类的performTravesal()方法中：
+     * 该方法中调用了getRootMeasureSpec方法,这个方法的参数均为绝对值，不像getChildMeasureSpec方法中使用了相对值，方法说明如下:
+     * <p>
+     * 	Figures out the measure spec for the root view in a window based on it's layout params.
+     * 	一个window有一个root view。正常视图结构是DecorView，popup window这种就应该是popup对话框。
+     * 	@param windowSize
+     *            The available width or height of the window
+     *
+     * 	@param rootDimension
+     *            The layout params for one dimension (width or height) of the
+     *            window.
+     *
+     * 	@return The measure spec to use to measure the root view.
+     *
+     * 	private static int getRootMeasureSpec(int windowSize, int rootDimension) {
+     * <p>
+	 *
+     * 下面的dimension均指高或者宽。比如 in the current dimension，在当前的维度（高度或者宽度）
      * Does the hard part of measureChildren: figuring out the MeasureSpec to
      * pass to a particular child. This method figures out the right MeasureSpec
      * for one dimension (height or width) of one child view.
@@ -6382,36 +6408,35 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
      * layout given an exact size.
      *
      * @param spec The requirements for this view 
-	      这个参数就是measureChild方法传过来的父容器自己的MeasureSpec
+	          这个参数就是measureChild方法传过来的父容器自己的MeasureSpec
      * @param padding The padding of this view for the current dimension and
      *        margins, if applicable
-	      //viewGroup的padding参数
+	          viewGroup的padding参数
      * @param childDimension How big the child wants to be in the current
      *        dimension
-		//这里的childDimension只是child view布局参数中的layout_width或layout_height，虽然上面注解说的child wants to
-		//be，但是这里的期望宽高只是根据布局参数得到的，只是mode，并没有size，跟view的onMeasure()方法中第一步得到的
-		//期望宽高不是一回事。只是child dimension。
+	     	  这里的childDimension对应于child view布局参数中的layout_width或layout_height，用于计算ChildMeasureSpec的mode。
      * @return a MeasureSpec integer for the child
+     *
      */
     public static int getChildMeasureSpec(int spec, int padding, int childDimension) {
-	//拿到当前ViewGroup的宽高和布局参数（这里的mode是view group自己的）
+		//拿到当前ViewGroup的宽高和布局参数（这里的mode是view group自己的）
         int specMode = MeasureSpec.getMode(spec);
         int specSize = MeasureSpec.getSize(spec);
-	//到这里父容器的宽高可能还没有确定下来，所以有可能为0
-	//什么情况下宽高可能定不下来？如果ViewGroup的布局参数使用的是
+		//到这里父容器的宽高可能还没有确定下来，所以size有可能为0.什么情况下会是0？
+		//当specsize=0时，specSize - padding<0
         int size = Math.max(0, specSize - padding);
 
         int resultSize = 0;
         int resultMode = 0;
 
-	//这里的specMode是当前ViewGroup的
+		//这里的specMode是当前ViewGroup的
         switch (specMode) {
         // Parent has imposed an exact size on us
-	//其实这里如果父容器的layout参数是精确的，那它的大小size就不可能是0。
-        case MeasureSpec.EXACTLY:
+		//其实这里如果父容器的layout参数是精确的，那它的大小size就不可能是0。
+        case MeasureSpec.EXACTLY: //viewGroup's layout_height or layout_width is "match_parent" or "exact_number(50dp)"
             if (childDimension >= 0) {
-		//如果父容器是精确的，孩子还是精确的，对孩子的宽高就没有限制。
-		//这里不需要判断一下父容器和孩子谁比较大么？即使都是精确值，孩子如果dp值被设置的很大，很有可能比父容器大。
+				//如果父容器是精确的，孩子还是精确的，对孩子的宽高就没有限制。
+				//这里不需要判断一下父容器和孩子谁比较大么？即使都是精确值，孩子如果dp值被设置的很大，很有可能比父容器大。
                 resultSize = childDimension;
                 resultMode = MeasureSpec.EXACTLY;
             } else if (childDimension == LayoutParams.MATCH_PARENT) {
@@ -6446,7 +6471,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
             break;
 
         // Parent asked to see how big we want to be
-?//什么情况下会出现UNSPECIFIED的情况
+        //UNSPECIFIED=0<<30;所以如果调用measure(0,0)，就是针对上面这句注释：Parent asked to see how big we want to be
         case MeasureSpec.UNSPECIFIED:
             if (childDimension >= 0) {
                 // Child wants a specific size... let him have it

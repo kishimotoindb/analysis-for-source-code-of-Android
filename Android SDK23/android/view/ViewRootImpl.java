@@ -1724,6 +1724,7 @@ public final class ViewRootImpl implements ViewParent,
 					//定的是getRootMeasureSpec()这个方法并没有处理，所以lp.width在来到这里之前就被处理过了。按照
 					//这个逻辑，所有获取measureSpec的方法都直接使用的lp.width，所以lp.width一定是在某个位置已
 					//经被处理好了。
+					//这里获取的MeasureSpec是根布局的
                     int childWidthMeasureSpec = getRootMeasureSpec(mWidth, lp.width); 
                     int childHeightMeasureSpec = getRootMeasureSpec(mHeight, lp.height); 
     
