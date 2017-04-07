@@ -8455,6 +8455,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             refreshDrawableState();
         }
 		//如果是ViewGroup，子View在满足条件的情况下，保持与viewgroup的pressed同步
+		//duplicateParentState
         dispatchSetPressed(pressed);
     }
 
@@ -11109,7 +11110,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 	 * 2.自定义控件的时候应该重写的是onTouchEvent()方法，将onTouch()方法留给控件的使用者，如果使用者需要执行一些与
 	 *   touchEvent有关的操作时，就可以通过设置onTouchListener的方式进行
      ×
-	 * 1.只要控件是Clickable的，那么一定会处理时间
+	 * 1.只要控件是Clickable的，那么一定会处理事件
      * 2.disable view:
      × 	1）并不会真的处理事件，只不过根据三个Clickable属性返回一个布尔值。
      ×  2）如果Clickable，返回true；反之，返回false
@@ -11125,9 +11126,13 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         final int action = event.getAction();
 
 //1.**************************************处理View为Disable的情况：开始****************************************************
-		//如果一个控件disable，虽然CLICKABLE、LONG_CLICKABLE、CONTEXT_CLICKABLE设置为true的时候，onTouchEvent方法会返回true，
-		//系统反映出来的好像事件被处理了，但是实际上只不过是return true而已，并没有对事件进行任何处理。即使重写了onclick方法，
-		//也不会被执行。说白了，就是如果一个控件disable，onTouchEvent方法中就是不会真正的处理事件。
+		/*
+		 * 1.如果一个控件disable，虽然CLICKABLE、LONG_CLICKABLE、CONTEXT_CLICKABLE设置为true的时候，onTouchEvent方法会返回true，
+		 * 系统反映出来的好像事件被处理了，但是实际上只不过是return true而已，并没有对事件进行任何处理。即使重写了onclick方法，
+		 * 也不会被执行。说白了，就是如果一个控件disable，onTouchEvent方法中就不会真正的处理事件，但可能返回true。
+		 * 
+		 * 2.able的情况下，触摸事件完成之前，onTouchEvent返回的一直是true。
+		 */
         if ((viewFlags & ENABLED_MASK) == DISABLED) {
             if (action == MotionEvent.ACTION_UP && (mPrivateFlags & PFLAG_PRESSED) != 0) {
                 setPressed(false);
@@ -11141,8 +11146,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 //1.**************************************处理View为Disable的情况：结束****************************************************
 
 //2.**************************************代理处理onTouchEvent：开始****************************************************
-		// 当前view的边界外侧有一圈新的边界，这个边界比view的边界要大。这时如果希望用户点击外边这圈边界，view也需要相应事件，就
-		// 需要代理。mTouchDelegate能够处理这种情况。所以这里对事件分发的基本流程并没有什么影响。
+		/* 当前view的边界外侧有一圈新的边界，这个边界比view的边界要大。这时如果希望用户点击外边这圈边界，view也需要响应事件，就
+		 * 需要代理。mTouchDelegate能够处理这种情况。所以这里对事件分发的基本流程并没有什么影响。
+		 * 代理事件处理的返回值可以不全是true。
+		 */
         if (mTouchDelegate != null) {
             if (mTouchDelegate.onTouchEvent(event)) {
                 return true;
@@ -17642,8 +17649,8 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      */
     @SuppressWarnings({"unchecked"})
     public void layout(int l, int t, int r, int b) {
+    	//什么情况下会出现layout之前需要重新测量的情况
         if ((mPrivateFlags3 & PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT) != 0) {
-	//这调用onMeasure的目的？
             onMeasure(mOldWidthMeasureSpec, mOldHeightMeasureSpec);
             mPrivateFlags3 &= ~PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT;
         }
@@ -17653,6 +17660,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         int oldB = mBottom;
         int oldR = mRight;
 
+       /*
+        * This constant is a {@link #setLayoutMode(int) layoutMode}.
+	    * Optical bounds describe where a widget appears to be. They sit inside the clip
+	    * bounds which need to cover a larger area to allow other effects,
+	    * such as shadows and glows, to be drawn.
+	    */
         boolean changed = isLayoutModeOptical(mParent) ?
                 setOpticalFrame(l, t, r, b) : setFrame(l, t, r, b);
 
@@ -19788,6 +19801,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             mAttachInfo.mViewRequestingLayout = this;
         }
 
+		//设置需要layout的标志，然后将自己的状态设置为无效。
         mPrivateFlags |= PFLAG_FORCE_LAYOUT;
         mPrivateFlags |= PFLAG_INVALIDATED;
 
