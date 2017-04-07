@@ -6298,7 +6298,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
      * @param widthMeasureSpec The width requirements for this view
      * @param heightMeasureSpec The height requirements for this view
      */
-	//这个方法已经是最顶层的方法了，估计是被系统进行调用的。
+	//这个方法应该是用来测量viewGroup中所有子View的理想大小，不考虑其他子View已占用的空间，均使用ViewGroup的完成大小。
 	//但从DecorView开始迭代调用的不是这个方法，而是measureChildWithMargins()，然后一层层的迭代
     protected void measureChildren(int widthMeasureSpec, int heightMeasureSpec) {
         final int size = mChildrenCount;
@@ -6394,6 +6394,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
      *
      * 	private static int getRootMeasureSpec(int windowSize, int rootDimension) {
      * <p>
+     * 默认Activity中的window，windowSize就是窗口大小，rootDimension就是Exact
 	 *
      * 下面的dimension均指高或者宽。比如 in the current dimension，在当前的维度（高度或者宽度）
      * Does the hard part of measureChildren: figuring out the MeasureSpec to
@@ -6420,6 +6421,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
      */
     public static int getChildMeasureSpec(int spec, int padding, int childDimension) {
 		//拿到当前ViewGroup的宽高和布局参数（这里的mode是view group自己的）
+		//测量rootView的时候，这个spec的参数：size=窗口大小; mode=MeasureSpec.EXACTLY
         int specMode = MeasureSpec.getMode(spec);
         int specSize = MeasureSpec.getSize(spec);
 		//到这里父容器的宽高可能还没有确定下来，所以size有可能为0.什么情况下会是0？
