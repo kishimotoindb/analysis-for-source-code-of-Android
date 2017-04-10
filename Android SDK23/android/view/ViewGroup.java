@@ -6348,11 +6348,21 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
      *
      * @param child The child to measure
      * @param parentWidthMeasureSpec The width requirements for this view
+              这个参数应该就是ViewGroup自己的MeasureSpec，其他子View已经使用的空间由widthUsed和heightUsed
+              参数控制。
      * @param widthUsed Extra space that has been used up by the parent
      *        horizontally (possibly by other children of the parent)
      * @param parentHeightMeasureSpec The height requirements for this view
      * @param heightUsed Extra space that has been used up by the parent
      *        vertically (possibly by other children of the parent)
+     */
+     
+    /*
+     * 自定义ViewGroup的onMeasure方法中，应该调用这个方法对子View进行测量。ViewGroup的onMeasure方法
+     * 主要是计算widthUsed和heightUsed两个参数。参数中的两个MeasureSpec是ViewGroup的measure方法传递
+     * 给Viewgroup的onMeasure方法的MeasureSpec，所以在测量子View的过程中，Viewgroup的onMeasure方法
+     * 中,不需要对这两个MeasureSpec进行任何处理。
+     *
      */
     protected void measureChildWithMargins(View child,
             int parentWidthMeasureSpec, int widthUsed,
@@ -6370,10 +6380,21 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
     }
 
     /** 
-     * ViewGroup在测量其子View的时候，传给子View的measureSpec是根据三个量确定的
+     * 
+      根据父容器的spec得到的child的spec，实际上并不是child的大小，这个childSpec只是告诉child，目前屏幕
+      上剩余的显示空间范围为childSpec所圈定的范围，child可以根据这个范围确定自己的大小。child实际上以
+      比这个范围大，也可以比这个范围小，其最终的大小是由child自身的onMeasure方法确定。只不过如果child
+      的大小超出了childSpec限制的范围，屏幕上是无法显示的，无法显示也就没有意义。
+      所以measure流程中所有使用的MeasureSpec，本质上表示的就是当前屏幕剩余的，能够提供给当前View的可用
+      于显示的区域。
+     
+       ViewGroup在测量其子View的时候，传给子View的measureSpec是根据五个量确定的
      * 1.group自己的measureSpec
      * 2.group的padding参数
-     * 3.子view的layout_height or layout_width
+     × 3.子View的margin参数
+     × 4.group的空间，已经被使用的空间大小（widthUsed and heightUsed）
+     * 5.子view的layout_height or layout_width
+     * 其中2～4最终是以padding的形式给到当前方法
      * 也就是说，子View的measureSpec中的size和mode不完全取决于自己的layout_height or layout_width。
      * 这里需要注意一点，即第一个参数(group自己的measureSpec)也不是view group自己能够确定的，并不是根据group自己的layout-params
      * 确定的。group的spec一样需要考虑其父容器对其的影响。那么最顶层的view group调用getChildMeasureSpec方法的时候，传入的spec

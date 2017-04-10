@@ -17691,6 +17691,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     /**
      * Called from layout when this view should
      * assign a size and position to each of its children.
+       onLayout的时候，
      *
      * Derived classes with children should override
      * this method and call layout on each of
@@ -22248,6 +22249,17 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     };
 
     /**
+     * MeasureSpec是一个静态类，等价于一个工具类，实际使用时并不是使用MeasureSpec的对象，而是该
+       类根据自己的规则生成的一个int值。从这个int值可以解析出size和mode.
+       
+       MeasureSpec存储的就是当前View可以使用的空间(屏幕上还未被分配，仍可显示内容的空间)。这个空间由
+       两个参数表示，一个表示最大可用空间大小的参数(size)，这个size只是一个表示空间大小的上限值；另一
+       个表示空间的使用方式，Exact，表示全部使用；AT—MOST表示最多使用这么多。
+      
+       所以在调用View的Measure方法，但尚未执行方法前，该View的大小可能已经确定了。如果传递给Measure
+       方法的MeasureSpec的mode是Exact，那么该View的大小就已经确定了。只有在这个MeasureSpec的mode是
+       AT—MOST的时候，才需要在onMeasure方法中对View的大小进行计算。
+       
      * A MeasureSpec encapsulates the layout requirements passed from parent to child.
      * Each MeasureSpec represents a requirement for either the width or the height.
      * A MeasureSpec is comprised of a size and a mode. There are three possible
