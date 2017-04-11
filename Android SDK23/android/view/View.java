@@ -11118,6 +11118,11 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      × 	1）可能真的处理事件
      × 	2）如果unClickable，返回false
      ×	3）如果Clickable，真的进行事件处理（前提是onClickListener真的存在）
+     *
+     * MotionEvent的发送频率：
+     * 经测试，差不多0～4ms传递过来一个MotionEvent。屏幕绘制是16.7ms一次，
+     * 也就是说如果每次事件都requesLayout，中间会出现很多次无效的。
+     *
      */
     public boolean onTouchEvent(MotionEvent event) {
         final float x = event.getX();
