@@ -3711,6 +3711,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         final View[] children = mChildren;
         int flags = mGroupFlags;
 
+        //动画相关
         if ((flags & FLAG_RUN_ANIMATION) != 0 && canAnimate()) {
             final boolean buildCache = !isHardwareAccelerated();
             for (int i = 0; i < childrenCount; i++) {
@@ -3762,6 +3763,8 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
                 ? null : buildOrderedChildList();
         final boolean customOrder = preorderedList == null
                 && isChildrenDrawingOrderEnabled();
+
+        //画他家的娃儿
         for (int i = 0; i < childrenCount; i++) {
             while (transientIndex >= 0 && mTransientIndices.get(transientIndex) == i) {
                 final View transientChild = mTransientViews.get(transientIndex);
@@ -6445,8 +6448,9 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
 		//测量rootView的时候，这个spec的参数：size=窗口大小; mode=MeasureSpec.EXACTLY
         int specMode = MeasureSpec.getMode(spec);
         int specSize = MeasureSpec.getSize(spec);
-		//到这里父容器的宽高可能还没有确定下来，所以size有可能为0.什么情况下会是0？
-		//当specsize=0时，specSize - padding<0
+
+		// padding是ViewGroup分配空间给排在当前View前面的子View后，已经使用的空间，specSize是父
+        // 容器的总空间，如果已用空间大于了父容器的可用空间，那么当前View的空间就应该是0.
         int size = Math.max(0, specSize - padding);
 
         int resultSize = 0;

@@ -17205,6 +17205,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         boolean verticalEdges = (viewFlags & FADING_EDGE_VERTICAL) != 0;
         if (!verticalEdges && !horizontalEdges) {
             // Step 3, draw the content
+            // 绘制自己（View 或 ViewGroup自身），dispatchDraw是画当前容器的娃儿
             if (!dirtyOpaque) onDraw(canvas);
 
             // Step 4, draw the children
@@ -17636,6 +17637,11 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * onLayout. In that method, they should
      * call layout on each of their children.</p>
      *
+     * (注意，下面的四个坐标相对于当前View的父容器，不是相对于屏幕左上角)
+     * 当前View的父容器传到这里的四个坐标，是当前View相对于其父容器的相
+     * 对位置坐标。如果当前View是ViewGroup的话，需要在onLayout方法中
+     * 计算其所有子View的位置坐标，但这个坐标是相对于自己的，而不是自己的
+     * 父容器。这点需要注意。
      * @param l Left position, relative to parent
      * @param t Top position, relative to parent
      * @param r Right position, relative to parent
