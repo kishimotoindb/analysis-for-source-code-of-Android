@@ -1155,6 +1155,7 @@ public class RecyclerView extends ViewGroup {
      * Similar to {@link #stopScroll()} but does not set the state.
      */
     private void stopScrollersInternal() {
+        //mViewFlinger的类型是ViewFlinger,ViewFlinger extends Runnable
         mViewFlinger.stop();
         mLayout.stopSmoothScroller();
     }
@@ -1186,6 +1187,7 @@ public class RecyclerView extends ViewGroup {
 
     private void releaseGlows() {
         boolean needsInvalidate = false;
+        //m*Glow的类型是EdgeEffectCompat
         if (mLeftGlow != null) needsInvalidate = mLeftGlow.onRelease();
         if (mTopGlow != null) needsInvalidate |= mTopGlow.onRelease();
         if (mRightGlow != null) needsInvalidate |= mRightGlow.onRelease();
@@ -1496,6 +1498,9 @@ public class RecyclerView extends ViewGroup {
                 mInitialTouchX = mLastTouchX = (int) (e.getX() + 0.5f);
                 mInitialTouchY = mLastTouchY = (int) (e.getY() + 0.5f);
 
+                // 如果列表在自动滚动，再次触摸屏幕时，不判断是条目点击事件还是滑动事件，默认为滑动事件。
+                // 所以实际操作手机的时候，这种情况下要么就是停止滑动，要么就是接着滑动，点击条目需要在
+                // 列表静止时才生效。
                 if (mScrollState == SCROLL_STATE_SETTLING) {
                     getParent().requestDisallowInterceptTouchEvent(true);
                     setScrollState(SCROLL_STATE_DRAGGING);

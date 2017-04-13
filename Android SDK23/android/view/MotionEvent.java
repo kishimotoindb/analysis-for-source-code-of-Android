@@ -178,12 +178,18 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * Use {@link #getButtonState} to retrieve the button state.
      * </p>
      */
+    /*
+     * 多个手指同时触摸屏幕，第一个手指碰到屏幕时，是ACTION_DOWN；之后的几个手指碰到屏幕时，是ACTION_POINTER_DOWN
+     */
     public static final int ACTION_DOWN             = 0;
     
     /**
      * Constant for {@link #getActionMasked}: A pressed gesture has finished, the
      * motion contains the final release location as well as any intermediate
      * points since the last down or move event.
+     */
+    /*
+     * 多个手指同时触摸屏幕后，当抬起手指时，最后一个手指离开屏幕时，是ACTION-UP；之前的手指离开屏幕，是ACTION_POINTER_UP
      */
     public static final int ACTION_UP               = 1;
     
@@ -210,13 +216,16 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public static final int ACTION_OUTSIDE          = 4;
 
     /**
-     * Constant for {@link #getActionMasked}: A non-primary pointer has gone down.
+     * Constant for {@link #getActionMasked}: A non-primary() pointer has gone down.
      * <p>
      * Use {@link #getActionIndex} to retrieve the index of the pointer that changed.
      * </p><p>
      * The index is encoded in the {@link #ACTION_POINTER_INDEX_MASK} bits of the
      * unmasked action returned by {@link #getAction}.
      * </p>
+     */
+    /*
+     * 多个手指同时触摸屏幕，第一个手指碰到屏幕时，是ACTION_DOWN；之后的几个手指碰到屏幕时，是ACTION_POINTER_DOWN
      */
     public static final int ACTION_POINTER_DOWN     = 5;
     
@@ -228,6 +237,9 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * The index is encoded in the {@link #ACTION_POINTER_INDEX_MASK} bits of the
      * unmasked action returned by {@link #getAction}.
      * </p>
+     */
+    /*
+     * 多个手指同时触摸屏幕后，当抬起手指时，最后一个手指离开屏幕时，是ACTION-UP；之前的手指离开屏幕，是ACTION_POINTER_UP
      */
     public static final int ACTION_POINTER_UP       = 6;
 
