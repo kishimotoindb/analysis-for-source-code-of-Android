@@ -12926,6 +12926,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     }
 
     /**
+     *
      * Sets the vertical location of this view relative to its {@link #getTop() top} position.
      * This effectively positions the object post-layout, in addition to wherever the object's
      * layout placed it.
@@ -13772,6 +13773,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     }
 
     /**
+     * 按照这里的说法，这个方法适合处理个别属性改变的情况。这个方法并不能处理所有invalidate()方法能够处理的情况。
      * Quick invalidation for View property changes (alpha, translationXY, etc.). We don't want to
      * set any flags or handle all of the cases handled by the default invalidation methods.
      * Instead, we just want to schedule a traversal in ViewRootImpl with the appropriate
