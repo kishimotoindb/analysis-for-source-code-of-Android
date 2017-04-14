@@ -640,6 +640,11 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
         }
 
         final T adapter = getAdapter();
+        /*
+         * adapter.isEmpty()根据getCount()==0判断。但是因为getCount()方法包含headers和footers，所以如果需要，
+         * 这个方法自行定义。
+         * 当ListView没有设置adapter，或者数据数量为0的情况下，均会展示emptyView
+         */
         final boolean empty = ((adapter == null) || adapter.isEmpty());
         updateEmptyStatus(empty);
     }
@@ -661,6 +666,7 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
      *
      * @return True if the view is in filter mode, false otherwise.
      */
+    //通过重写这个方法，可以在需要的时候，即使adapter的数据为空，也不展示emptyView
     boolean isInFilterMode() {
         return false;
     }
@@ -711,6 +717,7 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
      * is VISIBLE and that the empty view is GONE (if it's not null).
      */
     private void updateEmptyStatus(boolean empty) {
+        //isInFilterMode()直接返回false，如果需要返回其他值，那么需要子类重写isInFilterMode()方法。
         if (isInFilterMode()) {
             empty = false;
         }

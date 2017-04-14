@@ -1507,6 +1507,8 @@ public class RecyclerView extends ViewGroup {
                 }
                 break;
 
+            //两个手指先后在屏幕上滑动，但都没有离开屏幕。先碰到屏幕的手指滑动时，列表滚动。当后一个手指触摸屏幕时，
+            //前一个手指失效，列表跟随后一个手指滚动。所以这里更新了mInitialTouchX和mInitialTouchY
             case MotionEventCompat.ACTION_POINTER_DOWN:
                 mScrollPointerId = MotionEventCompat.getPointerId(e, actionIndex);
                 mInitialTouchX = mLastTouchX = (int) (MotionEventCompat.getX(e, actionIndex) + 0.5f);
