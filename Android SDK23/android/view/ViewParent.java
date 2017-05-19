@@ -7,7 +7,7 @@ import android.view.accessibility.AccessibilityEvent;
 /**
  * Defines the responsibilities for a class that will be a parent of a View.
  * This is the API that a view sees when it wants to interact with its parent.
- * 
+ * ViewGroup extends ViewParent
  */
 public interface ViewParent {
     /**

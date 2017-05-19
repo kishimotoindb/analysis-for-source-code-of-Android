@@ -569,7 +569,7 @@ public class Canvas {
     /**
      * Preconcat the current matrix with the specified translation
      *
-     * @param dx The distance to translate in X
+     * @param dx The distance to translate(平移) in X
      * @param dy The distance to translate in Y
     */
     public void translate(float dx, float dy) {

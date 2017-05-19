@@ -1907,6 +1907,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         if (dr == null || dr.mShowing[Drawables.LEFT] == null) {
             return mPaddingLeft;
         } else {
+            //padding和drawablePadding是累加的
+            //drawablePadding只是文字和图片之间的距离。图片距离TextView边框的距离，有正常的
+            //padding属性决定。
             return mPaddingLeft + dr.mDrawablePadding + dr.mDrawableSizeLeft;
         }
     }
@@ -5552,28 +5555,39 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         // Draw the background for this view
         super.onDraw(canvas);
 
+        //compoundPadding考虑了drawable的size，与mPadding不同。
+        //如果没有照片，就是mPadding
         final int compoundPaddingLeft = getCompoundPaddingLeft();
         final int compoundPaddingTop = getCompoundPaddingTop();
         final int compoundPaddingRight = getCompoundPaddingRight();
         final int compoundPaddingBottom = getCompoundPaddingBottom();
+
         final int scrollX = mScrollX;
         final int scrollY = mScrollY;
+
+        //The distance in pixels from the left edge of this view's parent
+        //to the right edge of this view.
+        //说明l,t,r,b都是相对于view's parent.
         final int right = mRight;
         final int left = mLeft;
         final int bottom = mBottom;
         final int top = mTop;
+
+        //是否是从右至左
         final boolean isLayoutRtl = isLayoutRtl();
+        //getHorizontalOffsetForDrawables默认返回“0”，也就是说leftOffset和rightOffset为“0”
         final int offset = getHorizontalOffsetForDrawables();
         final int leftOffset = isLayoutRtl ? 0 : offset;
         final int rightOffset = isLayoutRtl ? offset : 0 ;
 
         final Drawables dr = mDrawables;
+        //从这可以看出TextView可以四个方向同时存在drawable
         if (dr != null) {
             /*
              * Compound, not extended, because the icon is not clipped
              * if the text height is smaller.
              */
-
+            //去除drawable之后，可以绘制文字的尺寸
             int vspace = bottom - top - compoundPaddingBottom - compoundPaddingTop;
             int hspace = right - left - compoundPaddingRight - compoundPaddingLeft;
 
@@ -5584,6 +5598,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                 canvas.translate(scrollX + mPaddingLeft + leftOffset,
                                  scrollY + compoundPaddingTop +
                                  (vspace - dr.mDrawableHeightLeft) / 2);
+                //将drawable绘制到画布上
                 dr.mShowing[Drawables.LEFT].draw(canvas);
                 canvas.restore();
             }

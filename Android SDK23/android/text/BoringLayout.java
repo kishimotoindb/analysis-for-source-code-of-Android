@@ -26,10 +26,12 @@ import android.text.style.ParagraphStyle;
  * fits on a single line and is all left-to-right characters.
  * You will probably never want to make one of these yourself;
  * if you do, be sure to call {@link #isBoring} first to make sure
- * the text meets the criteria.
+ * the text meets the criteria(criterion单数).
  * <p>This class is used by widgets to control text layout. You should not need
  * to use this class directly unless you are implementing your own widget
  * or custom display object, in which case
+ *
+ * 照这里的说法，绘制文字的时候应该使用layout，而不是canvas.drawText()
  * you are encouraged to use a Layout instead of calling
  * {@link android.graphics.Canvas#drawText(java.lang.CharSequence, int, int, float, float, android.graphics.Paint)
  *  Canvas.drawText()} directly.</p>
