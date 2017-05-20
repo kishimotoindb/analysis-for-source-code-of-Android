@@ -6582,7 +6582,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         mOldMaximum = mMaximum;
         mOldMaxMode = mMaxMode;
 
-        mHighlightPathBogus = true;
+        mHighlightPathBogus = true; //bogus伪造的
 
         if (wantWidth < 0) {
             wantWidth = 0;
@@ -6591,7 +6591,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             hintWidth = 0;
         }
 
+        //TextView的gravity属性，只对文字有效，对drawable无效。
         Layout.Alignment alignment = getLayoutAlignment();
+        //mSingleLine对应singleLine的属性
         final boolean testDirChange = mSingleLine && mLayout != null &&
             (alignment == Layout.Alignment.ALIGN_NORMAL ||
              alignment == Layout.Alignment.ALIGN_OPPOSITE);
@@ -6607,7 +6609,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         }
 
         if (mTextDir == null) {
-            mTextDir = getTextDirectionHeuristic();
+            mTextDir = getTextDirectionHeuristic(); //heuristic启发式的
         }
 
         mLayout = makeSingleLayout(wantWidth, boring, ellipsisWidth, alignment, shouldEllipsize,

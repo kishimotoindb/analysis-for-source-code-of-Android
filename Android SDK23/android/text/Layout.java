@@ -407,8 +407,10 @@ public abstract class Layout {
             Directions directions = getLineDirections(lineNum);
             if (directions == DIRS_ALL_LEFT_TO_RIGHT && !mSpannedText && !hasTabOrEmoji) {
                 // XXX: assumes there's nothing additional to be done
+                //不是spanendText，就直接用canvas绘制文字
                 canvas.drawText(buf, start, end, x, lbaseline, paint);
             } else {
+                //tl是TextLine的实例，实现spannedText的绘制。
                 tl.set(paint, buf, start, end, dir, directions, hasTabOrEmoji, tabStops);
                 tl.draw(canvas, x, ltop, lbaseline, lbottom);
             }
@@ -706,6 +708,7 @@ public abstract class Layout {
      * specified line, either 1 for left-to-right lines, or -1 for right-to-left
      * lines (see {@link #DIR_LEFT_TO_RIGHT}, {@link #DIR_RIGHT_TO_LEFT}).
      */
+    //应该可以通过重写这个方法，实现每行的文字方向不一致。
     public abstract int getParagraphDirection(int line);
 
     /**
