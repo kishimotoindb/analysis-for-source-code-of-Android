@@ -31,6 +31,8 @@ import android.util.Log;
 import com.android.internal.util.ArrayUtils;
 
 /**
+ *
+ *
  * Represents a line of styled text, for measuring in visual order and
  * for rendering.
  *

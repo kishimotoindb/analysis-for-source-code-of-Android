@@ -142,6 +142,7 @@ public abstract class Layout {
                 next = end;
 
             // note, omits trailing paragraph char
+            //计算每一行的宽度，取最大值，从而确定整个layout的宽度。
             float w = measurePara(paint, source, i, next);
 
             if (w > need)

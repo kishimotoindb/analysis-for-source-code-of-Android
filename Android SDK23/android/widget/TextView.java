@@ -5577,8 +5577,8 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         final boolean isLayoutRtl = isLayoutRtl();
         //getHorizontalOffsetForDrawables默认返回“0”，也就是说leftOffset和rightOffset为“0”
         final int offset = getHorizontalOffsetForDrawables();
-        final int leftOffset = isLayoutRtl ? 0 : offset;
-        final int rightOffset = isLayoutRtl ? offset : 0 ;
+        final int leftOffset = isLayoutRtl ? 0 : offset; //leftOffset=0
+        final int rightOffset = isLayoutRtl ? offset : 0 ; //rightOffset哦票=0
 
         final Drawables dr = mDrawables;
         //从这可以看出TextView可以四个方向同时存在drawable
@@ -5595,6 +5595,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             // Make sure to update invalidateDrawable() when changing this code.
             if (dr.mShowing[Drawables.LEFT] != null) {
                 canvas.save();
+                // 画布原点的纵向位置：(compoundPaddingTop+vspace/2)-dr.mDrawableHeightLeft/2
                 canvas.translate(scrollX + mPaddingLeft + leftOffset,
                                  scrollY + compoundPaddingTop +
                                  (vspace - dr.mDrawableHeightLeft) / 2);
