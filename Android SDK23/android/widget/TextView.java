@@ -5594,8 +5594,11 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             // IMPORTANT: The coordinates computed are also used in invalidateDrawable()
             // Make sure to update invalidateDrawable() when changing this code.
             if (dr.mShowing[Drawables.LEFT] != null) {
+                //在变换绘图坐标系前，保存当前坐标系的位置。
                 canvas.save();
-                // 画布原点的纵向位置：(compoundPaddingTop+vspace/2)-dr.mDrawableHeightLeft/2
+                // 变换绘图坐标系的纵向位置：(compoundPaddingTop+vspace/2)-dr.mDrawableHeightLeft/2
+                //translate,rotate等，都是变换的绘图坐标系，画布本身并没有发生移动位置。
+                //好比一把尺子在画布上移动，然后以尺子为基准在画布上绘图。
                 canvas.translate(scrollX + mPaddingLeft + leftOffset,
                                  scrollY + compoundPaddingTop +
                                  (vspace - dr.mDrawableHeightLeft) / 2);

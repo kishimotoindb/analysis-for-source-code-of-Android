@@ -459,6 +459,7 @@ public class BitmapDrawable extends Drawable {
     }
 
     private boolean needMirroring() {
+        //LayoutDirection设置之后，还需要设置mBitmapState.mAutoMirrored
         return isAutoMirrored() && getLayoutDirection() == LayoutDirection.RTL;
     }
 
@@ -517,6 +518,7 @@ public class BitmapDrawable extends Drawable {
         if (state.mBaseAlpha != 1.0f) {
             final Paint p = getPaint();
             restoreAlpha = p.getAlpha();
+            //BitmapState里有一个基准alpha，所以paint设置的alpha均需要叠加基准alpha
             p.setAlpha((int) (restoreAlpha * state.mBaseAlpha + 0.5f));
         } else {
             restoreAlpha = -1;
@@ -559,7 +561,7 @@ public class BitmapDrawable extends Drawable {
                     paint.setShader(shader);
                 }
             }
-
+            //paint的shader里有bitmap的信息
             canvas.drawRect(mDstRect, paint);
         }
 
