@@ -13683,11 +13683,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
     void invalidateInternal(int l, int t, int r, int b, boolean invalidateCache,
             boolean fullInvalidate) {
+        //当前View有ghostView的情况下，ghostView也需要invalidate()
         if (mGhostView != null) {
             mGhostView.invalidate(true);
             return;
         }
 
+        //以下情况下skip：
+        // 不可见 && 无动画 && （mParent不是ViewGroup || parent.isViewTransitioning）
         if (skipInvalidate()) {
             return;
         }
@@ -13890,6 +13893,8 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * whether an instance is opaque. Opaque Views are treated in a special way by
      * the View hierarchy, possibly allowing it to perform optimizations during
      * invalidate/draw passes.
+     *
+     * 如果完全不透明，绘制的时候就不需要考虑位于其下面的View，直接绘制该View即可。
      *
      * @return True if this View is guaranteed to be fully opaque, false otherwise.
      */
@@ -19798,6 +19803,9 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      *
      * <p>Subclasses which override this method should call the superclass method to
      * handle possible request-during-layout errors correctly.</p>
+     *
+     * requestLayout就是设置两个标志位，在下一次rendering frame的流程时，根据此处设置的标志位
+     * 执行相应的操作。
      */
     @CallSuper
     public void requestLayout() {

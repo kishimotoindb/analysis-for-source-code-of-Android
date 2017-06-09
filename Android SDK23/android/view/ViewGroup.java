@@ -5420,6 +5420,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
             // Make sure we do not set both flags at the same time
             int opaqueFlag = isOpaque ? PFLAG_DIRTY_OPAQUE : PFLAG_DIRTY;
 
+            //child设置invalidate后，parent也要设置invalidate
             if (child.mLayerType != LAYER_TYPE_NONE) {
                 mPrivateFlags |= PFLAG_INVALIDATED;
                 mPrivateFlags &= ~PFLAG_DRAWING_CACHE_VALID;

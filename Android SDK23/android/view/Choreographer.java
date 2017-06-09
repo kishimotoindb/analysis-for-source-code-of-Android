@@ -743,7 +743,7 @@ public final class Choreographer {
          * The frame time provides a stable time base for synchronizing animations
          * and drawing.  It should be used instead of {@link SystemClock#uptimeMillis()}
          * or {@link System#nanoTime()} for animations and drawing in the UI.  Using the frame
-         * time helps to reduce inter-frame jitter because the frame time is fixed at the time
+         * time helps to reduce inter-frame jitter([ˈdʒɪtɚ]抖动) because the frame time is fixed at the time
          * the frame was scheduled to start, regardless of when the animations or drawing
          * callback actually runs.  All callbacks that run as part of rendering a frame will
          * observe the same frame time so using the frame time also helps to synchronize effects

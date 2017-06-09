@@ -31,7 +31,9 @@ import android.text.style.ParagraphStyle;
  * to use this class directly unless you are implementing your own widget
  * or custom display object, in which case
  *
- * 照这里的说法，绘制文字的时候应该使用layout，而不是canvas.drawText()
+ * 照这里的说法，绘制文字的时候应该使用layout，而不是直接调用canvas.drawText()。这个类与Drawable
+ * 类似，自身会调用canvas.drawText()来绘制文字。与直接调用canvas.drawText()不同的是，drawText
+ * 之前，Layout会设置很多配置参数。
  * you are encouraged to use a Layout instead of calling
  * {@link android.graphics.Canvas#drawText(java.lang.CharSequence, int, int, float, float, android.graphics.Paint)
  *  Canvas.drawText()} directly.</p>

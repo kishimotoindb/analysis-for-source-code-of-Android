@@ -6603,6 +6603,8 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
              alignment == Layout.Alignment.ALIGN_OPPOSITE);
         int oldDir = 0;
         if (testDirChange) oldDir = mLayout.getParagraphDirection(0);
+        //editText不能使用Ellipsize属性
+        //getKeyListener() == null用来判断是TextView还是EditText
         boolean shouldEllipsize = mEllipsize != null && getKeyListener() == null;
         final boolean switchEllipsize = mEllipsize == TruncateAt.MARQUEE &&
                 mMarqueeFadeMode != MARQUEE_FADE_NORMAL;
@@ -6778,10 +6780,18 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         return result;
     }
 
+    /*
+     * 压缩Text的意思是：
+     * 跑马灯效果下，虽然文字超出了一行能够容纳的范围，但是超出的部分文字的长度并没有跑马灯一次挪动的
+     * 距离长，那么TextView会自动压缩一下文字，使其能够在一行内展示。
+     * 并不是指在所有文字中，截取一行能够显示出来的字符串。原本以为这个方法是在跑马灯挪动的过程中，
+     * 实时截取当前需要显示的字符串。
+     */
     private boolean compressText(float width) {
         if (isHardwareAccelerated()) return false;
 
         // Only compress the text if it hasn't been compressed by the previous pass
+        //Marquee需要将lines设置为1,并且xml中不能设置TextScaleX（文字缩放）
         if (width > 0.0f && mLayout != null && getLineCount() == 1 && !mUserSetTextScaleX &&
                 mTextPaint.getTextScaleX() == 1.0f) {
             final float textWidth = mLayout.getLineWidth(0);
@@ -7832,6 +7842,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         // Do not ellipsize EditText
         if (getKeyListener() != null) return;
 
+        //如果文字被压缩到一行全部显示，Marquee效果就没有用了。
         if (compressText(getWidth() - getCompoundPaddingLeft() - getCompoundPaddingRight())) {
             return;
         }
@@ -10019,7 +10030,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             final float density = v.getContext().getResources().getDisplayMetrics().density;
             mPixelsPerSecond = MARQUEE_DP_PER_SECOND * density;
             mView = new WeakReference<TextView>(v);
-            mChoreographer = Choreographer.getInstance();
+            mChoreographer = Choreographer.getInstance(); //[ˌkɒrɪ'ɒɡrəfə(r)] 编舞者
         }
 
         private Choreographer.FrameCallback mTickCallback = new Choreographer.FrameCallback() {
@@ -10058,6 +10069,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             mChoreographer.removeFrameCallback(mTickCallback);
 
             final TextView textView = mView.get();
+            //运行marquee效果，需要TextView获得焦点或者selected
             if (textView != null && (textView.isFocused() || textView.isSelected())) {
                 long currentMs = mChoreographer.getFrameTime();
                 long deltaMs = currentMs - mLastAnimationMs;
