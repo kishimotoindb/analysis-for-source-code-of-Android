@@ -31,6 +31,7 @@ import javax.crypto.SecretKey;
  * A key specification for a <code>SecretKey</code> and also a secret key
  * implementation that is provider-independent. It can be used for raw secret
  * keys that can be specified as <code>byte[]</code>.
+ * 1.以byte[]数组的形式保存了secret key, 以string的形式保存了algorithm
  */
 public class SecretKeySpec implements SecretKey, KeySpec, Serializable {
 
