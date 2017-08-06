@@ -1261,6 +1261,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     public static final int MEASURED_HEIGHT_STATE_SHIFT = 16;
 
     /**
+     * View的尺寸实际上只是用32位中的低24位，高8位用来表示状态或者MeasureSpec的模式
      * Bit of {@link #getMeasuredWidthAndState()} and
      * {@link #getMeasuredWidthAndState()} that indicates the measured size
      * is smaller that the space the view would like to have.

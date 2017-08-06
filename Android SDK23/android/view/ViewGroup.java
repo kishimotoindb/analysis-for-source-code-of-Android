@@ -2320,11 +2320,11 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
 				
 //1.3.1s.********************************if (actionMasked == MotionEvent.ACTION_DOWN:开始******************
 				/**
-				 × 1.每个事件序列只在Down事件和Point_Down事件的时候获取newTouchTarget。（HOVER_MOVE先不考虑）
+				 * 1.每个事件序列只在Down事件和Point_Down事件的时候获取newTouchTarget。（HOVER_MOVE先不考虑）
 				 * 2.Down事件的时候，判断有没有子View在坐标位置上。通过循环迭代出来。
-				 × 3.这个if，只有在手指按下的单一事件时才会进入。HoverMove先不考虑，这个是浮动手势。所以if的方法体可能会执行多
-				 ×   次。
-				 × 4.在每次有Down事件，包括Pointer_Down事件的时候，寻找newTouchTarget
+				 * 3.这个if，只有在手指按下的单一事件时才会进入。HoverMove先不考虑，这个是浮动手势。所以if的方法体可能会执行多
+				 *   次。
+				 * 4.在每次有Down事件，包括Pointer_Down事件的时候，寻找newTouchTarget
 				 * 5.如果split是false，那就不会处理Pointer_Down事件。
 				 */
                 if (actionMasked == MotionEvent.ACTION_DOWN
