@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/view/View.java" afterPath="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java" afterPath="$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" afterPath="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/config.dtd" afterPath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/config.dtd" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/config.xml" afterPath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/config.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/schema/etsi.xsd" afterPath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/schema/etsi.xsd" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/xmlsecurity_de.properties" afterPath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/xmlsecurity_de.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/xmlsecurity_en.properties" afterPath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/xmlsecurity_en.properties" />
     </list>
     <ignored path="analysis-for-source-code-of-Android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,13 +27,15 @@
     <favorites_list name="analysis-for-source-code-of-Android" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="AWTUtilities.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/java/com/sun/awt/AWTUtilities.java">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="SwipeRefreshLayout.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="505">
+              <caret line="660" column="31" selection-start-line="660" selection-start-column="31" selection-end-line="660" selection-end-column="31" />
+              <folding>
+                <element signature="e#0#44170#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -49,10 +54,12 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
+        <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="1920" />
     <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
@@ -67,7 +74,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -80,38 +87,13 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="analysis-for-source-code-of-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="analysis-for-source-code-of-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="analysis-for-source-code-of-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="FullScreen" value="true" />
-    <property name="SearchEverywhereHistoryKey" value="Relativelayout&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/RelativeLayout.java&#10;Linearlayout.j&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/mock_android/widget/LinearLayout.java&#10;Linearlayout&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/LinearLayout.java&#10;FrameLayout.java&#9;null&#9;null&#10;View&#9;ACTION&#9;ViewMenu" />
+    <property name="SearchEverywhereHistoryKey" value="Relativelayout&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/RelativeLayout.java&#10;View.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/view/View.java&#10;Circleima&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v4/widget/CircleImageView.java&#10;CircleView&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/com/android/datetimepicker/time/CircleView.java&#10;SwipeRe&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java&#10;Toast&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/Toast.java&#10;ActivityThre&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/app/ActivityThread.java&#10;abstrStringbuilder&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/AbstractStringBuilder.java&#10;StringBuilder.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/StringBuilder.java&#10;Stringbuilder.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/java/java/lang/StringBuilder.java&#10;Stringfactory&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/StringFactory.java&#10;String.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/String.java&#10;Linearlayout.j&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/mock_android/widget/LinearLayout.java&#10;Linearlayout&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/LinearLayout.java&#10;FrameLayout.java&#9;null&#9;null&#10;View&#9;ACTION&#9;ViewMenu" />
     <property name="ignore_missing_gitignore" value="true" />
+    <property name="FullScreen" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -386,11 +368,19 @@
       <option name="presentableId" value="Default" />
       <updated>1499156234829</updated>
     </task>
+    <task id="LOCAL-00001" summary="增加open-jdk7源码">
+      <created>1502008413579</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1502008413579</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="false" />
+    <frame x="1920" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -400,7 +390,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23960535" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23960535" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -426,11 +416,39 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="增加open-jdk7源码" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加open-jdk7源码" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/String.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/StringFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/StringBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/FrameLayout.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2685">
@@ -634,13 +652,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="1270" column="7" selection-start-line="1270" selection-start-column="7" selection-end-line="1270" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -662,13 +673,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/RelativeLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="1245" column="58" selection-start-line="1245" selection-start-column="58" selection-end-line="1245" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/FrameLayout.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="287">
@@ -678,9 +682,132 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/java/com/sun/awt/AWTUtilities.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/app/ActivityThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/java/java/lang/String.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="178" column="24" selection-start-line="178" selection-start-column="24" selection-end-line="178" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#123378#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/java/java/lang/StringBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="72" column="33" selection-start-line="72" selection-start-column="12" selection-end-line="72" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/AbstractStringBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="30" column="21" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/String.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/StringFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/StringBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/Toast.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#16037#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/com/android/datetimepicker/time/CircleView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#4125#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/jre/jdk/Contents/Home/jre/lib/rt.jar!/javax/swing/text/View.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/RelativeLayout.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="1239" column="0" selection-start-line="1239" selection-start-column="0" selection-end-line="1239" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="14745" column="54" selection-start-line="14745" selection-start-column="27" selection-end-line="14745" selection-end-column="54" />
+          <folding>
+            <element signature="e#584269#584270#0" expanded="true" />
+            <element signature="e#584300#584301#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/CircleImageView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#5556#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="505">
+          <caret line="660" column="31" selection-start-line="660" selection-start-column="31" selection-end-line="660" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#44170#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
