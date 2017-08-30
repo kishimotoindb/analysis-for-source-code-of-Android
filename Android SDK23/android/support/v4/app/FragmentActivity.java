@@ -47,17 +47,17 @@ import java.util.List;
  * Base class for activities that want to use the support-based
  * {@link android.support.v4.app.Fragment} and
  * {@link android.support.v4.content.Loader} APIs.
- *
+ * <p>
  * <p>When using this class as opposed to new platform's built-in fragment
  * and loader support, you must use the {@link #getSupportFragmentManager()}
  * and {@link #getSupportLoaderManager()} methods respectively to access
  * those features.
- *
+ * <p>
  * <p class="note"><strong>Note:</strong> If you want to implement an activity that includes
  * an <a href="{@docRoot}guide/topics/ui/actionbar.html">action bar</a>, you should instead use
  * the {@link android.support.v7.app.ActionBarActivity} class, which is a subclass of this one,
  * so allows you to use {@link android.support.v4.app.Fragment} APIs on API level 7 and higher.</p>
- *
+ * <p>
  * <p>Known limitations:</p>
  * <ul>
  * <li> <p>When using the <code>&lt;fragment></code> tag, this implementation can not
@@ -134,7 +134,7 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mFragments.noteStateNotSaved();
-        int index = requestCode>>16;
+        int index = requestCode >> 16;
         if (index != 0) {
             index--;
             final int activeFragmentsCount = mFragments.getActiveFragmentsCount();
@@ -150,7 +150,7 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
                 Log.w(TAG, "Activity result no fragment exists for index: 0x"
                         + Integer.toHexString(requestCode));
             } else {
-                frag.onActivityResult(requestCode&0xffff, resultCode, data);
+                frag.onActivityResult(requestCode & 0xffff, resultCode, data);
             }
             return;
         }
@@ -173,7 +173,7 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
      * to reverse its exit Transition. When the exit Transition completes,
      * {@link #finish()} is called. If no entry Transition was used, finish() is called
      * immediately and the Activity exit Transition is run.
-     *
+     * <p>
      * <p>On Android 4.4 or lower, this method only finishes the Activity with no
      * special exit transition.</p>
      */
@@ -274,7 +274,7 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
 
     @Override
     final View dispatchFragmentsOnCreateView(View parent, String name, Context context,
-            AttributeSet attrs) {
+                                             AttributeSet attrs) {
         return mFragments.onCreateView(parent, name, context, attrs);
     }
 
@@ -284,7 +284,7 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        //判断Activity是否是真正的销毁，以便判断是否保留fragment的状态
         doReallyStop(false);
 
         mFragments.dispatchDestroy();
@@ -325,11 +325,11 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
         if (super.onMenuItemSelected(featureId, item)) {
             return true;
         }
-        
+
         switch (featureId) {
             case Window.FEATURE_OPTIONS_PANEL:
                 return mFragments.dispatchOptionsItemSelected(item);
-                
+
             case Window.FEATURE_CONTEXT_MENU:
                 return mFragments.dispatchContextItemSelected(item);
 
@@ -350,7 +350,7 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
         }
         super.onPanelClosed(featureId, menu);
     }
-    
+
     /**
      * Dispatch onPause() to fragments.
      */
@@ -556,7 +556,7 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
 
     /**
      * Support library version of {@link Activity#invalidateOptionsMenu}.
-     *
+     * <p>
      * <p>Invalidate the activity's options menu. This will cause relevant presentations
      * of the menu to fully update via calls to onCreateOptionsMenu and
      * onPrepareOptionsMenu the next time the menu is requested.
@@ -579,28 +579,34 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
      * you run "adb shell dumpsys activity <activity_component_name>".
      *
      * @param prefix Desired prefix to prepend at each line of output.
-     * @param fd The raw file descriptor that the dump is being sent to.
+     * @param fd     The raw file descriptor that the dump is being sent to.
      * @param writer The PrintWriter to which you should dump your state.  This will be
-     * closed for you after you return.
-     * @param args additional arguments to the dump request.
+     *               closed for you after you return.
+     * @param args   additional arguments to the dump request.
      */
     public void dump(String prefix, FileDescriptor fd, PrintWriter writer, String[] args) {
         if (android.os.Build.VERSION.SDK_INT >= HONEYCOMB) {
             // XXX This can only work if we can call the super-class impl. :/
             //ActivityCompatHoneycomb.dump(this, prefix, fd, writer, args);
         }
-        writer.print(prefix); writer.print("Local FragmentActivity ");
-                writer.print(Integer.toHexString(System.identityHashCode(this)));
-                writer.println(" State:");
+        writer.print(prefix);
+        writer.print("Local FragmentActivity ");
+        writer.print(Integer.toHexString(System.identityHashCode(this)));
+        writer.println(" State:");
         String innerPrefix = prefix + "  ";
-        writer.print(innerPrefix); writer.print("mCreated=");
-                writer.print(mCreated); writer.print("mResumed=");
-                writer.print(mResumed); writer.print(" mStopped=");
-                writer.print(mStopped); writer.print(" mReallyStopped=");
-                writer.println(mReallyStopped);
+        writer.print(innerPrefix);
+        writer.print("mCreated=");
+        writer.print(mCreated);
+        writer.print("mResumed=");
+        writer.print(mResumed);
+        writer.print(" mStopped=");
+        writer.print(mStopped);
+        writer.print(" mReallyStopped=");
+        writer.println(mReallyStopped);
         mFragments.dumpLoaders(innerPrefix, fd, writer, args);
         mFragments.getSupportFragmentManager().dump(prefix, fd, writer, args);
-        writer.print(prefix); writer.println("View Hierarchy:");
+        writer.print(prefix);
+        writer.println("View Hierarchy:");
         dumpViewHierarchy(prefix + "  ", writer, getWindow().getDecorView());
     }
 
@@ -611,15 +617,23 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
         out.append(Integer.toHexString(System.identityHashCode(view)));
         out.append(' ');
         switch (view.getVisibility()) {
-            case View.VISIBLE: out.append('V'); break;
-            case View.INVISIBLE: out.append('I'); break;
-            case View.GONE: out.append('G'); break;
-            default: out.append('.'); break;
+            case View.VISIBLE:
+                out.append('V');
+                break;
+            case View.INVISIBLE:
+                out.append('I');
+                break;
+            case View.GONE:
+                out.append('G');
+                break;
+            default:
+                out.append('.');
+                break;
         }
         out.append(view.isFocusable() ? 'F' : '.');
         out.append(view.isEnabled() ? 'E' : '.');
         out.append(view.willNotDraw() ? '.' : 'D');
-        out.append(view.isHorizontalScrollBarEnabled()? 'H' : '.');
+        out.append(view.isHorizontalScrollBarEnabled() ? 'H' : '.');
         out.append(view.isVerticalScrollBarEnabled() ? 'V' : '.');
         out.append(view.isClickable() ? 'C' : '.');
         out.append(view.isLongClickable() ? 'L' : '.');
@@ -643,12 +657,12 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
             if (id != 0 && r != null) {
                 try {
                     String pkgname;
-                    switch (id&0xff000000) {
+                    switch (id & 0xff000000) {
                         case 0x7f000000:
-                            pkgname="app";
+                            pkgname = "app";
                             break;
                         case 0x01000000:
-                            pkgname="android";
+                            pkgname = "android";
                             break;
                         default:
                             pkgname = r.getResourcePackageName(id);
@@ -680,13 +694,13 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
         if (!(view instanceof ViewGroup)) {
             return;
         }
-        ViewGroup grp = (ViewGroup)view;
+        ViewGroup grp = (ViewGroup) view;
         final int N = grp.getChildCount();
         if (N <= 0) {
             return;
         }
         prefix = prefix + "  ";
-        for (int i=0; i<N; i++) {
+        for (int i = 0; i < N; i++) {
             dumpViewHierarchy(prefix, writer, grp.getChildAt(i));
         }
     }
@@ -700,8 +714,24 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
         }
     }
 
-    /**
-     * Pre-HC, we didn't have a way to determine whether an activity was
+    /*
+     * 3.0版本以前的系统是需要判断的。
+     *
+     * 用于判断是因为屏幕旋转等配置改变需要进行重建而退出当前Activity，还是用户真的关闭了当前Activity。
+     * 如果是前者，需要保存Fragment的状态，如果是后者，不需要保存。判断的过程中可能需要重建Fragment，
+     * 从而在Activity调用onDestroy的时候，才会回调Fragment的onCreateView。
+     * onCreate,onStart,onResume三个回调中，onResume->onPause之间，都可以调用finish()方法退出当
+     * 前Activity，但是这个对App主动的finish调用，系统无法将之与旋转屏幕时系统自身调用的finish()相
+     * 区别。所以才需要在这里进行判断。
+     *
+     * 实际bug分析：
+     * 1.之所以在Activity onDestory()时会调用Fragment的onCreateView()，原因如下：
+     * Activity调用finish()方法时，Fragment还没有回调过onCreateView(),那么在Activity的onDestroy
+     * 方法中，doReallyStop()方法一路执行下来，到FragmentManager.moveToState()方法时，会调用一遍
+     * fragment的onCreateView()。如果finish()之前调用过onCreateView，onDestroy中就不会再调用。
+     * 总之，fragment的onCreateView在Activity的生命周期中，目前来看应该是一定要调用一次的。
+     *
+     * Pre-HC(pre-HoneyComb, means before HoneyComb), we didn't have a way to determine whether an activity was
      * being stopped for a config change or not until we saw
      * onRetainNonConfigurationInstance() called after onStop().  However
      * we need to know this, to know whether to retain fragments.  This will
@@ -742,7 +772,7 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
      */
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
-        if (requestCode != -1 && (requestCode&0xffff0000) != 0) {
+        if (requestCode != -1 && (requestCode & 0xffff0000) != 0) {
             throw new IllegalArgumentException("Can only use lower 16 bits for requestCode");
         }
         super.startActivityForResult(intent, requestCode);
@@ -773,17 +803,16 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
      * and results arrays which should be treated as a cancellation.
      * </p>
      *
-     * @param requestCode The request code passed in {@link #requestPermissions(String[], int)}.
-     * @param permissions The requested permissions. Never null.
+     * @param requestCode  The request code passed in {@link #requestPermissions(String[], int)}.
+     * @param permissions  The requested permissions. Never null.
      * @param grantResults The grant results for the corresponding permissions
-     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
-     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
-     *
+     *                     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *                     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
      * @see #requestPermissions(String[], int)
      */
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
-        int index = (requestCode>>8)&0xff;
+                                           @NonNull int[] grantResults) {
+        int index = (requestCode >> 8) & 0xff;
         if (index != 0) {
             index--;
             final int activeFragmentsCount = mFragments.getActiveFragmentsCount();
@@ -799,7 +828,7 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
                 Log.w(TAG, "Activity result no fragment exists for index: 0x"
                         + Integer.toHexString(requestCode));
             } else {
-                frag.onRequestPermissionsResult(requestCode&0xff, permissions, grantResults);
+                frag.onRequestPermissionsResult(requestCode & 0xff, permissions, grantResults);
             }
         }
     }
@@ -808,27 +837,27 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
      * Called by Fragment.startActivityForResult() to implement its behavior.
      */
     public void startActivityFromFragment(Fragment fragment, Intent intent,
-            int requestCode) {
+                                          int requestCode) {
         if (requestCode == -1) {
             super.startActivityForResult(intent, -1);
             return;
         }
-        if ((requestCode&0xffff0000) != 0) {
+        if ((requestCode & 0xffff0000) != 0) {
             throw new IllegalArgumentException("Can only use lower 16 bits for requestCode");
         }
-        super.startActivityForResult(intent, ((fragment.mIndex+1)<<16) + (requestCode&0xffff));
+        super.startActivityForResult(intent, ((fragment.mIndex + 1) << 16) + (requestCode & 0xffff));
     }
 
     /**
      * Called by Fragment.requestPermissions() to implement its behavior.
      */
     private void requestPermissionsFromFragment(Fragment fragment, String[] permissions,
-            int requestCode) {
+                                                int requestCode) {
         if (requestCode == -1) {
             ActivityCompat.requestPermissions(this, permissions, requestCode);
             return;
         }
-        if ((requestCode&0xffffff00) != 0) {
+        if ((requestCode & 0xffffff00) != 0) {
             throw new IllegalArgumentException("Can only use lower 8 bits for requestCode");
         }
         mRequestedPermissionsFromFragment = true;
@@ -873,7 +902,7 @@ public class FragmentActivity extends BaseFragmentActivityHoneycomb implements
 
         @Override
         public void onRequestPermissionsFromFragment(@NonNull Fragment fragment,
-                @NonNull String[] permissions, int requestCode) {
+                                                     @NonNull String[] permissions, int requestCode) {
             FragmentActivity.this.requestPermissionsFromFragment(fragment, permissions,
                     requestCode);
         }
