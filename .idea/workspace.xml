@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" afterPath="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/config.dtd" afterPath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/config.dtd" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/config.xml" afterPath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/config.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/schema/etsi.xsd" afterPath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/schema/etsi.xsd" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/xmlsecurity_de.properties" afterPath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/xmlsecurity_de.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/xmlsecurity_en.properties" afterPath="$PROJECT_DIR$/java/com/sun/org/apache/xml/internal/security/resource/xmlsecurity_en.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java" afterPath="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java" />
     </list>
     <ignored path="analysis-for-source-code-of-Android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,13 +24,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SwipeRefreshLayout.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java">
+      <file leaf-file-name="ViewPager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="505">
-              <caret line="660" column="31" selection-start-line="660" selection-start-column="31" selection-end-line="660" selection-end-column="31" />
+            <state relative-caret-position="274">
+              <caret line="118" column="24" selection-start-line="118" selection-start-column="24" selection-end-line="118" selection-end-column="24" />
               <folding>
-                <element signature="e#0#44170#0" expanded="true" />
+                <element signature="e#0#116574#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OkHttpClient.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#34993#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -55,11 +63,13 @@
       <list>
         <option value="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" />
+        <option value="$PROJECT_DIR$/recyclerview-v7/LinearLayoutManager.java" />
+        <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/app/FragmentActivity.java" />
+        <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1920" />
     <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
@@ -91,7 +101,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="SearchEverywhereHistoryKey" value="Relativelayout&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/RelativeLayout.java&#10;View.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/view/View.java&#10;Circleima&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v4/widget/CircleImageView.java&#10;CircleView&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/com/android/datetimepicker/time/CircleView.java&#10;SwipeRe&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java&#10;Toast&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/Toast.java&#10;ActivityThre&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/app/ActivityThread.java&#10;abstrStringbuilder&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/AbstractStringBuilder.java&#10;StringBuilder.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/StringBuilder.java&#10;Stringbuilder.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/java/java/lang/StringBuilder.java&#10;Stringfactory&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/StringFactory.java&#10;String.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/String.java&#10;Linearlayout.j&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/mock_android/widget/LinearLayout.java&#10;Linearlayout&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/LinearLayout.java&#10;FrameLayout.java&#9;null&#9;null&#10;View&#9;ACTION&#9;ViewMenu" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/bear/DemoProject/analysis-for-source-code-of-Android/Android SDK23/mock_android/view/View.java&#10;Activity.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/app/Activity.java&#10;FragmentActivi&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v4/app/FragmentActivity.java&#10;Linearlayoutman&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/recyclerview-v7/LinearLayoutManager.java&#10;View.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/view/View.java&#10;Recyclerview&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v7/widget/RecyclerView.java&#10;Relativelayout&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/RelativeLayout.java&#10;Circleima&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v4/widget/CircleImageView.java&#10;CircleView&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/com/android/datetimepicker/time/CircleView.java&#10;SwipeRe&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java&#10;Toast&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/Toast.java&#10;ActivityThre&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/app/ActivityThread.java&#10;abstrStringbuilder&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/AbstractStringBuilder.java&#10;StringBuilder.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/StringBuilder.java&#10;Stringbuilder.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/java/java/lang/StringBuilder.java&#10;Stringfactory&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/StringFactory.java&#10;String.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/String.java&#10;Linearlayout.j&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/mock_android/widget/LinearLayout.java&#10;Linearlayout&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/LinearLayout.java&#10;FrameLayout.java&#9;null&#9;null&#10;View&#9;ACTION&#9;ViewMenu" />
     <property name="ignore_missing_gitignore" value="true" />
     <property name="FullScreen" value="true" />
   </component>
@@ -375,11 +385,25 @@
       <option name="project" value="LOCAL" />
       <updated>1502008413579</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="SwipeRefreshLayout的OnInterceptTouchEvent">
+      <created>1503476377544</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1503476377544</updated>
+    </task>
+    <task id="LOCAL-00003" summary="在Activity onDestory()时调用Fragment的onCreateView()的原因分析">
+      <created>1504064508552</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1504064508552</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -387,7 +411,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23960535" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -418,65 +442,15 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="增加open-jdk7源码" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加open-jdk7源码" />
+    <MESSAGE value="SwipeRefreshLayout的OnInterceptTouchEvent" />
+    <MESSAGE value="在Activity onDestory()时调用Fragment的onCreateView()的原因分析" />
+    <option name="LAST_COMMIT_MESSAGE" value="在Activity onDestory()时调用Fragment的onCreateView()的原因分析" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/String.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/StringFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/StringBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/FrameLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2685">
-          <caret line="199" column="39" selection-start-line="199" selection-start-column="39" selection-end-line="199" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="54" column="32" selection-start-line="54" selection-start-column="32" selection-end-line="54" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/graphics/drawable/ColorDrawable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="44" column="39" selection-start-line="44" selection-start-column="39" selection-end-line="44" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/graphics/Drawable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="12465">
@@ -624,13 +598,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/mock_android/view/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/graphics/drawable/ColorDrawable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -649,13 +616,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="11925">
           <caret line="873" column="26" selection-start-line="873" selection-start-column="26" selection-end-line="873" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="49" column="6" selection-start-line="49" selection-start-column="6" selection-end-line="49" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -698,9 +658,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="178" column="24" selection-start-line="178" selection-start-column="24" selection-end-line="178" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#123378#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -708,7 +665,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="735">
           <caret line="72" column="33" selection-start-line="72" selection-start-column="12" selection-end-line="72" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -716,7 +672,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="30" column="21" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -724,7 +679,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -732,7 +686,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -740,7 +693,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -748,9 +700,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#16037#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -758,9 +707,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#4125#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -768,7 +714,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -776,18 +721,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="145">
           <caret line="1239" column="0" selection-start-line="1239" selection-start-column="0" selection-end-line="1239" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="14745" column="54" selection-start-line="14745" selection-start-column="27" selection-end-line="14745" selection-end-column="54" />
-          <folding>
-            <element signature="e#584269#584270#0" expanded="true" />
-            <element signature="e#584300#584301#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -795,18 +728,91 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#5556#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="660" column="31" selection-start-line="660" selection-start-column="31" selection-end-line="660" selection-end-column="31" />
+        <state relative-caret-position="220">
+          <caret line="645" column="5" selection-start-line="645" selection-start-column="5" selection-end-line="645" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/recyclerview-v7/LinearLayoutManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="429" column="50" selection-start-line="429" selection-start-column="50" selection-end-line="429" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v7/widget/RecyclerView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="1293" column="9" selection-start-line="1293" selection-start-column="9" selection-end-line="1293" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/app/FragmentActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="670">
+          <caret line="717" column="24" selection-start-line="717" selection-start-column="24" selection-end-line="717" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/app/Activity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="691" column="26" selection-start-line="691" selection-start-column="23" selection-end-line="691" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/mock_android/view/View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="20" column="7" selection-start-line="20" selection-start-column="7" selection-end-line="20" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="858" column="61" selection-start-line="858" selection-start-column="61" selection-end-line="858" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/PagerAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="15350" column="19" selection-start-line="15350" selection-start-column="19" selection-end-line="15350" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="118" column="24" selection-start-line="118" selection-start-column="24" selection-end-line="118" selection-end-column="24" />
           <folding>
-            <element signature="e#0#44170#0" expanded="true" />
+            <element signature="e#0#116574#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#34993#0" expanded="true" />
           </folding>
         </state>
       </provider>

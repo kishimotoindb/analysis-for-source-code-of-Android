@@ -112,6 +112,12 @@ public class ViewPager extends ViewGroup {
      */
     private int mExpectedAdapterCount;
 
+    /*
+     * ViewPager的每一页（page）对应一个描述当前页g（page）的View。
+     * 因为object是Object类型的，所以其实ViewPager的每一页对应的内容可以由任意类型的对象提供。
+     * 按道理，viewPager只需要object提供的包含内容的View，然后viewPager来进行显示。至于这个
+     * View由谁或者如何提供，不关心。
+     */
     static class ItemInfo {
         Object object;
         int position;
@@ -331,6 +337,8 @@ public class ViewPager extends ViewGroup {
          *                 position of the pager. 0 is front and center. 1 is one full
          *                 page position to the right, and -1 is one page position to the left.
          */
+
+        //从这里参数的命名也可以看出，ViewPage的每一页（page）对应一个View。
         public void transformPage(View page, float position);
     }
 
@@ -455,6 +463,7 @@ public class ViewPager extends ViewGroup {
         }
     }
 
+    //移除所有作为PageView的View，用来修饰Page的Decor类型的View保留。
     private void removeNonDecorViews() {
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
@@ -530,6 +539,7 @@ public class ViewPager extends ViewGroup {
             item = mAdapter.getCount() - 1;
         }
         final int pageLimit = mOffscreenPageLimit;
+        //OffScreenPage外的View，在滚动完成前，不会被移除。
         if (item > (mCurItem + pageLimit) || item < (mCurItem - pageLimit)) {
             // We are doing a jump by more than one page.  To avoid
             // glitches, we want to keep all current pages in the view
@@ -952,12 +962,15 @@ public class ViewPager extends ViewGroup {
         populate(mCurItem);
     }
 
+    //执行到当前方法的时候，mCurItem和newCurrentItem仍然是不同的，mCurItem是当前屏幕展示的页面。
     void populate(int newCurrentItem) {
         ItemInfo oldCurInfo = null;
         int focusDirection = View.FOCUS_FORWARD;
         if (mCurItem != newCurrentItem) {
             focusDirection = mCurItem < newCurrentItem ? View.FOCUS_RIGHT : View.FOCUS_LEFT;
             oldCurInfo = infoForPosition(mCurItem);
+
+        //到这里，mCurItem已经被赋值为newCurrentItem
             mCurItem = newCurrentItem;
         }
 
