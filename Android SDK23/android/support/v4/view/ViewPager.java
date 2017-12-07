@@ -528,6 +528,8 @@ public class ViewPager extends ViewGroup {
             setScrollingCacheEnabled(false);
             return;
         }
+
+        //always的目的：当前希望切换到的页面与当前展示的页面相同时，是否走加载流程
         if (!always && mCurItem == item && mItems.size() != 0) {
             setScrollingCacheEnabled(false);
             return;
@@ -539,11 +541,13 @@ public class ViewPager extends ViewGroup {
             item = mAdapter.getCount() - 1;
         }
         final int pageLimit = mOffscreenPageLimit;
-        //OffScreenPage外的View，在滚动完成前，不会被移除。
         if (item > (mCurItem + pageLimit) || item < (mCurItem - pageLimit)) {
             // We are doing a jump by more than one page.  To avoid
             // glitches, we want to keep all current pages in the view
             // until the scroll ends.
+            //在页面滚动时，offscreenPageLimit某种意义上是不生效的，因为滚动到
+            // offscreenPageLimit外时，当前已经初始化的page是暂时不销毁的。但是
+            //应该也只会比offscreenPageLimit多1个页面，即当前要跳转到的目标页面。
             for (int i=0; i<mItems.size(); i++) {
                 mItems.get(i).scrolling = true;
             }
@@ -982,7 +986,7 @@ public class ViewPager extends ViewGroup {
         // Bail now if we are waiting to populate.  This is to hold off
         // on creating views from the time the user releases their finger to
         // fling to a new position until we have finished the scroll to
-        // that position, avoiding glitches from happening at that point.
+        // that position, avoiding glitches(小故障) from happening at that point.
         if (mPopulatePending) {
             if (DEBUG) Log.i(TAG, "populate is pending, skipping for now...");
             sortChildDrawingOrder();
@@ -992,6 +996,9 @@ public class ViewPager extends ViewGroup {
         // Also, don't populate until we are attached to a window.  This is to
         // avoid trying to populate before we have restored our view hierarchy
         // state and conflicting with what is restored.
+        // 对于View来说，创建View的时候（setContentView，构建ViewTree），会进行restore state，
+        // 所以在Activity等组件中写代码改变控件状态，已经是restore之后了。
+        // 可以通过View是否有WindowToken来判断View是不是已经attached to a window
         if (getWindowToken() == null) {
             return;
         }

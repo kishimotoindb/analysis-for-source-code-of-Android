@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="在Activity onDestory()时调用Fragment的onCreateView()的原因分析">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java" afterPath="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java" />
     </list>
@@ -24,25 +23,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ViewPager.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ViewPager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="118" column="24" selection-start-line="118" selection-start-column="24" selection-end-line="118" selection-end-column="24" />
+            <state relative-caret-position="408">
+              <caret line="1000" column="65" selection-start-line="1000" selection-start-column="65" selection-end-line="1000" selection-end-column="65" />
               <folding>
-                <element signature="e#0#116574#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OkHttpClient.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#34993#0" expanded="true" />
+                <element signature="e#0#116951#0" expanded="true" />
+                <element signature="e#35039#35040#0" expanded="true" />
+                <element signature="e#35073#35074#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -65,6 +54,7 @@
         <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" />
         <option value="$PROJECT_DIR$/recyclerview-v7/LinearLayoutManager.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/app/FragmentActivity.java" />
+        <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java" />
       </list>
     </option>
@@ -411,8 +401,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5876663" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23960535" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -428,6 +418,24 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -797,22 +805,83 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java">
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="118" column="24" selection-start-line="118" selection-start-column="24" selection-end-line="118" selection-end-column="24" />
+        <state relative-caret-position="-11435">
+          <caret line="49" column="41" selection-start-line="49" selection-start-column="41" selection-end-line="49" selection-end-column="41" />
           <folding>
-            <element signature="e#0#116574#0" expanded="true" />
+            <element signature="e#8355#8356#0" expanded="false" />
+            <element signature="e#8384#8385#0" expanded="false" />
+            <element signature="e#11796#11797#0" expanded="false" />
+            <element signature="e#11827#11828#0" expanded="false" />
+            <element signature="e#11912#11913#0" expanded="false" />
+            <element signature="e#11940#11941#0" expanded="false" />
+            <element signature="e#12027#12028#0" expanded="false" />
+            <element signature="e#12056#12057#0" expanded="false" />
+            <element signature="e#12146#12147#0" expanded="false" />
+            <element signature="e#12175#12176#0" expanded="false" />
+            <element signature="e#12201#12202#0" expanded="false" />
+            <element signature="e#12223#12224#0" expanded="false" />
+            <element signature="e#12265#12266#0" expanded="false" />
+            <element signature="e#12295#12296#0" expanded="false" />
+            <element signature="e#12329#12330#0" expanded="false" />
+            <element signature="e#12355#12356#0" expanded="false" />
+            <element signature="e#12381#12382#0" expanded="false" />
+            <element signature="e#12403#12404#0" expanded="false" />
+            <element signature="e#12528#12529#0" expanded="false" />
+            <element signature="e#12548#12549#0" expanded="false" />
+            <element signature="e#12590#12591#0" expanded="false" />
+            <element signature="e#12620#12621#0" expanded="false" />
+            <element signature="e#12668#12669#0" expanded="false" />
+            <element signature="e#12701#12702#0" expanded="false" />
+            <element signature="e#12749#12750#0" expanded="false" />
+            <element signature="e#12782#12783#0" expanded="false" />
+            <element signature="e#12832#12833#0" expanded="false" />
+            <element signature="e#12866#12867#0" expanded="false" />
+            <element signature="e#12908#12909#0" expanded="false" />
+            <element signature="e#12938#12939#0" expanded="false" />
+            <element signature="e#12985#12986#0" expanded="false" />
+            <element signature="e#13020#13021#0" expanded="false" />
+            <element signature="e#13064#13065#0" expanded="false" />
+            <element signature="e#13095#13096#0" expanded="false" />
+            <element signature="e#13136#13137#0" expanded="false" />
+            <element signature="e#13171#13172#0" expanded="false" />
+            <element signature="e#13209#13210#0" expanded="false" />
+            <element signature="e#13241#13242#0" expanded="false" />
+            <element signature="e#13288#13289#0" expanded="false" />
+            <element signature="e#13329#13330#0" expanded="false" />
+            <element signature="e#13365#13366#0" expanded="false" />
+            <element signature="e#13392#13393#0" expanded="false" />
+            <element signature="e#13431#13432#0" expanded="false" />
+            <element signature="e#13457#13458#0" expanded="false" />
+            <element signature="e#13508#13509#0" expanded="false" />
+            <element signature="e#13540#13541#0" expanded="false" />
+            <element signature="e#13834#13835#0" expanded="false" />
+            <element signature="e#13863#13864#0" expanded="false" />
+            <element signature="e#14200#14201#0" expanded="false" />
+            <element signature="e#14236#14237#0" expanded="false" />
+            <element signature="e#14293#14294#0" expanded="false" />
+            <element signature="e#14330#14331#0" expanded="false" />
+            <element signature="e#14879#14880#0" expanded="false" />
+            <element signature="e#14913#14914#0" expanded="false" />
+            <element signature="e#33050#33051#0" expanded="false" />
+            <element signature="e#33083#33084#0" expanded="false" />
+            <element signature="e#33646#33647#0" expanded="false" />
+            <element signature="e#33686#33687#0" expanded="false" />
+            <element signature="e#34942#34943#0" expanded="false" />
+            <element signature="e#34985#34986#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java">
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="408">
+          <caret line="1000" column="65" selection-start-line="1000" selection-start-column="65" selection-end-line="1000" selection-end-column="65" />
           <folding>
-            <element signature="e#0#34993#0" expanded="true" />
+            <element signature="e#0#116951#0" expanded="true" />
+            <element signature="e#35039#35040#0" expanded="true" />
+            <element signature="e#35073#35074#0" expanded="true" />
           </folding>
         </state>
       </provider>
