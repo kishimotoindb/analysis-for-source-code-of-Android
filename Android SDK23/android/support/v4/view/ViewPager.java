@@ -442,10 +442,14 @@ public class ViewPager extends ViewGroup {
             }
             mAdapter.registerDataSetObserver(mObserver);
             mPopulatePending = false;
+            //onAttachToWindow的时候mFirstLayout设置为true
+            //在设置adapter时，记录设置本次adapter之前，是否进行过layout
             final boolean wasFirstLayout = mFirstLayout;
             mFirstLayout = true;
             mExpectedAdapterCount = mAdapter.getCount();
             if (mRestoredCurItem >= 0) {
+                //恢复状态的操作一定发生在ViewPager有adapter之后，但是保存的状态赋值给ViewPager，
+                //一定是在onRestoreState时
                 mAdapter.restoreState(mRestoredAdapterState, mRestoredClassLoader);
                 setCurrentItemInternal(mRestoredCurItem, false, true);
                 mRestoredCurItem = -1;
@@ -454,6 +458,7 @@ public class ViewPager extends ViewGroup {
             } else if (!wasFirstLayout) {
                 populate();
             } else {
+                //ViewPager第一次设置adapter时，因为wasFirstLayout=true，所以上来就要requestLayout()
                 requestLayout();
             }
         }
@@ -1431,6 +1436,9 @@ public class ViewPager extends ViewGroup {
         // our view.  We can't really know what it is since we will be
         // adding and removing different arbitrary views and do not
         // want the layout to change as this happens.
+        // 因为ViewPager的各个页面的尺寸可以不尽相同，所以如果ViewPager的大小由
+        // page决定，那么有可能ViewPager在滑动时，大小需要时刻变动。所以ViewPager
+        // 自身的大小，由自己和其父容器共同决定，完全不考虑子View对其的影响。
         setMeasuredDimension(getDefaultSize(0, widthMeasureSpec),
                 getDefaultSize(0, heightMeasureSpec));
 

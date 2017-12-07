@@ -18,6 +18,7 @@ package okhttp3.internal.http1;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.ProtocolException;
+
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
