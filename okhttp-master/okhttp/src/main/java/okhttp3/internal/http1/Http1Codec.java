@@ -208,12 +208,14 @@ public final class Http1Codec implements HttpCodec {
     }
   }
 
+  //读取http response start line
   private String readHeaderLine() throws IOException {
     String line = source.readUtf8LineStrict(headerLimit);
     headerLimit -= line.length();
     return line;
   }
 
+  //read response header，一行一行读取
   /** Reads headers or trailers. */
   public Headers readHeaders() throws IOException {
     Headers.Builder headers = new Headers.Builder();
