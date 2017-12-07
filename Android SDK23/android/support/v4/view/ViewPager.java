@@ -1031,6 +1031,13 @@ public class ViewPager extends ViewGroup {
         for (curIndex = 0; curIndex < mItems.size(); curIndex++) {
             final ItemInfo ii = mItems.get(curIndex);
             if (ii.position >= mCurItem) {
+                /*
+                 * limitOffScreen=2
+                 * 当前打开的页面：     2 3 4 5 6  mItems={2,3,4,5,6}
+                 * 希望跳转到页面5：    3 4 5 6 7  ii.position>=5
+                 *
+                 *
+                 */
                 if (ii.position == mCurItem) curItem = ii;
                 break;
             }

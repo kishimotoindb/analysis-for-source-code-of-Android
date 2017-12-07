@@ -93,6 +93,10 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 
         // Do we already have this fragment?
         String name = makeFragmentName(container.getId(), itemId);
+        //按道理来说这里其实是初始化Fragment的地方，如果初始化了，不应该再进到这里。所以find应该
+        //找不到才对。除非移除的framgment在manager中有缓存，或者ViewPager的Items仍然保存
+        //limitOffScreen范围外已创建的fragment。
+        //估计只要fragment添加到transaction后，就不会被移除，只是显示谁由ViewPager说了算
         Fragment fragment = mFragmentManager.findFragmentByTag(name);
         if (fragment != null) {
             if (DEBUG) Log.v(TAG, "Attaching item #" + itemId + ": f=" + fragment);
@@ -105,6 +109,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
         }
         if (fragment != mCurrentPrimaryItem) {
             FragmentCompat.setMenuVisibility(fragment, false);
+//这里调用了Fragment.setUserVisibleHint(false);
             FragmentCompat.setUserVisibleHint(fragment, false);
         }
 
@@ -125,6 +130,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         Fragment fragment = (Fragment)object;
         if (fragment != mCurrentPrimaryItem) {
+            //切换ViewPager的页面时，首先将原页面设置为不可见，然后将新页面设置为可见。
             if (mCurrentPrimaryItem != null) {
                 FragmentCompat.setMenuVisibility(mCurrentPrimaryItem, false);
                 FragmentCompat.setUserVisibleHint(mCurrentPrimaryItem, false);
