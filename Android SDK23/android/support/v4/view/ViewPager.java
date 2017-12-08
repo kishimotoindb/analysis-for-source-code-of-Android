@@ -140,6 +140,8 @@ public class ViewPager extends ViewGroup {
         }
     };
 
+    //按页面的位置正序保存，并且仅保存开启的页面。所以item的在mItems里的索引与item页面实际的展示位置
+    //不同
     private final ArrayList<ItemInfo> mItems = new ArrayList<ItemInfo>();
     private final ItemInfo mTempItem = new ItemInfo();
 
@@ -1048,6 +1050,7 @@ public class ViewPager extends ViewGroup {
             }
         }
 
+        //这里初始化了所需位置的Fragment
         if (curItem == null && N > 0) {
             curItem = addNewItem(mCurItem, curIndex);
         }
@@ -1055,6 +1058,7 @@ public class ViewPager extends ViewGroup {
         // Fill 3x the available width or up to the number of offscreen
         // pages requested to either side, whichever is larger.
         // If we have no current item we have no work to do.
+        // 最少也会在当前页面的两边各增加一个页面
         if (curItem != null) {
             float extraWidthLeft = 0.f;
             int itemIndex = curIndex - 1;
