@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="">
+    <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="1.ViewPager: 初始化ViewPager过程中，onMeasure()中调用populate()。分析ViewPager初始化的过程">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java" afterPath="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java" />
     </list>
@@ -26,13 +26,10 @@
       <file leaf-file-name="ViewPager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="258">
-              <caret line="142" column="53" selection-start-line="142" selection-start-column="53" selection-end-line="142" selection-end-column="53" />
+            <state relative-caret-position="-1452">
+              <caret line="977" column="66" selection-start-line="977" selection-start-column="66" selection-end-line="977" selection-end-column="66" />
               <folding>
-                <element signature="e#0#117776#0" expanded="true" />
-                <element signature="e#5498#5508#0" expanded="true" />
-                <element signature="e#35410#35411#0" expanded="true" />
-                <element signature="e#35444#35445#0" expanded="true" />
+                <element signature="e#0#118572#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -41,7 +38,7 @@
       <file leaf-file-name="FragmentPagerAdapter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v13/app/FragmentPagerAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
+            <state relative-caret-position="1605">
               <caret line="131" column="46" selection-start-line="131" selection-start-column="46" selection-end-line="131" selection-end-column="46" />
               <folding />
             </state>
@@ -51,7 +48,7 @@
       <file leaf-file-name="PagerAdapter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/PagerAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="625">
+            <state relative-caret-position="4290">
               <caret line="316" column="17" selection-start-line="316" selection-start-column="17" selection-end-line="316" selection-end-column="17" />
               <folding>
                 <element signature="e#13561#13562#0" expanded="true" />
@@ -64,7 +61,7 @@
       <file leaf-file-name="View.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
+            <state relative-caret-position="295350">
               <caret line="20063" column="33" selection-start-line="20063" selection-start-column="25" selection-end-line="20063" selection-end-column="33" />
               <folding />
             </state>
@@ -454,7 +451,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512644364726</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="1.ViewPager: 初始化ViewPager过程中，onMeasure()中调用populate()。分析ViewPager初始化的过程">
+      <created>1512703041758</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1512703041758</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -470,7 +474,6 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31571528" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -480,6 +483,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -521,7 +525,8 @@
     <MESSAGE value="FragmentPagerAdapter分析" />
     <MESSAGE value="Http1Codec" />
     <MESSAGE value="1.OkHttp: Http1Codec 2.ViewPager: setAdapter(),onMeasure()" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.OkHttp: Http1Codec 2.ViewPager: setAdapter(),onMeasure()" />
+    <MESSAGE value="1.ViewPager: 初始化ViewPager过程中，onMeasure()中调用populate()。分析ViewPager初始化的过程" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.ViewPager: 初始化ViewPager过程中，onMeasure()中调用populate()。分析ViewPager初始化的过程" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -868,36 +873,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="29" column="30" selection-start-line="29" selection-start-column="30" selection-end-line="29" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#20839#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#5350#5351#0" expanded="false" />
-            <element signature="e#5385#5386#0" expanded="false" />
-            <element signature="e#7526#7527#0" expanded="false" />
-            <element signature="e#7558#7559#0" expanded="false" />
-            <element signature="e#7746#7747#0" expanded="false" />
-            <element signature="e#7782#7783#0" expanded="false" />
-            <element signature="e#7976#7977#0" expanded="false" />
-            <element signature="e#8008#8009#0" expanded="false" />
-            <element signature="e#8196#8197#0" expanded="false" />
-            <element signature="e#8225#8226#0" expanded="false" />
-            <element signature="e#8413#8414#0" expanded="false" />
-            <element signature="e#8442#8443#0" expanded="false" />
-            <element signature="e#8947#8948#0" expanded="false" />
-            <element signature="e#8977#8978#0" expanded="false" />
-            <element signature="e#9166#9167#0" expanded="false" />
-            <element signature="e#9196#9197#0" expanded="false" />
-            <element signature="e#9409#9410#0" expanded="false" />
-            <element signature="e#9439#9440#0" expanded="false" />
-            <element signature="e#9652#9653#0" expanded="false" />
-            <element signature="e#9682#9683#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v13/app/FragmentPagerAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
+        <state relative-caret-position="1605">
           <caret line="131" column="46" selection-start-line="131" selection-start-column="46" selection-end-line="131" selection-end-column="46" />
           <folding />
         </state>
@@ -905,7 +886,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/PagerAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="625">
+        <state relative-caret-position="4290">
           <caret line="316" column="17" selection-start-line="316" selection-start-column="17" selection-end-line="316" selection-end-column="17" />
           <folding>
             <element signature="e#13561#13562#0" expanded="true" />
@@ -916,7 +897,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
+        <state relative-caret-position="295350">
           <caret line="20063" column="33" selection-start-line="20063" selection-start-column="25" selection-end-line="20063" selection-end-column="33" />
           <folding />
         </state>
@@ -924,13 +905,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="142" column="53" selection-start-line="142" selection-start-column="53" selection-end-line="142" selection-end-column="53" />
+        <state relative-caret-position="-1452">
+          <caret line="977" column="66" selection-start-line="977" selection-start-column="66" selection-end-line="977" selection-end-column="66" />
           <folding>
-            <element signature="e#0#117776#0" expanded="true" />
-            <element signature="e#5498#5508#0" expanded="true" />
-            <element signature="e#35410#35411#0" expanded="true" />
-            <element signature="e#35444#35445#0" expanded="true" />
+            <element signature="e#0#118572#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -973,6 +973,8 @@ public class ViewPager extends ViewGroup {
         populate(mCurItem);
     }
 
+    //当前方法的作用，通过遍历，对mItems中的itemInfo进行创建、复用或删除，使mItems里只剩下需要加载的itemInfo，
+    //然后在onLayout方法中直接拿mItems中的元素进行布局
     //执行到当前方法的时候，mCurItem和newCurrentItem仍然是不同的，mCurItem是当前屏幕展示的页面。
     void populate(int newCurrentItem) {
         ItemInfo oldCurInfo = null;
@@ -1050,16 +1052,19 @@ public class ViewPager extends ViewGroup {
             }
         }
 
-        //这里初始化了所需位置的Fragment
+        // 这里初始化了当前要展示位置的Fragment
         if (curItem == null && N > 0) {
             curItem = addNewItem(mCurItem, curIndex);
         }
 
+        // 添加当前展示的item左右两边的item
         // Fill 3x the available width or up to the number of offscreen
         // pages requested to either side, whichever is larger.
         // If we have no current item we have no work to do.
         // 最少也会在当前页面的两边各增加一个页面
         if (curItem != null) {
+
+            //添加当前展示的item左边的item
             float extraWidthLeft = 0.f;
             int itemIndex = curIndex - 1;
             ItemInfo ii = itemIndex >= 0 ? mItems.get(itemIndex) : null;
@@ -1094,14 +1099,22 @@ public class ViewPager extends ViewGroup {
                 }
             }
 
+            //添加当前展示的item右边的item
             float extraWidthRight = curItem.widthFactor;
             itemIndex = curIndex + 1;
             if (extraWidthRight < 2.f) {
+                //这个itemIndex指向了当前需要展示页面的下一个页面
                 ii = itemIndex < mItems.size() ? mItems.get(itemIndex) : null;
                 final float rightWidthNeeded = clientWidth <= 0 ? 0 :
                         (float) getPaddingRight() / (float) clientWidth + 2.f;
                 for (int pos = mCurItem + 1; pos < N; pos++) {
+                    //通过循环创建或复用当前要展示页面右侧的所有页面
+
                     if (extraWidthRight >= rightWidthNeeded && pos > endPos) {
+                        //如果右侧占用的控件超出了所需空间，并且超出了offScreenLimit的数量，
+                        //如果itemInfo不为空，remove。那就是说populate之后，mItems里的itemInfo
+                        //只剩下有用的了（除去一种特殊情况，即当前ViewPager在滚动。但是一旦滚动
+                        // 结束，mItems中不展示的itemInfo便会被清除）
                         if (ii == null) {
                             break;
                         }
@@ -1115,10 +1128,14 @@ public class ViewPager extends ViewGroup {
                             ii = itemIndex < mItems.size() ? mItems.get(itemIndex) : null;
                         }
                     } else if (ii != null && pos == ii.position) {
+                        //itemInfo如果有，并且位置与要展示的位置相同，那么就复用此itemInfo。
                         extraWidthRight += ii.widthFactor;
                         itemIndex++;
                         ii = itemIndex < mItems.size() ? mItems.get(itemIndex) : null;
                     } else {
+                        //ii=null
+                        //当前position的fragment还没有创建
+                        //setadapter()开始初始化时，当前页面的下一个页面的fragment还没有被创建，这里创建
                         ii = addNewItem(pos, itemIndex);
                         itemIndex++;
                         extraWidthRight += ii.widthFactor;
@@ -1511,7 +1528,7 @@ public class ViewPager extends ViewGroup {
         // Make sure we have created all fragments that we need to have shown.
         mInLayout = true;
         populate();
-        mInLayout = false;
+         = false;
 
         // Page views next.
         size = getChildCount();
