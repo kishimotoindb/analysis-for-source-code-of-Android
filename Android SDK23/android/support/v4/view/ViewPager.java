@@ -1528,7 +1528,7 @@ public class ViewPager extends ViewGroup {
         // Make sure we have created all fragments that we need to have shown.
         mInLayout = true;
         populate();
-         = false;
+        mInLayout = false;
 
         // Page views next.
         size = getChildCount();
@@ -1596,6 +1596,7 @@ public class ViewPager extends ViewGroup {
         int paddingTop = getPaddingTop();
         int paddingRight = getPaddingRight();
         int paddingBottom = getPaddingBottom();
+        //滚动的本质就是在onLayout()方法中对item的位置进行偏移
         final int scrollX = getScrollX();
 
         int decorCount = 0;
