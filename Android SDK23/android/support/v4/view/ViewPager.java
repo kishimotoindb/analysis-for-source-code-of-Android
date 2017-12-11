@@ -1413,6 +1413,7 @@ public class ViewPager extends ViewGroup {
         }
     }
 
+    //拿到ViewPager的第一个层级子View的ItemInfo
     ItemInfo infoForChild(View child) {
         for (int i=0; i<mItems.size(); i++) {
             ItemInfo ii = mItems.get(i);
@@ -1423,6 +1424,7 @@ public class ViewPager extends ViewGroup {
         return null;
     }
 
+    //通过随便哪个层级的View，拿到ViewPager的第一个层级子View的ItemInfo
     ItemInfo infoForAnyChild(View child) {
         ViewParent parent;
         while ((parent=child.getParent()) != this) {
