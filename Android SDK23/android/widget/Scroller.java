@@ -558,6 +558,7 @@ public class Scroller  {
                 Math.signum(yvel) == Math.signum(mFinalY - mStartY);
     }
 
+    //viscous 粘稠的
     static class ViscousFluidInterpolator implements Interpolator {
         /** Controls the viscous fluid effect (how much of it). */
         private static final float VISCOUS_FLUID_SCALE = 8.0f;

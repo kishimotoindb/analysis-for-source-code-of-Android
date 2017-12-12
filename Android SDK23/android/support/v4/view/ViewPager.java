@@ -575,6 +575,7 @@ public class ViewPager extends ViewGroup {
         }
     }
 
+    //dispatchSelected表示是否要通知Selected事件
     private void scrollToItem(int item, boolean smoothScroll, int velocity,
             boolean dispatchSelected) {
         final ItemInfo curInfo = infoForPosition(item);
@@ -881,6 +882,7 @@ public class ViewPager extends ViewGroup {
         }
         duration = Math.min(duration, MAX_SETTLE_DURATION);
 
+        //这个方法只是设置了一些值，并没有涉及到开启动画
         mScroller.startScroll(sx, sy, dx, dy, duration);
         ViewCompat.postInvalidateOnAnimation(this);
     }
