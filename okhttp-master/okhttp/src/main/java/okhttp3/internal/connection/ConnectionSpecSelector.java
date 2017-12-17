@@ -30,7 +30,8 @@ import okhttp3.ConnectionSpec;
 import okhttp3.internal.Internal;
 
 /**
- * Handles the connection spec fallback strategy: When a secure socket connection fails due to a
+ *
+ * Handles the connection spec fallback(备用) strategy: When a secure socket connection fails due to a
  * handshake / protocol problem the connection may be retried with different protocols. Instances
  * are stateful and should be created and used for a single connection attempt.
  */

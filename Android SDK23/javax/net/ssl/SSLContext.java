@@ -29,6 +29,8 @@ import org.apache.harmony.security.fortress.Engine;
 /**
  * The public API for secure socket protocol implementations. It acts as factory
  * for {@code SSLSocketFactory}'s and {@code SSLEngine}s.
+ *
+ * SSLContext是生产SSLSocketFactory和SSLEngine的工厂，SSLSocketFactory是生产SSLSocket的工厂
  */
 public class SSLContext {
     // StoreSSLContext service name

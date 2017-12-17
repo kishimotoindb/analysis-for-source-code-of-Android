@@ -47,7 +47,7 @@ import javax.net.ssl.X509TrustManager;
  * <li>Timeout specification for SSL handshake operations
  * <li>Hostname verification in most cases (see WARNINGs below)
  * <li>Optional SSL session caching with {@link SSLSessionCache}
- * <li>Optionally bypass all SSL certificate checks
+ * <li>Optionally bypass(绕开) all SSL certificate checks
  * </ul>
  *
  * The handshake timeout does not apply to actual TCP socket connection.

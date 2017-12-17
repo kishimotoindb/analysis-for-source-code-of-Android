@@ -126,6 +126,7 @@ public final class RealConnection extends Http2Connection.Listener implements Co
     return result;
   }
 
+  //建立连接的方法
   public void connect(int connectTimeout, int readTimeout, int writeTimeout,
       boolean connectionRetryEnabled, Call call, EventListener eventListener) {
     if (protocol != null) throw new IllegalStateException("already connected");
@@ -147,6 +148,8 @@ public final class RealConnection extends Http2Connection.Listener implements Co
     }
 
     while (true) {
+      // TODO: 15/12/2017 这里应该涉及到请求失败自动重新请求的逻辑
+      //问题：1.什么情况下会重新请求？2.失败的请求会不会走回调方法
       try {
         if (route.requiresTunnel()) {
           connectTunnel(connectTimeout, readTimeout, writeTimeout, call, eventListener);
@@ -278,6 +281,8 @@ public final class RealConnection extends Http2Connection.Listener implements Co
     }
   }
 
+  //执行到这个方法的时候，TCP握手已经完成，socket已经建立
+  //如果请求的url是https协议的，那么会通过这个方法生成SSLSocket
   private void connectTls(ConnectionSpecSelector connectionSpecSelector) throws IOException {
     Address address = route.address();
     SSLSocketFactory sslSocketFactory = address.sslSocketFactory();
@@ -286,13 +291,13 @@ public final class RealConnection extends Http2Connection.Listener implements Co
     try {
       // Create the wrapper over the connected socket.
       sslSocket = (SSLSocket) sslSocketFactory.createSocket(
-          rawSocket, address.url().host(), address.url().port(), true /* autoClose */);
+              rawSocket, address.url().host(), address.url().port(), true /* autoClose */);
 
       // Configure the socket's ciphers, TLS versions, and extensions.
       ConnectionSpec connectionSpec = connectionSpecSelector.configureSecureSocket(sslSocket);
       if (connectionSpec.supportsTlsExtensions()) {
         Platform.get().configureTlsExtensions(
-            sslSocket, address.url().host(), address.protocols());
+                sslSocket, address.url().host(), address.protocols());
       }
 
       // Force handshake. This can throw!
@@ -303,26 +308,26 @@ public final class RealConnection extends Http2Connection.Listener implements Co
       if (!address.hostnameVerifier().verify(address.url().host(), sslSocket.getSession())) {
         X509Certificate cert = (X509Certificate) unverifiedHandshake.peerCertificates().get(0);
         throw new SSLPeerUnverifiedException("Hostname " + address.url().host() + " not verified:"
-            + "\n    certificate: " + CertificatePinner.pin(cert)
-            + "\n    DN: " + cert.getSubjectDN().getName()
-            + "\n    subjectAltNames: " + OkHostnameVerifier.allSubjectAltNames(cert));
+                + "\n    certificate: " + CertificatePinner.pin(cert)
+                + "\n    DN: " + cert.getSubjectDN().getName()
+                + "\n    subjectAltNames: " + OkHostnameVerifier.allSubjectAltNames(cert));
       }
 
       // Check that the certificate pinner is satisfied by the certificates presented.
       address.certificatePinner().check(address.url().host(),
-          unverifiedHandshake.peerCertificates());
+              unverifiedHandshake.peerCertificates());
 
       // Success! Save the handshake and the ALPN protocol.
       String maybeProtocol = connectionSpec.supportsTlsExtensions()
-          ? Platform.get().getSelectedProtocol(sslSocket)
-          : null;
+              ? Platform.get().getSelectedProtocol(sslSocket)
+              : null;
       socket = sslSocket;
       source = Okio.buffer(Okio.source(socket));
       sink = Okio.buffer(Okio.sink(socket));
       handshake = unverifiedHandshake;
       protocol = maybeProtocol != null
-          ? Protocol.get(maybeProtocol)
-          : Protocol.HTTP_1_1;
+              ? Protocol.get(maybeProtocol)
+              : Protocol.HTTP_1_1;
       success = true;
     } catch (AssertionError e) {
       if (Util.isAndroidGetsocknameError(e)) throw new IOException(e);

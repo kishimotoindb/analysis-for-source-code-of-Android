@@ -48,6 +48,9 @@ public abstract class SSLSocketFactory extends SocketFactory {
         }
         lastCacheVersion = newCacheVersion;
 
+        //首先拿到系统提供SSLSocketFactory的provider的类名，然后后面通过反射创建SSLSocketFactory
+        //的对象
+        //这块涉及到Security和Services两个类，暂时不深入
         String newName = Security.getProperty("ssl.SocketFactory.provider");
         if (newName != null) {
             /* The cache could have been invalidated, but the provider name didn't change. This

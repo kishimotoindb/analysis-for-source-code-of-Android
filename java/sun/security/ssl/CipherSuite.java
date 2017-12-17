@@ -42,6 +42,7 @@ import static sun.security.ssl.CipherSuite.PRF.*;
 import static sun.security.ssl.JsseJce.*;
 
 /**
+ *
  * An SSL/TLS CipherSuite. Constants for the standard key exchange, cipher,
  * and mac algorithms are also defined in this class.
  *
@@ -328,7 +329,7 @@ final class CipherSuite implements Comparable {
      */
     static enum KeyExchange {
 
-        // key exchange algorithms
+        // key exchange algorithms 
         K_NULL       ("NULL",       false),
         K_RSA        ("RSA",        true),
         K_RSA_EXPORT ("RSA_EXPORT", true),
