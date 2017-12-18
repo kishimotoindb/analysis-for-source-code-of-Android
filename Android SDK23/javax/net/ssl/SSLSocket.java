@@ -743,6 +743,8 @@ import java.net.UnknownHostException;
  *     </tbody>
  * </table>
  */
+
+//实现类SSLSocketImpl，具体的方法实现都在impl类中。
 public abstract class SSLSocket extends Socket {
 
     /**

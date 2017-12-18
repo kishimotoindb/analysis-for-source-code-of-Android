@@ -17,12 +17,14 @@
 
 package javax.net.ssl;
 
+import org.apache.harmony.security.fortress.Services;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
+
 import javax.net.SocketFactory;
-import org.apache.harmony.security.fortress.Services;
 
 /**
  * The abstract factory implementation to create {@code SSLSocket}s.

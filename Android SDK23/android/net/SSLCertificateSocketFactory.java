@@ -18,9 +18,11 @@ package android.net;
 
 import android.os.SystemProperties;
 import android.util.Log;
+
 import com.android.org.conscrypt.OpenSSLContextImpl;
 import com.android.org.conscrypt.OpenSSLSocketImpl;
 import com.android.org.conscrypt.SSLClientSessionCache;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -28,6 +30,7 @@ import java.net.SocketException;
 import java.security.KeyManagementException;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
+
 import javax.net.SocketFactory;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;

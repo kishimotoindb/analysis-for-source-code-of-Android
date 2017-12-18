@@ -26,10 +26,8 @@
 
 package sun.security.ssl;
 
-import java.util.*;
-
-import java.security.NoSuchAlgorithmException;
 import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import javax.crypto.SecretKey;
@@ -37,6 +35,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import sun.security.ssl.CipherSuite.*;
+
 import static sun.security.ssl.CipherSuite.KeyExchange.*;
 import static sun.security.ssl.CipherSuite.PRF.*;
 import static sun.security.ssl.JsseJce.*;

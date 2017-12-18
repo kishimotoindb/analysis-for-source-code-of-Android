@@ -5,9 +5,10 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/net/SSLCertificateSocketFactory.java" afterPath="$PROJECT_DIR$/Android SDK23/android/net/SSLCertificateSocketFactory.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLContext.java" afterPath="$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLContext.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocket.java" afterPath="$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocket.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocketFactory.java" afterPath="$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocketFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/org/apache/harmony/security/fortress/Services.java" afterPath="$PROJECT_DIR$/Android SDK23/org/apache/harmony/security/fortress/Services.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/sun/security/ssl/CipherSuite.java" afterPath="$PROJECT_DIR$/java/sun/security/ssl/CipherSuite.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/sun/security/ssl/SSLSocketImpl.java" afterPath="$PROJECT_DIR$/java/sun/security/ssl/SSLSocketImpl.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/ConnectionSpecSelector.java" afterPath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/ConnectionSpecSelector.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/RealConnection.java" afterPath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/RealConnection.java" />
     </list>
@@ -32,15 +33,9 @@
       <file leaf-file-name="HttpsURLConnection.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/HttpsURLConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
+            <state relative-caret-position="2085">
               <caret line="158" column="66" selection-start-line="158" selection-start-column="50" selection-end-line="158" selection-end-column="66" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#11238#11239#0" expanded="false" />
-                <element signature="e#11277#11278#0" expanded="false" />
-                <element signature="e#11956#11957#0" expanded="false" />
-                <element signature="e#11995#11996#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -48,10 +43,35 @@
       <file leaf-file-name="RealConnection.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/RealConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="292" column="28" selection-start-line="292" selection-start-column="19" selection-end-line="292" selection-end-column="28" />
+            <state relative-caret-position="3525">
+              <caret line="305" column="30" selection-start-line="305" selection-start-column="16" selection-end-line="305" selection-end-column="30" />
               <folding>
-                <element signature="e#0#22255#0" expanded="true" />
+                <element signature="e#0#22257#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SSLSocketImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/SSLSocketImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18045">
+              <caret line="1249" column="43" selection-start-line="1249" selection-start-column="32" selection-end-line="1249" selection-end-column="43" />
+              <folding>
+                <element signature="e#25613#25614#0" expanded="true" />
+                <element signature="e#25651#25652#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="InputRecord.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/InputRecord.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#22913#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -60,22 +80,10 @@
       <file leaf-file-name="SSLSocket.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocket.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="33" column="20" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
+            <state relative-caret-position="10920">
+              <caret line="746" column="35" selection-start-line="746" selection-start-column="35" selection-end-line="746" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CipherSuite.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/CipherSuite.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="342" column="0" selection-start-line="342" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#60622#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -84,10 +92,10 @@
       <file leaf-file-name="SSLSocketFactory.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocketFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1200">
-              <caret line="85" column="36" selection-start-line="85" selection-start-column="26" selection-end-line="85" selection-end-column="36" />
+            <state relative-caret-position="975">
+              <caret line="87" column="36" selection-start-line="87" selection-start-column="26" selection-end-line="87" selection-end-column="36" />
               <folding>
-                <element signature="e#0#5321#0" expanded="true" />
+                <element signature="imports" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -96,10 +104,16 @@
       <file leaf-file-name="SSLContext.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLContext.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="438">
-              <caret line="39" column="61" selection-start-line="39" selection-start-column="61" selection-end-line="39" selection-end-column="61" />
+            <state relative-caret-position="270">
+              <caret line="40" column="61" selection-start-line="40" selection-start-column="61" selection-end-line="40" selection-end-column="61" />
               <folding>
-                <element signature="e#0#15499#0" expanded="true" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#10305#10306#0" expanded="false" />
+                <element signature="e#10336#10337#0" expanded="false" />
+                <element signature="e#10532#10533#0" expanded="false" />
+                <element signature="e#10563#10564#0" expanded="false" />
+                <element signature="e#13211#13212#0" expanded="false" />
+                <element signature="e#13265#13266#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -111,6 +125,7 @@
             <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
+                <element signature="e#0#4180#0" expanded="false" />
                 <element signature="e#2313#2314#0" expanded="false" />
                 <element signature="e#2364#2365#0" expanded="false" />
                 <element signature="e#2677#2678#0" expanded="false" />
@@ -134,6 +149,7 @@
             <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
+                <element signature="e#0#3276#0" expanded="false" />
                 <element signature="imports" expanded="false" />
                 <element signature="e#2023#2024#0" expanded="false" />
                 <element signature="e#2047#2048#0" expanded="false" />
@@ -151,9 +167,10 @@
       <file leaf-file-name="Address.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Address.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
+            <state relative-caret-position="225">
               <caret line="38" column="15" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="15" />
               <folding>
+                <element signature="e#0#7253#0" expanded="false" />
                 <element signature="imports" expanded="false" />
                 <element signature="e#3644#3645#0" expanded="false" />
                 <element signature="e#3664#3665#0" expanded="false" />
@@ -212,6 +229,8 @@
         <option value="$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocketFactory.java" />
         <option value="$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLContext.java" />
         <option value="$PROJECT_DIR$/java/sun/security/ssl/CipherSuite.java" />
+        <option value="$PROJECT_DIR$/java/sun/security/ssl/SSLSocketImpl.java" />
+        <option value="$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocket.java" />
       </list>
     </option>
   </component>
@@ -247,24 +266,7 @@
       <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="analysis-for-source-code-of-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="analysis-for-source-code-of-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="analysis-for-source-code-of-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
+        <subPane />
       </pane>
       <pane id="AndroidView" />
       <pane id="Scope" />
@@ -633,12 +635,19 @@
       <option name="project" value="LOCAL" />
       <updated>1513069182313</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Https相关">
+      <created>1513512711441</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1513512711441</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -648,8 +657,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5876663" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31545064" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31545064" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -659,6 +667,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -706,7 +715,8 @@
     <MESSAGE value="1.ViewPager的onMeasure()方法分析" />
     <MESSAGE value="1.ViewPager的onLayout()方法分析" />
     <MESSAGE value="1.ViewPager的scroll相关方法 2.Scroller类" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.ViewPager的scroll相关方法 2.Scroller类" />
+    <MESSAGE value="Https相关" />
+    <option name="LAST_COMMIT_MESSAGE" value="Https相关" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -723,20 +733,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/StringFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/StringBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/Toast.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -948,7 +944,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9735">
           <caret line="710" column="63" selection-start-line="710" selection-start-column="63" selection-end-line="710" selection-end-column="63" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -963,10 +958,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#7312#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -974,7 +965,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="23" column="69" selection-start-line="23" selection-start-column="69" selection-end-line="23" selection-end-column="69" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -982,9 +972,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="33" column="42" selection-start-line="33" selection-start-column="42" selection-end-line="33" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#5333#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -992,9 +979,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#16538#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1002,45 +986,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="50" column="18" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#16938#16939#0" expanded="false" />
-            <element signature="e#16961#16962#0" expanded="false" />
-            <element signature="e#16991#16992#0" expanded="false" />
-            <element signature="e#17030#17031#0" expanded="false" />
-            <element signature="e#18351#18352#0" expanded="false" />
-            <element signature="e#18376#18377#0" expanded="false" />
-            <element signature="e#19640#19641#0" expanded="false" />
-            <element signature="e#19665#19666#0" expanded="false" />
-            <element signature="e#20495#20496#0" expanded="false" />
-            <element signature="e#20516#20517#0" expanded="false" />
-            <element signature="e#21116#21117#0" expanded="false" />
-            <element signature="e#21137#21138#0" expanded="false" />
-            <element signature="e#21982#21983#0" expanded="false" />
-            <element signature="e#22018#22019#0" expanded="false" />
-            <element signature="e#24546#24547#0" expanded="false" />
-            <element signature="e#24575#24576#0" expanded="false" />
-            <element signature="e#35877#35878#0" expanded="false" />
-            <element signature="e#35902#35903#0" expanded="false" />
-            <element signature="e#38155#38156#0" expanded="false" />
-            <element signature="e#38193#38194#0" expanded="false" />
-            <element signature="e#39082#39083#0" expanded="false" />
-            <element signature="e#39120#39121#0" expanded="false" />
-            <element signature="e#39296#39297#0" expanded="false" />
-            <element signature="e#39327#39328#0" expanded="false" />
-            <element signature="e#39367#39368#0" expanded="false" />
-            <element signature="e#39387#39388#0" expanded="false" />
-            <element signature="e#43238#43239#0" expanded="false" />
-            <element signature="e#43298#43299#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Address.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
+        <state relative-caret-position="225">
           <caret line="38" column="15" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="15" />
           <folding>
+            <element signature="e#0#7253#0" expanded="false" />
             <element signature="imports" expanded="false" />
             <element signature="e#3644#3645#0" expanded="false" />
             <element signature="e#3664#3665#0" expanded="false" />
@@ -1073,6 +1027,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+            <element signature="e#0#3276#0" expanded="false" />
             <element signature="imports" expanded="false" />
             <element signature="e#2023#2024#0" expanded="false" />
             <element signature="e#2047#2048#0" expanded="false" />
@@ -1091,6 +1046,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+            <element signature="e#0#4180#0" expanded="false" />
             <element signature="e#2313#2314#0" expanded="false" />
             <element signature="e#2364#2365#0" expanded="false" />
             <element signature="e#2677#2678#0" expanded="false" />
@@ -1109,15 +1065,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/HttpsURLConnection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
+        <state relative-caret-position="2085">
           <caret line="158" column="66" selection-start-line="158" selection-start-column="50" selection-end-line="158" selection-end-column="66" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#11238#11239#0" expanded="false" />
-            <element signature="e#11277#11278#0" expanded="false" />
-            <element signature="e#11956#11957#0" expanded="false" />
-            <element signature="e#11995#11996#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1125,9 +1075,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-15480">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#47294#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1135,9 +1082,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="29" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#6917#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1145,9 +1089,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#2401#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1155,46 +1096,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-60">
           <caret line="46" column="18" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#22652#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLContext.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="39" column="61" selection-start-line="39" selection-start-column="61" selection-end-line="39" selection-end-column="61" />
+        <state relative-caret-position="270">
+          <caret line="40" column="61" selection-start-line="40" selection-start-column="61" selection-end-line="40" selection-end-column="61" />
           <folding>
-            <element signature="e#0#15499#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#10305#10306#0" expanded="false" />
+            <element signature="e#10336#10337#0" expanded="false" />
+            <element signature="e#10532#10533#0" expanded="false" />
+            <element signature="e#10563#10564#0" expanded="false" />
+            <element signature="e#13211#13212#0" expanded="false" />
+            <element signature="e#13265#13266#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocketFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1200">
-          <caret line="85" column="36" selection-start-line="85" selection-start-column="26" selection-end-line="85" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#5321#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/RealConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="292" column="28" selection-start-line="292" selection-start-column="19" selection-end-line="292" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#22255#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="33" column="20" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
+        <state relative-caret-position="975">
+          <caret line="87" column="36" selection-start-line="87" selection-start-column="26" selection-end-line="87" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
@@ -1203,10 +1127,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/CipherSuite.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="342" column="0" selection-start-line="342" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
+        <state relative-caret-position="-3690">
+          <caret line="382" column="5" selection-start-line="382" selection-start-column="5" selection-end-line="382" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/RealConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3525">
+          <caret line="305" column="30" selection-start-line="305" selection-start-column="16" selection-end-line="305" selection-end-column="30" />
           <folding>
-            <element signature="e#0#60622#0" expanded="true" />
+            <element signature="e#0#22257#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10920">
+          <caret line="746" column="35" selection-start-line="746" selection-start-column="35" selection-end-line="746" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/SSLSocketImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18045">
+          <caret line="1249" column="43" selection-start-line="1249" selection-start-column="32" selection-end-line="1249" selection-end-column="43" />
+          <folding>
+            <element signature="e#25613#25614#0" expanded="true" />
+            <element signature="e#25651#25652#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/InputRecord.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#22913#0" expanded="true" />
           </folding>
         </state>
       </provider>

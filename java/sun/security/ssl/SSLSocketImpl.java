@@ -1280,9 +1280,14 @@ final public class SSLSocketImpl extends BaseSSLSocketImpl {
      *          certain exception. If <code>resumable</code>, the socket will
      *          be reserved for exceptions like timeout; otherwise, the socket
      *          will be closed, no further communications could be done.
+     *          如果resumable，那么如果ssl握手因为超时等原因失败，socket（注意是socket，不是
+     *          sslSocket）会保持连接状态。
      */
     private void startHandshake(boolean resumable) throws IOException {
+        //从这里也能够看出SSL握手是发生在socket连接成功之后，即首先是tcp握手。开始ssl握手之前，这里
+        //先判断了一下socket是否还是连接状态。
         checkWrite();
+
         try {
             if (getConnectionState() == cs_HANDSHAKE) {
                 // do initial handshake
