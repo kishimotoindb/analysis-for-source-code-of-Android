@@ -26,22 +26,15 @@
 
 package sun.security.ssl;
 
-import java.io.*;
-import java.net.*;
-import java.security.GeneralSecurityException;
-import java.security.AccessController;
 import java.security.AccessControlContext;
-import java.security.PrivilegedAction;
+import java.security.AccessController;
 import java.security.AlgorithmConstraints;
-import java.util.*;
+import java.security.GeneralSecurityException;
+import java.security.PrivilegedAction;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.crypto.BadPaddingException;
-
-import javax.net.ssl.*;
-
-import com.sun.net.ssl.internal.ssl.X509ExtendedTrustManager;
 
 /**
  * Implementation of an SSL socket.  This is a normal connection type
@@ -100,6 +93,8 @@ final public class SSLSocketImpl extends BaseSSLSocketImpl {
      * - HANDSHAKE picks session parameters before allowing traffic.
      *          There are many substates due to sequencing requirements
      *          for handshake messages.
+     *          因为握手时交换信息是有顺序要求的，所以HandShake状态下，有很多子状态。
+     *
      * - DATA may be transmitted.
      * - RENEGOTIATE state allows concurrent data and handshaking
      *          traffic ("same" substates as HANDSHAKE), and terminates
@@ -1303,7 +1298,7 @@ final public class SSLSocketImpl extends BaseSSLSocketImpl {
     }
 
     /**
-     * Kickstart the handshake if it is not already in progress.
+     * Kickstart(貌似是快速开始、立即开始的含义) the handshake if it is not already in progress.
      * This means:
      *
      *  . if handshaking is already underway, do nothing and return

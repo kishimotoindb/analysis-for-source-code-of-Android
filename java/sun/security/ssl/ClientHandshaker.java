@@ -1291,7 +1291,11 @@ final class ClientHandshaker extends Handshaker {
     /*
      * Unless we are using an anonymous ciphersuite, the server always
      * sends a certificate message (for the CipherSuites we currently
-     * support). The trust manager verifies the chain for us.
+     * support).
+     *
+     * ***The trust manager verifies the chain for us.***
+     * ClientHandShaker和ServerHandShaker是进行两端握手的关键，这里也说了trust manager是用来
+     * 验证公钥证书的有效性的，但是怎么验证服务器是合法的服务器，需要先理解ssl握手的过程。
      */
     private void serverCertificate(CertificateMsg mesg) throws IOException {
         if (debug != null && Debug.isOn("handshake")) {
