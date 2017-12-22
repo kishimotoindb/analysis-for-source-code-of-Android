@@ -25,30 +25,22 @@
 
 package sun.security.ssl;
 
-import java.io.*;
 import java.math.BigInteger;
-import java.security.*;
-import java.util.*;
-
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.ECParameterSpec;
 
-import java.security.cert.X509Certificate;
-import java.security.cert.CertificateException;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
-import javax.net.ssl.*;
-
 import javax.security.auth.Subject;
 
-import sun.security.ssl.HandshakeMessage.*;
-import sun.security.ssl.CipherSuite.*;
-import static sun.security.ssl.CipherSuite.KeyExchange.*;
-
 import sun.net.util.IPAddressUtil;
+import sun.security.ssl.CipherSuite.*;
+import sun.security.ssl.HandshakeMessage.*;
+
+import static sun.security.ssl.CipherSuite.KeyExchange.*;
 
 /**
  * ClientHandshaker does the protocol handshaking from the point
@@ -1301,12 +1293,16 @@ final class ClientHandshaker extends Handshaker {
         if (debug != null && Debug.isOn("handshake")) {
             mesg.print(System.out);
         }
+        // 服务器传递过来的证书是一个证书链，通过这个链来验证证书的有效性。所以接收服务器证书的是一个
+        // 数组X509Certificate[]
         X509Certificate[] peerCerts = mesg.getCertificateChain();
         if (peerCerts.length == 0) {
             fatalSE(Alerts.alert_bad_certificate,
                 "empty certificate chain");
         }
         // ask the trust manager to verify the chain
+        // 下面就是通过trustManager验证证书有效性的流程
+        // sslContext和android里的Context类似，提供上下文环境，从中能够拿到当前操作所需要的资源。
         X509TrustManager tm = sslContext.getX509TrustManager();
         try {
             // find out the key exchange algorithm used

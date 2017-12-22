@@ -4,7 +4,6 @@
     <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/sun/security/ssl/ClientHandshaker.java" afterPath="$PROJECT_DIR$/java/sun/security/ssl/ClientHandshaker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java/sun/security/ssl/SSLSocketImpl.java" afterPath="$PROJECT_DIR$/java/sun/security/ssl/SSLSocketImpl.java" />
     </list>
     <ignored path="analysis-for-source-code-of-Android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -67,20 +66,87 @@
       <file leaf-file-name="SSLSocketImpl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/SSLSocketImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
+            <state relative-caret-position="17550">
               <caret line="1211" column="45" selection-start-line="1211" selection-start-column="29" selection-end-line="1211" selection-end-column="45" />
-              <folding />
+              <folding>
+                <element signature="e#0#93795#0" expanded="false" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#25531#25532#0" expanded="false" />
+                <element signature="e#25569#25570#0" expanded="false" />
+                <element signature="e#25632#25633#0" expanded="false" />
+                <element signature="e#25671#25672#0" expanded="false" />
+                <element signature="e#25708#25709#0" expanded="false" />
+                <element signature="e#25734#25735#0" expanded="false" />
+                <element signature="e#46016#46017#0" expanded="false" />
+                <element signature="e#46044#46045#0" expanded="false" />
+                <element signature="e#46167#46168#0" expanded="false" />
+                <element signature="e#46196#46197#0" expanded="false" />
+                <element signature="e#54552#54553#0" expanded="false" />
+                <element signature="e#54612#54613#0" expanded="false" />
+                <element signature="e#69000#69001#0" expanded="false" />
+                <element signature="e#69060#69061#0" expanded="false" />
+                <element signature="e#78607#78608#0" expanded="false" />
+                <element signature="e#78641#78642#0" expanded="false" />
+                <element signature="e#81170#81171#0" expanded="false" />
+                <element signature="e#81209#81210#0" expanded="false" />
+                <element signature="e#86041#86042#0" expanded="false" />
+                <element signature="e#86077#86078#0" expanded="false" />
+                <element signature="e#93189#93190#0" expanded="false" />
+                <element signature="e#93244#93245#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClientHandshaker.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ClientHandshaker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/ClientHandshaker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="93">
-              <caret line="1284" column="55" selection-start-line="1284" selection-start-column="55" selection-end-line="1284" selection-end-column="55" />
+            <state relative-caret-position="543">
+              <caret line="1318" column="46" selection-start-line="1318" selection-start-column="22" selection-end-line="1318" selection-end-column="46" />
               <folding>
-                <element signature="e#0#54759#0" expanded="true" />
+                <element signature="e#0#54864#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="X509ExtendedTrustManager.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/java/javax/net/ssl/X509ExtendedTrustManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="40">
+              <caret line="103" column="68" selection-start-line="103" selection-start-column="61" selection-end-line="103" selection-end-column="68" />
+              <folding>
+                <element signature="e#0#12301#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Handshaker.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/Handshaker.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1080">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#24255#24256#0" expanded="false" />
+                <element signature="e#24301#24302#0" expanded="false" />
+                <element signature="e#26864#26865#0" expanded="false" />
+                <element signature="e#26924#26925#0" expanded="false" />
+                <element signature="e#27116#27117#0" expanded="false" />
+                <element signature="e#27146#27147#0" expanded="false" />
+                <element signature="e#27558#27559#0" expanded="false" />
+                <element signature="e#27600#27601#0" expanded="false" />
+                <element signature="e#27728#27729#0" expanded="false" />
+                <element signature="e#27767#27768#0" expanded="false" />
+                <element signature="e#27895#27896#0" expanded="false" />
+                <element signature="e#27934#27935#0" expanded="false" />
+                <element signature="e#31303#31304#0" expanded="false" />
+                <element signature="e#31337#31338#0" expanded="false" />
+                <element signature="e#47080#47081#0" expanded="false" />
+                <element signature="e#47118#47119#0" expanded="false" />
+                <element signature="e#48111#48112#0" expanded="false" />
+                <element signature="e#48157#48158#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -151,51 +217,6 @@
                 <element signature="e#10563#10564#0" expanded="false" />
                 <element signature="e#13211#13212#0" expanded="false" />
                 <element signature="e#13265#13266#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AssertionError.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/AssertionError.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#4180#0" expanded="false" />
-                <element signature="e#2313#2314#0" expanded="false" />
-                <element signature="e#2364#2365#0" expanded="false" />
-                <element signature="e#2677#2678#0" expanded="false" />
-                <element signature="e#2728#2729#0" expanded="false" />
-                <element signature="e#3037#3038#0" expanded="false" />
-                <element signature="e#3090#3091#0" expanded="false" />
-                <element signature="e#3398#3399#0" expanded="false" />
-                <element signature="e#3448#3449#0" expanded="false" />
-                <element signature="e#3759#3760#0" expanded="false" />
-                <element signature="e#3810#3811#0" expanded="false" />
-                <element signature="e#4124#4125#0" expanded="false" />
-                <element signature="e#4176#4177#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Route.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Route.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#3276#0" expanded="false" />
-                <element signature="imports" expanded="false" />
-                <element signature="e#2023#2024#0" expanded="false" />
-                <element signature="e#2047#2048#0" expanded="false" />
-                <element signature="e#2296#2297#0" expanded="false" />
-                <element signature="e#2318#2319#0" expanded="false" />
-                <element signature="e#2364#2365#0" expanded="false" />
-                <element signature="e#2398#2399#0" expanded="false" />
-                <element signature="e#3221#3222#0" expanded="false" />
-                <element signature="e#3272#3273#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -644,7 +665,14 @@
       <option name="project" value="LOCAL" />
       <updated>1513563161455</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="ClientHandShaker的学习，看到从服务端获取公钥证书，然后使用trustManager验证证书的有效性。但是如何验证服务器合法，还要接续看">
+      <created>1513866262401</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1513866262401</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -718,7 +746,8 @@
     <MESSAGE value="1.ViewPager的onLayout()方法分析" />
     <MESSAGE value="1.ViewPager的scroll相关方法 2.Scroller类" />
     <MESSAGE value="Https相关" />
-    <option name="LAST_COMMIT_MESSAGE" value="Https相关" />
+    <MESSAGE value="ClientHandShaker的学习，看到从服务端获取公钥证书，然后使用trustManager验证证书的有效性。但是如何验证服务器合法，还要接续看" />
+    <option name="LAST_COMMIT_MESSAGE" value="ClientHandShaker的学习，看到从服务端获取公钥证书，然后使用trustManager验证证书的有效性。但是如何验证服务器合法，还要接续看" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -735,27 +764,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Android SDK23/com/android/datetimepicker/time/CircleView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/jre/jdk/Contents/Home/jre/lib/rt.jar!/javax/swing/text/View.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/RelativeLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="1239" column="0" selection-start-line="1239" selection-start-column="0" selection-end-line="1239" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/CircleImageView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -988,7 +996,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="38" column="15" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -996,18 +1003,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#3276#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#2023#2024#0" expanded="false" />
-            <element signature="e#2047#2048#0" expanded="false" />
-            <element signature="e#2296#2297#0" expanded="false" />
-            <element signature="e#2318#2319#0" expanded="false" />
-            <element signature="e#2364#2365#0" expanded="false" />
-            <element signature="e#2398#2399#0" expanded="false" />
-            <element signature="e#3221#3222#0" expanded="false" />
-            <element signature="e#3272#3273#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1073,23 +1069,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-60">
           <caret line="46" column="18" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="40" column="61" selection-start-line="40" selection-start-column="61" selection-end-line="40" selection-end-column="61" />
-          <folding>
-            <element signature="e#0#15500#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#10305#10306#0" expanded="false" />
-            <element signature="e#10336#10337#0" expanded="false" />
-            <element signature="e#10532#10533#0" expanded="false" />
-            <element signature="e#10563#10564#0" expanded="false" />
-            <element signature="e#13211#13212#0" expanded="false" />
-            <element signature="e#13265#13266#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1168,18 +1147,106 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/SSLSocketImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
+        <state relative-caret-position="17550">
           <caret line="1211" column="45" selection-start-line="1211" selection-start-column="29" selection-end-line="1211" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#93795#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#25531#25532#0" expanded="false" />
+            <element signature="e#25569#25570#0" expanded="false" />
+            <element signature="e#25632#25633#0" expanded="false" />
+            <element signature="e#25671#25672#0" expanded="false" />
+            <element signature="e#25708#25709#0" expanded="false" />
+            <element signature="e#25734#25735#0" expanded="false" />
+            <element signature="e#46016#46017#0" expanded="false" />
+            <element signature="e#46044#46045#0" expanded="false" />
+            <element signature="e#46167#46168#0" expanded="false" />
+            <element signature="e#46196#46197#0" expanded="false" />
+            <element signature="e#54552#54553#0" expanded="false" />
+            <element signature="e#54612#54613#0" expanded="false" />
+            <element signature="e#69000#69001#0" expanded="false" />
+            <element signature="e#69060#69061#0" expanded="false" />
+            <element signature="e#78607#78608#0" expanded="false" />
+            <element signature="e#78641#78642#0" expanded="false" />
+            <element signature="e#81170#81171#0" expanded="false" />
+            <element signature="e#81209#81210#0" expanded="false" />
+            <element signature="e#86041#86042#0" expanded="false" />
+            <element signature="e#86077#86078#0" expanded="false" />
+            <element signature="e#93189#93190#0" expanded="false" />
+            <element signature="e#93244#93245#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="40" column="61" selection-start-line="40" selection-start-column="61" selection-end-line="40" selection-end-column="61" />
+          <folding>
+            <element signature="e#0#15500#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#10305#10306#0" expanded="false" />
+            <element signature="e#10336#10337#0" expanded="false" />
+            <element signature="e#10532#10533#0" expanded="false" />
+            <element signature="e#10563#10564#0" expanded="false" />
+            <element signature="e#13211#13212#0" expanded="false" />
+            <element signature="e#13265#13266#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/jre/jdk/Contents/Home/jre/lib/jsse.jar!/sun/security/ssl/Handshaker.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-375">
+          <caret line="6" column="15" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/Handshaker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1080">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#24255#24256#0" expanded="false" />
+            <element signature="e#24301#24302#0" expanded="false" />
+            <element signature="e#26864#26865#0" expanded="false" />
+            <element signature="e#26924#26925#0" expanded="false" />
+            <element signature="e#27116#27117#0" expanded="false" />
+            <element signature="e#27146#27147#0" expanded="false" />
+            <element signature="e#27558#27559#0" expanded="false" />
+            <element signature="e#27600#27601#0" expanded="false" />
+            <element signature="e#27728#27729#0" expanded="false" />
+            <element signature="e#27767#27768#0" expanded="false" />
+            <element signature="e#27895#27896#0" expanded="false" />
+            <element signature="e#27934#27935#0" expanded="false" />
+            <element signature="e#31303#31304#0" expanded="false" />
+            <element signature="e#31337#31338#0" expanded="false" />
+            <element signature="e#47080#47081#0" expanded="false" />
+            <element signature="e#47118#47119#0" expanded="false" />
+            <element signature="e#48111#48112#0" expanded="false" />
+            <element signature="e#48157#48158#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/ClientHandshaker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="93">
-          <caret line="1284" column="55" selection-start-line="1284" selection-start-column="55" selection-end-line="1284" selection-end-column="55" />
+        <state relative-caret-position="543">
+          <caret line="1318" column="46" selection-start-line="1318" selection-start-column="22" selection-end-line="1318" selection-end-column="46" />
           <folding>
-            <element signature="e#0#54759#0" expanded="true" />
+            <element signature="e#0#54864#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/java/javax/net/ssl/X509ExtendedTrustManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="103" column="68" selection-start-line="103" selection-start-column="61" selection-end-line="103" selection-end-column="68" />
+          <folding>
+            <element signature="e#0#12301#0" expanded="true" />
           </folding>
         </state>
       </provider>
