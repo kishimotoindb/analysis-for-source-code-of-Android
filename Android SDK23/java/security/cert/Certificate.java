@@ -30,7 +30,7 @@ import java.security.SignatureException;
 import java.util.Arrays;
 
 /**
- * Abstract class to represent identity certificates. It represents a way to
+ * Abstract class to represent identity certificates（身份证书）. It represents a way to
  * verify the binding of a Principal(证书持有者) and its public key. Examples are X.509,
  * PGP, and SDSI.
  */

@@ -198,6 +198,7 @@ public final class PKIXValidator extends Validator {
         return parameterTemplate;
     }
 
+    //验证证书有效性的核心代码
     @Override
     X509Certificate[] engineValidate(X509Certificate[] chain,
             Collection<X509Certificate> otherCerts,
@@ -236,7 +237,9 @@ public final class PKIXValidator extends Validator {
                 // updated its cert with a stronger signature algorithm in JRE
                 // but the weak one is still in circulation.
 
+//**************自签名证书验证证书有效性的核心代码********************************************
                 if (trustedCerts.contains(cert) ||          // trusted cert
+//**************自签名证书验证证书有效性的核心代码********************************************
                         (trustedSubjects.containsKey(dn) && // replacing ...
                          trustedSubjects.get(dn).contains(  // ... weak cert
                             cert.getPublicKey()))) {

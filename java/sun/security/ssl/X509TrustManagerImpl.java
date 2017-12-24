@@ -45,7 +45,7 @@ import sun.security.util.HostnameChecker;
  * <p>
  * This class supports both the Simple validation algorithm from previous
  * JSSE versions and PKIX validation. Currently, it is not possible for the
- * application to specify PKIX parameters other than trust anchors. This will
+ * application to specify PKIX parameters other than(除了) trust anchors. This will
  * be fixed in a future release using new APIs. When that happens, it may also
  * make sense to separate the Simple and PKIX trust managers into separate
  * classes.
@@ -107,6 +107,9 @@ final class X509TrustManagerImpl extends X509ExtendedTrustManager
         checkTrusted(chain, authType, (Socket)null, false);
     }
 
+    /*
+     * 这里返回的应该是可信任CA机构的根证书
+     */
     @Override
     public X509Certificate[] getAcceptedIssuers() {
         X509Certificate[] certsArray = new X509Certificate[trustedCerts.size()];
@@ -180,7 +183,9 @@ final class X509TrustManagerImpl extends X509ExtendedTrustManager
         return v;
     }
 
-
+    /*
+     * 对于自签名证书，chain应该是peer发送过来的证书，不是app本地的存的那个
+     */
     private void checkTrusted(X509Certificate[] chain, String authType,
                 Socket socket, boolean isClient) throws CertificateException {
         Validator v = checkTrustedInit(chain, authType, isClient);
@@ -199,6 +204,19 @@ final class X509TrustManagerImpl extends X509ExtendedTrustManager
             String identityAlg = sslSocket.getSSLParameters().
                                         getEndpointIdentificationAlgorithm();
             if (identityAlg != null && identityAlg.length() != 0) {
+                /*
+                 * 在验证公钥证书有效性和server是否与期望请求的server相同之前，先对hostname进行一
+                 * 轮验证。
+                 * 为什么在上两个验证之前做hostname的验证？
+                 * 我觉得有两种情况：
+                 * 1.运营商域名劫持，当前连接的server不是自家公司的server，然后它给客户端发送的公
+                 *   钥证书是自己server的。
+                 * 2.man-in-the-middle：man发送给客户端的证书是自家公司server的，但是man使用的
+                 *   hostname不是自家公司的。
+                 * 以上两种情形根本不需要去验证证书的有效性，因为hostname就是不匹配的。检测hostname
+                 * 要比检测证书链简单的多。所以可能想先简单的验证一步。
+                 *
+                 */
                 String hostname = session.getPeerHost();
                 checkIdentity(hostname, chain[0], identityAlg);
             }
