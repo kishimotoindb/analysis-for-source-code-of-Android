@@ -27,15 +27,8 @@
 package sun.security.ssl;
 
 import java.net.Socket;
+
 import javax.net.ssl.SSLSession;
-
-import java.util.*;
-import java.security.*;
-import java.security.cert.*;
-
-import javax.net.ssl.*;
-
-import sun.security.validator.*;
 
 import sun.security.util.HostnameChecker;
 

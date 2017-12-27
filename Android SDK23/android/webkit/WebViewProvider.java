@@ -48,11 +48,11 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * WebView backend provider interface: this interface is the abstract backend to a WebView
+ * WebView backend(后台) provider interface: this interface is the abstract backend to a WebView
  * instance; each WebView object is bound to exactly one WebViewProvider object which implements
  * the runtime behavior of that WebView.
  *
- * All methods must behave as per their namesake in {@link WebView}, unless otherwise noted.
+ * All methods must behave as per their namesake(同名的人) in {@link WebView}, unless otherwise noted.
  *
  * @hide Not part of the public API; only required by system implementors.
  */

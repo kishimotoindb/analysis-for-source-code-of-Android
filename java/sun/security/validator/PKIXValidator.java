@@ -25,12 +25,8 @@
 
 package sun.security.validator;
 
-import java.util.*;
-
-import java.security.*;
-import java.security.cert.*;
-
 import javax.security.auth.x500.X500Principal;
+
 import sun.security.action.GetBooleanAction;
 import sun.security.provider.certpath.AlgorithmChecker;
 
@@ -237,9 +233,9 @@ public final class PKIXValidator extends Validator {
                 // updated its cert with a stronger signature algorithm in JRE
                 // but the weak one is still in circulation.
 
-//**************自签名证书验证证书有效性的核心代码********************************************
+//**************自签名证书验证证书有效性的核心代码****************************************************************************************************************
                 if (trustedCerts.contains(cert) ||          // trusted cert
-//**************自签名证书验证证书有效性的核心代码********************************************
+//**************自签名证书验证证书有效性的核心代码****************************************************************************************************************
                         (trustedSubjects.containsKey(dn) && // replacing ...
                          trustedSubjects.get(dn).contains(  // ... weak cert
                             cert.getPublicKey()))) {
