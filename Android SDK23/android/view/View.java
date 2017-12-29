@@ -18054,7 +18054,16 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     }
 
     /**
-     * 这个方法其实就是对应着selector中的state_pressed等状态。一个View的状态是可以自定义的。
+     * 如果View设置的drawable相关属性是个状态选择器，drawable的状态可以通过这个方法和mergeDrawableState()
+     * 方法进行控制。
+     *
+     * 首先通过当前方法生成drawableStates[]，然后通过mergeDrawableState()方法将drawable的状态
+     * 放入drawableStates[]中，供系统控制状态使用。
+     *
+     * 如果需要加入自定义的DrawableState，那么首先通过重写当前方法扩展drawableStates[]的元素个数，
+     * 然后通过mergeDrawableState()方法更新drawableStates[]中的元素状态。
+     *
+     *
      * Generate the new {@link android.graphics.drawable.Drawable} state for
      * this view. This is called by the view
      * system when the cached Drawable state is determined to be invalid.  To

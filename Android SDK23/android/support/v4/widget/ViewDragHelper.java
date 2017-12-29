@@ -155,7 +155,7 @@ public class ViewDragHelper {
          * @param dx Change in X position from the last call
          * @param dy Change in Y position from the last call
          */
-	//在Action Move中的dragTo方法中被调用
+	    //在Action Move中的dragTo方法中被调用
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {}
 
         /**
@@ -167,11 +167,11 @@ public class ViewDragHelper {
          * @param capturedChild Child view that was captured
          * @param activePointerId Pointer id tracking the child capture
          */
-	//ViewDragHelper默认捕获和拖拽的都是mParent下一层的View和ViewGroup。但是当一个ViewGroup被捕获的时候，会回调
-	//该方法，并将这个被捕获的ViewGroup传递过来，这时就可以通过重写这个方法，实现ViewGroup拖拽的时候，对ViewGroup
-	//的子View做一些操作。此时是Action Down，手指还没有移动。
-	//当父容器被捕获的时候，调用该方法。
-	//这个方法在用户交换手指操作同一个view的时候，会被多次调用，交换一次调用一次
+        //ViewDragHelper默认捕获和拖拽的都是mParent下一层的View和ViewGroup。但是当一个ViewGroup被捕获的时候，会回调
+        //该方法，并将这个被捕获的ViewGroup传递过来，这时就可以通过重写这个方法，实现ViewGroup拖拽的时候，对ViewGroup
+        //的子View做一些操作。此时是Action Down，手指还没有移动。
+        //当父容器被捕获的时候，调用该方法。
+        //这个方法在用户交换手指操作同一个view的时候，会被多次调用，交换一次调用一次
         public void onViewCaptured(View capturedChild, int activePointerId) {}
 
         /**
@@ -205,8 +205,8 @@ public class ViewDragHelper {
          * @see #EDGE_RIGHT
          * @see #EDGE_BOTTOM
          */
-	//Action Down的时候调用，1129行
-	//edgeFlags是标志位，表示的是被触摸的边界，同时这个边界是可以tracing的
+        //Action Down的时候调用，1129行
+        //edgeFlags是标志位，表示的是被触摸的边界，同时这个边界是可以tracing的
         public void onEdgeTouched(int edgeFlags, int pointerId) {}
 
         /**
@@ -388,7 +388,7 @@ public class ViewDragHelper {
 
         final ViewConfiguration vc = ViewConfiguration.get(context);
         final float density = context.getResources().getDisplayMetrics().density;
-	//默认边界的尺寸是20dp
+	    //默认边界的尺寸是20dp
         mEdgeSize = (int) (EDGE_SIZE * density + 0.5f);
 
         mTouchSlop = vc.getScaledTouchSlop();

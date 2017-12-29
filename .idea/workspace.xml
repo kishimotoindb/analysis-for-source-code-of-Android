@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="1.SSL握手：自签名证书的有效性验证，核心代码为PKIXValidator.engineValidate(){ if(trustedCerts.contains(chain[0]) }      2.开始学习WebView的网页加载过程。因为WebViewClient的onReceivedSslError方法在https请求失败时被调用，网上的做法是在这个方法中验证server提供的公钥证书和本地的公钥证书是否相同，如果相同，handler.proceed()。但是这个方法认证证书之后，是否重新进行ssl握手，还是其他什么流程，目前并不了解。这就需要先搞懂webview网页的加载流程。">
+    <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/WebView/ WebViewChromiumFactoryProvider.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/WebView/WebViewChromium" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/ViewDragHelper.java" afterPath="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/ViewDragHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/view/View.java" afterPath="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
     </list>
     <ignored path="analysis-for-source-code-of-Android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,11 +29,9 @@
       <file leaf-file-name="WebViewClient.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Android SDK23/android/webkit/WebViewClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4260">
+            <state relative-caret-position="4050">
               <caret line="291" column="64" selection-start-line="291" selection-start-column="49" selection-end-line="291" selection-end-column="64" />
-              <folding>
-                <element signature="e#0#19910#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -37,21 +39,53 @@
       <file leaf-file-name="WebView.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Android SDK23/android/webkit/WebView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="430">
+            <state relative-caret-position="32820">
               <caret line="2281" column="24" selection-start-line="2281" selection-start-column="24" selection-end-line="2281" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WebViewProvider.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Android SDK23/android/webkit/WebViewProvider.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="50" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="50" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WebViewChromium.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebView/WebViewChromium.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="79" column="3" selection-start-line="79" selection-start-column="3" selection-end-line="79" selection-end-column="3" />
               <folding>
-                <element signature="e#0#100106#0" expanded="true" />
+                <element signature="e#0#68162#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WebViewProvider.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Android SDK23/android/webkit/WebViewProvider.java">
+      <file leaf-file-name="View.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+            <state relative-caret-position="438">
+              <caret line="18063" column="58" selection-start-line="18063" selection-start-column="58" selection-end-line="18063" selection-end-column="58" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Queue.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Android SDK23/java/util/Queue.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2400">
+              <caret line="164" column="32" selection-start-line="164" selection-start-column="32" selection-end-line="164" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#7814#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -76,7 +110,6 @@
         <option value="$PROJECT_DIR$/okhttp-master/okhttp-tests/src/test/java/okhttp3/internal/ws/RealWebSocketTest.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/support/v13/app/FragmentPagerAdapter.java" />
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http1/Http1Codec.java" />
-        <option value="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/widget/Scroller.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java" />
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/ConnectionSpecSelector.java" />
@@ -93,6 +126,8 @@
         <option value="$PROJECT_DIR$/java/sun/security/ssl/X509TrustManagerImpl.java" />
         <option value="$PROJECT_DIR$/java/sun/security/validator/PKIXValidator.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/webkit/WebViewProvider.java" />
+        <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/ViewDragHelper.java" />
+        <option value="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
       </list>
     </option>
   </component>
@@ -531,12 +566,19 @@
       <option name="project" value="LOCAL" />
       <updated>1514384319038</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="增加WebView部分源码，对应文件夹WebView">
+      <created>1514430833574</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1514430833574</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -544,7 +586,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5900847" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5586457" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5586457" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31501058" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -609,7 +651,8 @@
     <MESSAGE value="ClientHandShaker的学习，checkServeCertificate&#10;" />
     <MESSAGE value="SSL握手：自签名证书的有效性验证，核心代码为PKIXValidator.engineValidate(){ if(trustedCerts.contains(chain[0]) }" />
     <MESSAGE value="1.SSL握手：自签名证书的有效性验证，核心代码为PKIXValidator.engineValidate(){ if(trustedCerts.contains(chain[0]) }      2.开始学习WebView的网页加载过程。因为WebViewClient的onReceivedSslError方法在https请求失败时被调用，网上的做法是在这个方法中验证server提供的公钥证书和本地的公钥证书是否相同，如果相同，handler.proceed()。但是这个方法认证证书之后，是否重新进行ssl握手，还是其他什么流程，目前并不了解。这就需要先搞懂webview网页的加载流程。" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.SSL握手：自签名证书的有效性验证，核心代码为PKIXValidator.engineValidate(){ if(trustedCerts.contains(chain[0]) }      2.开始学习WebView的网页加载过程。因为WebViewClient的onReceivedSslError方法在https请求失败时被调用，网上的做法是在这个方法中验证server提供的公钥证书和本地的公钥证书是否相同，如果相同，handler.proceed()。但是这个方法认证证书之后，是否重新进行ssl握手，还是其他什么流程，目前并不了解。这就需要先搞懂webview网页的加载流程。" />
+    <MESSAGE value="增加WebView部分源码，对应文件夹WebView" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加WebView部分源码，对应文件夹WebView" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -626,48 +669,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6165">
-          <caret line="455" column="0" selection-start-line="455" selection-start-column="0" selection-end-line="455" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v13/app/FragmentPagerAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1605">
-          <caret line="131" column="46" selection-start-line="131" selection-start-column="46" selection-end-line="131" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174570">
-          <caret line="11852" column="21" selection-start-line="11852" selection-start-column="21" selection-end-line="11852" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewPager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="884" column="33" selection-start-line="884" selection-start-column="33" selection-end-line="884" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/Scroller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="301" column="9" selection-start-line="301" selection-start-column="9" selection-end-line="301" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/jre/jdk/Contents/Home/jre/lib/rt.jar!/java/security/KeyStore.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="12" column="44" selection-start-line="12" selection-start-column="44" selection-end-line="12" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/security/KeyStore.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9735">
@@ -854,10 +855,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1515">
           <caret line="128" column="41" selection-start-line="128" selection-start-column="41" selection-end-line="128" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#12301#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -886,10 +883,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3180">
           <caret line="239" column="35" selection-start-line="239" selection-start-column="27" selection-end-line="239" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#14538#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -897,10 +890,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3480">
           <caret line="259" column="30" selection-start-line="259" selection-start-column="16" selection-end-line="259" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#11040#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -908,10 +897,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#14848#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -919,69 +904,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5295">
           <caret line="456" column="48" selection-start-line="456" selection-start-column="48" selection-end-line="456" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#8355#8356#0" expanded="false" />
-            <element signature="e#8384#8385#0" expanded="false" />
-            <element signature="e#11796#11797#0" expanded="false" />
-            <element signature="e#11827#11828#0" expanded="false" />
-            <element signature="e#11912#11913#0" expanded="false" />
-            <element signature="e#11940#11941#0" expanded="false" />
-            <element signature="e#12027#12028#0" expanded="false" />
-            <element signature="e#12056#12057#0" expanded="false" />
-            <element signature="e#12146#12147#0" expanded="false" />
-            <element signature="e#12175#12176#0" expanded="false" />
-            <element signature="e#12201#12202#0" expanded="false" />
-            <element signature="e#12223#12224#0" expanded="false" />
-            <element signature="e#12265#12266#0" expanded="false" />
-            <element signature="e#12295#12296#0" expanded="false" />
-            <element signature="e#12329#12330#0" expanded="false" />
-            <element signature="e#12355#12356#0" expanded="false" />
-            <element signature="e#12381#12382#0" expanded="false" />
-            <element signature="e#12403#12404#0" expanded="false" />
-            <element signature="e#12528#12529#0" expanded="false" />
-            <element signature="e#12548#12549#0" expanded="false" />
-            <element signature="e#12590#12591#0" expanded="false" />
-            <element signature="e#12620#12621#0" expanded="false" />
-            <element signature="e#12668#12669#0" expanded="false" />
-            <element signature="e#12701#12702#0" expanded="false" />
-            <element signature="e#12749#12750#0" expanded="false" />
-            <element signature="e#12782#12783#0" expanded="false" />
-            <element signature="e#12832#12833#0" expanded="false" />
-            <element signature="e#12866#12867#0" expanded="false" />
-            <element signature="e#12908#12909#0" expanded="false" />
-            <element signature="e#12938#12939#0" expanded="false" />
-            <element signature="e#12985#12986#0" expanded="false" />
-            <element signature="e#13020#13021#0" expanded="false" />
-            <element signature="e#13064#13065#0" expanded="false" />
-            <element signature="e#13095#13096#0" expanded="false" />
-            <element signature="e#13136#13137#0" expanded="false" />
-            <element signature="e#13171#13172#0" expanded="false" />
-            <element signature="e#13209#13210#0" expanded="false" />
-            <element signature="e#13241#13242#0" expanded="false" />
-            <element signature="e#13288#13289#0" expanded="false" />
-            <element signature="e#13329#13330#0" expanded="false" />
-            <element signature="e#13365#13366#0" expanded="false" />
-            <element signature="e#13392#13393#0" expanded="false" />
-            <element signature="e#13431#13432#0" expanded="false" />
-            <element signature="e#13457#13458#0" expanded="false" />
-            <element signature="e#13508#13509#0" expanded="false" />
-            <element signature="e#13540#13541#0" expanded="false" />
-            <element signature="e#13834#13835#0" expanded="false" />
-            <element signature="e#13863#13864#0" expanded="false" />
-            <element signature="e#14200#14201#0" expanded="false" />
-            <element signature="e#14236#14237#0" expanded="false" />
-            <element signature="e#14293#14294#0" expanded="false" />
-            <element signature="e#14330#14331#0" expanded="false" />
-            <element signature="e#14879#14880#0" expanded="false" />
-            <element signature="e#14913#14914#0" expanded="false" />
-            <element signature="e#33050#33051#0" expanded="false" />
-            <element signature="e#33083#33084#0" expanded="false" />
-            <element signature="e#33646#33647#0" expanded="false" />
-            <element signature="e#33686#33687#0" expanded="false" />
-            <element signature="e#34942#34943#0" expanded="false" />
-            <element signature="e#34985#34986#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -996,7 +918,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
           <caret line="234" column="0" selection-start-line="234" selection-start-column="0" selection-end-line="234" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1011,9 +932,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
           <caret line="33" column="48" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
-          <folding>
-            <element signature="e#0#6950#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1021,7 +939,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="438">
           <caret line="119" column="75" selection-start-line="119" selection-start-column="75" selection-end-line="119" selection-end-column="75" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1029,7 +946,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="745">
           <caret line="151" column="13" selection-start-line="151" selection-start-column="13" selection-end-line="151" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1037,17 +953,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/webkit/WebViewClient.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4260">
+        <state relative-caret-position="4050">
           <caret line="291" column="64" selection-start-line="291" selection-start-column="49" selection-end-line="291" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#19910#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1055,26 +968,64 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="16" column="23" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#8021#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/webkit/WebView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
+        <state relative-caret-position="32820">
           <caret line="2281" column="24" selection-start-line="2281" selection-start-column="24" selection-end-line="2281" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebView/WebViewChromium" />
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/webkit/WebViewProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="50" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/util/Queue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2400">
+          <caret line="164" column="32" selection-start-line="164" selection-start-column="32" selection-end-line="164" selection-end-column="32" />
           <folding>
-            <element signature="e#0#100106#0" expanded="true" />
+            <element signature="e#0#7814#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/webkit/WebViewProvider.java">
+    <entry file="file://$PROJECT_DIR$/Android SDK23/com/android/systemui/statusbar/DragDownHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/ViewDragHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5668">
+          <caret line="390" column="8" selection-start-line="390" selection-start-column="8" selection-end-line="390" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebView/WebViewChromium.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="79" column="3" selection-start-line="79" selection-start-column="3" selection-end-line="79" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#68162#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="438">
+          <caret line="18063" column="58" selection-start-line="18063" selection-start-column="58" selection-end-line="18063" selection-end-column="58" />
           <folding />
         </state>
       </provider>
