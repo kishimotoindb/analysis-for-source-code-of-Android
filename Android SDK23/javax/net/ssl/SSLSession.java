@@ -114,8 +114,10 @@ public interface SSLSession {
     public Certificate[] getPeerCertificates() throws SSLPeerUnverifiedException;
 
     /**
-     * Returns the host name of the peer of this session. The host name is not
-     * authenticated.
+     * Returns the host name of the peer of this session. The host name
+     * **********************
+     * is not authenticated.(特别注意，peer host name 是可以造假的)
+     * **********************
      *
      * @return the host name of the peer of this session, or {@code null} if no
      *         host name is available.
