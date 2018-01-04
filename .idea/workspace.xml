@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/java/util/concurrent/ThreadPoolExecutor.java" afterPath="$PROJECT_DIR$/Android SDK23/java/util/concurrent/ThreadPoolExecutor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java" afterPath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java" />
     </list>
     <ignored path="analysis-for-source-code-of-Android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,50 +24,59 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SwipeRefreshLayout.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java">
+      <file leaf-file-name="ConnectionPool.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="646" column="39" selection-start-line="646" selection-start-column="39" selection-end-line="646" selection-end-column="39" />
+            <state relative-caret-position="378">
+              <caret line="240" column="64" selection-start-line="240" selection-start-column="64" selection-end-line="240" selection-end-column="64" />
               <folding>
-                <element signature="e#0#44803#0" expanded="true" />
+                <element signature="e#0#11713#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ViewCompat.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewCompat.java">
+      <file leaf-file-name="ThreadPoolExecutor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Android SDK23/java/util/concurrent/ThreadPoolExecutor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="363">
-              <caret line="886" column="31" selection-start-line="886" selection-start-column="31" selection-end-line="886" selection-end-column="31" />
+            <state relative-caret-position="423">
+              <caret line="1289" column="64" selection-start-line="1289" selection-start-column="64" selection-end-line="1289" selection-end-column="64" />
               <folding>
-                <element signature="e#0#120488#0" expanded="true" />
+                <element signature="e#0#80481#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="View.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
+      <file leaf-file-name="Address.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Address.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="14697" column="17" selection-start-line="14697" selection-start-column="17" selection-end-line="14697" selection-end-column="17" />
-              <folding>
-                <element signature="e#584230#584231#0" expanded="true" />
-                <element signature="e#584261#584262#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ScrollingView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ScrollingView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
+            <state relative-caret-position="-120">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
-                <element signature="e#0#5086#0" expanded="true" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#3644#3645#0" expanded="false" />
+                <element signature="e#3664#3665#0" expanded="false" />
+                <element signature="e#3772#3773#0" expanded="false" />
+                <element signature="e#3792#3793#0" expanded="false" />
+                <element signature="e#3891#3892#0" expanded="false" />
+                <element signature="e#3921#3922#0" expanded="false" />
+                <element signature="e#4019#4020#0" expanded="false" />
+                <element signature="e#4054#4055#0" expanded="false" />
+                <element signature="e#4252#4253#0" expanded="false" />
+                <element signature="e#4278#4279#0" expanded="false" />
+                <element signature="e#4329#4330#0" expanded="false" />
+                <element signature="e#4361#4362#0" expanded="false" />
+                <element signature="e#4585#4586#0" expanded="false" />
+                <element signature="e#4615#4616#0" expanded="false" />
+                <element signature="e#4800#4801#0" expanded="false" />
+                <element signature="e#4822#4823#0" expanded="false" />
+                <element signature="e#4962#4963#0" expanded="false" />
+                <element signature="e#4995#4996#0" expanded="false" />
+                <element signature="e#5134#5135#0" expanded="false" />
+                <element signature="e#5167#5168#0" expanded="false" />
+                <element signature="e#5320#5321#0" expanded="false" />
+                <element signature="e#5354#5355#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -112,6 +123,8 @@
         <option value="$PROJECT_DIR$/Https/BaseConception" />
         <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewCompat.java" />
+        <option value="$PROJECT_DIR$/Android SDK23/java/util/concurrent/ThreadPoolExecutor.java" />
+        <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java" />
       </list>
     </option>
   </component>
@@ -586,12 +599,19 @@
       <option name="project" value="LOCAL" />
       <updated>1515038404206</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="SwipeRefreshLayout内的布局，如何控制SwipeRefreshLayout的CircleView的展示解析">
+      <created>1515038432475</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1515038432475</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -599,7 +619,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5900847" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5586457" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5586457" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31501058" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -685,27 +705,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/AssertionError.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/HttpsURLConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2085">
-          <caret line="158" column="66" selection-start-line="158" selection-start-column="50" selection-end-line="158" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/java/security/Provider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-15480">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/org/apache/harmony/security/fortress/Services.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -913,7 +912,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4050">
           <caret line="291" column="64" selection-start-line="291" selection-start-column="49" selection-end-line="291" selection-end-column="64" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -928,7 +926,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="32820">
           <caret line="2281" column="24" selection-start-line="2281" selection-start-column="24" selection-end-line="2281" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -937,7 +934,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="50" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="50" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -945,7 +941,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2400">
           <caret line="164" column="32" selection-start-line="164" selection-start-column="32" selection-end-line="164" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -967,7 +962,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="79" column="3" selection-start-line="79" selection-start-column="3" selection-end-line="79" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -975,7 +969,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -983,7 +976,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="43" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -991,9 +983,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="123">
           <caret line="119" column="55" selection-start-line="119" selection-start-column="55" selection-end-line="119" selection-end-column="55" />
-          <folding>
-            <element signature="e#0#7401#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1001,19 +990,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#811#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="646" column="39" selection-start-line="646" selection-start-column="39" selection-end-line="646" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#44803#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1021,7 +997,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-555">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1029,9 +1004,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="675">
           <caret line="64" column="43" selection-start-line="64" selection-start-column="34" selection-end-line="64" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#80400#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1040,8 +1012,25 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#5086#0" expanded="true" />
+            <element signature="e#0#5086#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewCompat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="876" column="13" selection-start-line="876" selection-start-column="13" selection-end-line="876" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#120488#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="646" column="39" selection-start-line="646" selection-start-column="39" selection-end-line="646" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -1050,18 +1039,60 @@
         <state relative-caret-position="288">
           <caret line="14697" column="17" selection-start-line="14697" selection-start-column="17" selection-end-line="14697" selection-end-column="17" />
           <folding>
-            <element signature="e#584230#584231#0" expanded="true" />
-            <element signature="e#584261#584262#0" expanded="true" />
+            <element signature="e#584230#584231#0" expanded="false" />
+            <element signature="e#584261#584262#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewCompat.java">
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Address.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="886" column="31" selection-start-line="886" selection-start-column="31" selection-end-line="886" selection-end-column="31" />
+        <state relative-caret-position="-120">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#120488#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#3644#3645#0" expanded="false" />
+            <element signature="e#3664#3665#0" expanded="false" />
+            <element signature="e#3772#3773#0" expanded="false" />
+            <element signature="e#3792#3793#0" expanded="false" />
+            <element signature="e#3891#3892#0" expanded="false" />
+            <element signature="e#3921#3922#0" expanded="false" />
+            <element signature="e#4019#4020#0" expanded="false" />
+            <element signature="e#4054#4055#0" expanded="false" />
+            <element signature="e#4252#4253#0" expanded="false" />
+            <element signature="e#4278#4279#0" expanded="false" />
+            <element signature="e#4329#4330#0" expanded="false" />
+            <element signature="e#4361#4362#0" expanded="false" />
+            <element signature="e#4585#4586#0" expanded="false" />
+            <element signature="e#4615#4616#0" expanded="false" />
+            <element signature="e#4800#4801#0" expanded="false" />
+            <element signature="e#4822#4823#0" expanded="false" />
+            <element signature="e#4962#4963#0" expanded="false" />
+            <element signature="e#4995#4996#0" expanded="false" />
+            <element signature="e#5134#5135#0" expanded="false" />
+            <element signature="e#5167#5168#0" expanded="false" />
+            <element signature="e#5320#5321#0" expanded="false" />
+            <element signature="e#5354#5355#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/util/concurrent/ThreadPoolExecutor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="1289" column="64" selection-start-line="1289" selection-start-column="64" selection-end-line="1289" selection-end-column="64" />
+          <folding>
+            <element signature="e#0#80481#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="240" column="64" selection-start-line="240" selection-start-column="64" selection-end-line="240" selection-end-column="64" />
+          <folding>
+            <element signature="e#0#11713#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -38,7 +38,7 @@ import static okhttp3.internal.Util.closeQuietly;
 
 /**
  * Manages reuse of HTTP and HTTP/2 connections for reduced network latency. HTTP requests that
- * share the same {@link Address} may share a {@link Connection}. This class implements the policy
+ * share the same {@link } may share a {@link Connection}. This class implements the policy
  * of which connections to keep open for future use.
  */
 public final class ConnectionPool {
@@ -208,6 +208,7 @@ public final class ConnectionPool {
         RealConnection connection = i.next();
 
         // If the connection is in use, keep searching.
+        // prune删减
         if (pruneAndGetAllocationCount(connection, now) > 0) {
           inUseConnectionCount++;
           continue;
@@ -223,15 +224,40 @@ public final class ConnectionPool {
         }
       }
 
+      // 到此处时，connections已经循环过一遍了，inUse和idle的connection数量、最长空闲时间都已经计算
+      // 出来了。
+
+      /*
+       * 此处的逻辑：
+       * 1.如果最长空闲时间的connection超过了keepAliveDurationNs，或者空闲的connection数量超过了
+       *   允许的空闲最大数量，那么将最长空闲时间的connection关闭。然后返回0，立即进行下一次cleanUp()
+       * 2.如果有空闲的connection，但是没有超时和超数量，那么将最大空闲时间与最大存活时间的差值返回，
+       *   以便这个时间之后再次执行cleanUp()。这个方式在下一次cleanUp()的时候不一定一定能够关闭本次
+       *   最长空闲时间的connection，因为在下次调用cleanUp()方法之前，这个最长空闲时间的connection
+       *   有可能被复用了。
+       * 3.如果没有空闲的connection，那么返回keepAliveDurationNs。这样做是因为当前的connection都是
+       *   活跃的，那么在最长存活时间之前，不可能出现需要清理的情况。存活connection的数量，在当前方法里是
+       *   不做控制的。
+       * 4.如果没有connection，那么将标志位置false，这样应该是为了减少thread的消耗。猜测，待看。
+       */
       if (longestIdleDurationNs >= this.keepAliveDurationNs
           || idleConnectionCount > this.maxIdleConnections) {
+        // 发现一个超时或者超数量时，就移除空闲时间最长的一个connection
+        // 默认认为空闲时间最久的是最不可能被再次使用的。这个逻辑是否可以自定义？
         // We've found a connection to evict. Remove it from the list, then close it below (outside
         // of the synchronized block).
         connections.remove(longestIdleConnection);
+
       } else if (idleConnectionCount > 0) {
+        // cleanUp()方法下次被执行的时间是在本次执行该方法时进行计算的。这个时间用于OkHttp自身连接回收线程的控制。
+        // 查看调用cleanUp()方法的地方就可以理解
+
         // A connection will be ready to evict soon.
         return keepAliveDurationNs - longestIdleDurationNs;
       } else if (inUseConnectionCount > 0) {
+        // cleanUp()方法下次被执行的时间是在本次执行该方法时进行计算的。这个时间用于OkHttp自身连接回收线程的控制。
+        // 查看调用cleanUp()方法的地方就可以理解
+
         // All connections are in use. It'll be at least the keep alive duration 'til we run again.
         return keepAliveDurationNs;
       } else {
