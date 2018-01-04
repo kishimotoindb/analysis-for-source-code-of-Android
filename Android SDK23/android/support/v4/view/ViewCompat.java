@@ -398,6 +398,11 @@ public class ViewCompat {
                 canScrollingViewScrollHorizontally((ScrollingView) v, direction);
         }
         public boolean canScrollVertically(View v, int direction) {
+            /*
+             * 判断View是否可以滑动,首先这个View要是实现了ScrollingView接口，其次，canScrollingViewScrollVertically()
+             * 方法需要返回true。
+             */
+
             return (v instanceof ScrollingView) &&
                     canScrollingViewScrollVertically((ScrollingView) v, direction);
         }
@@ -876,7 +881,10 @@ public class ViewCompat {
             final int offset = view.computeVerticalScrollOffset();
             final int range = view.computeVerticalScrollRange() -
                     view.computeVerticalScrollExtent();
+            //可滑动范围等于0，那么不可滑动
             if (range == 0) return false;
+
+            //根据滑动方向，判断offset的值
             if (direction < 0) {
                 return offset > 0;
             } else {

@@ -19,6 +19,7 @@ package javax.net.ssl;
 
 import java.security.Principal;
 import java.security.cert.Certificate;
+
 import javax.security.cert.X509Certificate;
 
 /**

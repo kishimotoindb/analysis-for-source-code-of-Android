@@ -632,6 +632,8 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
      */
     public boolean canChildScrollUp() {
         if (android.os.Build.VERSION.SDK_INT < 14) {
+            //4.0以下系统的处理方式
+
             if (mTarget instanceof AbsListView) {
                 final AbsListView absListView = (AbsListView) mTarget;
                 return absListView.getChildCount() > 0
@@ -641,13 +643,15 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
                 return ViewCompat.canScrollVertically(mTarget, -1) || mTarget.getScrollY() > 0;
             }
         } else {
+            //4.0及其以上系统的处理方式
             return ViewCompat.canScrollVertically(mTarget, -1);
         }
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        //拿到SwipeRefreshLayout包含的layout
+        //拿到第一个非CircleView的View（从SwipeRefreshLayout的第一个子View开始遍历），用来判断是否可下拉，如果可下拉，下拉该View；如果不可下拉，
+        //展示CircleView。
         ensureTarget();
 
         final int action = MotionEventCompat.getActionMasked(ev);
@@ -659,6 +663,19 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         //唯一一种使SwipeRefreshLayout失效的方式：1.refreshLayout.setEnable()
         //实现canChildScrollUp()方法中mChildScrollUpCallback接口：SDK23之前是没有这个接口的，
         //SDK25之后可以通过这种方式使下拉失效。
+        /*
+         * 1.SwipeRefreshLayout内包含的布局如果只是一个RecyclerView，那么二者的联动是没有任何问题的
+         * 2.SwipeRefreshLayout内包含一个ViewGroup，ViewGroup中的列表控件并非处于最顶层，其上面
+         *   还有其他控件，那么如果想要SwipeRefreshLayout与列表联动正常进行，那么就需要通过重写
+         */
+
+        /*
+         * 使SwipeRefreshLayout不弹下拉CirCleView的方式：
+         * 1.SwipeRefreshLayout设置为disable(主动)
+         * 2.CircleView正在展示（被动）
+         * 3.子View还可以继续下拉（主动），具体由canChildScrollUp()方法决定，canChildScrollUp()方法
+         *   返回true，CircleView不弹出
+         */
         if (!isEnabled() || mReturningToStart || canChildScrollUp() /*包含的顶层layout是否可以向上滑动*/ || mRefreshing) {
             // Fail fast if we're not in a state where a swipe is possible
             return false;
