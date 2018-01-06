@@ -54,12 +54,27 @@ import javax.annotation.Nullable;
  * A connection currently carrying zero streams is an idle stream. We keep it alive because reusing
  * an existing connection is typically faster than establishing a new one.
  *
+ * HTTP/1.x，一个socket同时只可以承载一个stream
+ * HTTP/2，一个socket同时可以承载多个stream
+ *
  * <p>When a single logical call requires multiple streams due to redirects or authorization
  * challenges, we prefer to use the same physical connection for all streams in the sequence. There
  * are potential performance and behavior consequences to this preference. To support this feature,
  * this class separates <i>allocations</i> from <i>streams</i>. An allocation is created by a call,
  * used for one or more streams, and then released. An allocated connection won't be stolen by other
  * calls while a redirect or authorization challenge is being handled.
+ *
+ * OkHttp在处理 redirects or authorization challenges 时，会默认使用同一个connection。而且防止其他Call加塞儿
+ * 使用这个connection。
+ * Allocation对应上面所描述的过程： When a single logical call requires multiple streams due to redirects or authorization
+ * challenges, we prefer to use the same physical connection for all streams in the sequence.
+ *
+ * Stream, connnection, allocation, call的关系
+ * 1.stream是单次请求的所使用的流
+ * 2.allocation是一个抽象的概念，表示这样一个过程：When a single logical call requires multiple streams due to redirects or authorization
+ * challenges, we prefer to use the same physical connection for all streams in the sequence.
+ * 3.Call也是一个抽象的概念
+ * 4.connection是一个实体的连接，可以包含一个或者多个stream，可以复用
  *
  * <p>When the maximum concurrent streams limit is reduced, some allocations will be rescinded.
  * Attempting to create new streams on these allocations will fail.
