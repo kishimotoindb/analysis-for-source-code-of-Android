@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" afterPath="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/view/View.java" afterPath="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/java/util/concurrent/ThreadPoolExecutor.java" afterPath="$PROJECT_DIR$/Android SDK23/java/util/concurrent/ThreadPoolExecutor.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java" afterPath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java" />
     </list>
@@ -23,66 +25,7 @@
     <favorites_list name="analysis-for-source-code-of-Android" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ConnectionPool.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="240" column="64" selection-start-line="240" selection-start-column="64" selection-end-line="240" selection-end-column="64" />
-              <folding>
-                <element signature="e#0#11713#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ThreadPoolExecutor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Android SDK23/java/util/concurrent/ThreadPoolExecutor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="423">
-              <caret line="1289" column="64" selection-start-line="1289" selection-start-column="64" selection-end-line="1289" selection-end-column="64" />
-              <folding>
-                <element signature="e#0#80481#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Address.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Address.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-120">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#3644#3645#0" expanded="false" />
-                <element signature="e#3664#3665#0" expanded="false" />
-                <element signature="e#3772#3773#0" expanded="false" />
-                <element signature="e#3792#3793#0" expanded="false" />
-                <element signature="e#3891#3892#0" expanded="false" />
-                <element signature="e#3921#3922#0" expanded="false" />
-                <element signature="e#4019#4020#0" expanded="false" />
-                <element signature="e#4054#4055#0" expanded="false" />
-                <element signature="e#4252#4253#0" expanded="false" />
-                <element signature="e#4278#4279#0" expanded="false" />
-                <element signature="e#4329#4330#0" expanded="false" />
-                <element signature="e#4361#4362#0" expanded="false" />
-                <element signature="e#4585#4586#0" expanded="false" />
-                <element signature="e#4615#4616#0" expanded="false" />
-                <element signature="e#4800#4801#0" expanded="false" />
-                <element signature="e#4822#4823#0" expanded="false" />
-                <element signature="e#4962#4963#0" expanded="false" />
-                <element signature="e#4995#4996#0" expanded="false" />
-                <element signature="e#5134#5135#0" expanded="false" />
-                <element signature="e#5167#5168#0" expanded="false" />
-                <element signature="e#5320#5321#0" expanded="false" />
-                <element signature="e#5354#5355#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -118,13 +61,13 @@
         <option value="$PROJECT_DIR$/java/sun/security/validator/PKIXValidator.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/webkit/WebViewProvider.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/ViewDragHelper.java" />
-        <option value="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
         <option value="$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSession.java" />
         <option value="$PROJECT_DIR$/Https/BaseConception" />
-        <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/view/ViewCompat.java" />
         <option value="$PROJECT_DIR$/Android SDK23/java/util/concurrent/ThreadPoolExecutor.java" />
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java" />
+        <option value="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
+        <option value="$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java" />
       </list>
     </option>
   </component>
@@ -606,12 +549,19 @@
       <option name="project" value="LOCAL" />
       <updated>1515038432475</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="OkHttp的ConnectionPool分析">
+      <created>1515066938783</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1515066938783</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -688,7 +638,8 @@
     <MESSAGE value="1.DrawableState的控制 2.增加WebView的类" />
     <MESSAGE value="增加http相关学习资料文件夹" />
     <MESSAGE value="SwipeRefreshLayout内的布局，如何控制SwipeRefreshLayout的CircleView的展示解析" />
-    <option name="LAST_COMMIT_MESSAGE" value="SwipeRefreshLayout内的布局，如何控制SwipeRefreshLayout的CircleView的展示解析" />
+    <MESSAGE value="OkHttp的ConnectionPool分析" />
+    <option name="LAST_COMMIT_MESSAGE" value="OkHttp的ConnectionPool分析" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -705,48 +656,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Android SDK23/org/apache/harmony/security/fortress/Services.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="29" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/DefaultSSLSocketFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/net/SSLCertificateSocketFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-60">
-          <caret line="46" column="18" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocketFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="975">
-          <caret line="87" column="36" selection-start-line="87" selection-start-column="26" selection-end-line="87" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/java/sun/security/ssl/CipherSuite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3690">
-          <caret line="382" column="5" selection-start-line="382" selection-start-column="5" selection-end-line="382" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/RealConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3525">
-          <caret line="305" column="30" selection-start-line="305" selection-start-column="16" selection-end-line="305" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/javax/net/ssl/SSLSocket.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="10920">
@@ -993,13 +902,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-555">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/LinearLayout.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="675">
@@ -1011,9 +913,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#5086#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1027,29 +926,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="646" column="39" selection-start-line="646" selection-start-column="39" selection-end-line="646" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="14697" column="17" selection-start-line="14697" selection-start-column="17" selection-end-line="14697" selection-end-column="17" />
-          <folding>
-            <element signature="e#584230#584231#0" expanded="false" />
-            <element signature="e#584261#584262#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Address.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-120">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+            <element signature="e#0#7253#0" expanded="false" />
             <element signature="imports" expanded="false" />
             <element signature="e#3644#3645#0" expanded="false" />
             <element signature="e#3664#3665#0" expanded="false" />
@@ -1079,21 +961,169 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/java/util/concurrent/ThreadPoolExecutor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="1289" column="64" selection-start-line="1289" selection-start-column="64" selection-end-line="1289" selection-end-column="64" />
+        <state relative-caret-position="19005">
+          <caret line="1288" column="64" selection-start-line="1288" selection-start-column="64" selection-end-line="1288" selection-end-column="64" />
           <folding>
-            <element signature="e#0#80481#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#16038#16039#0" expanded="false" />
+            <element signature="e#16066#16067#0" expanded="false" />
+            <element signature="e#16126#16127#0" expanded="false" />
+            <element signature="e#16155#16156#0" expanded="false" />
+            <element signature="e#16202#16203#0" expanded="false" />
+            <element signature="e#16237#16238#0" expanded="false" />
+            <element signature="e#24621#24622#0" expanded="false" />
+            <element signature="e#24660#24661#0" expanded="false" />
+            <element signature="e#24851#24852#0" expanded="false" />
+            <element signature="e#24897#24898#0" expanded="false" />
+            <element signature="e#31110#31111#0" expanded="false" />
+            <element signature="e#31153#31154#0" expanded="false" />
+            <element signature="e#31506#31507#0" expanded="false" />
+            <element signature="e#31562#31563#0" expanded="false" />
+            <element signature="e#56803#56804#0" expanded="false" />
+            <element signature="e#56848#56849#0" expanded="false" />
+            <element signature="e#57541#57542#0" expanded="false" />
+            <element signature="e#57602#57603#0" expanded="false" />
+            <element signature="e#58315#58316#0" expanded="false" />
+            <element signature="e#58341#58342#0" expanded="false" />
+            <element signature="e#58980#58981#0" expanded="false" />
+            <element signature="e#59016#59017#0" expanded="false" />
+            <element signature="e#59670#59671#0" expanded="false" />
+            <element signature="e#59700#59701#0" expanded="false" />
+            <element signature="e#61195#61196#0" expanded="false" />
+            <element signature="e#61230#61231#0" expanded="false" />
+            <element signature="e#63030#63031#0" expanded="false" />
+            <element signature="e#63075#63076#0" expanded="false" />
+            <element signature="e#65342#65343#0" expanded="false" />
+            <element signature="e#65380#65381#0" expanded="false" />
+            <element signature="e#67480#67481#0" expanded="false" />
+            <element signature="e#67512#67513#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="240" column="64" selection-start-line="240" selection-start-column="64" selection-end-line="240" selection-end-column="64" />
+        <state relative-caret-position="240">
+          <caret line="77" column="66" selection-start-line="77" selection-start-column="56" selection-end-line="77" selection-end-column="66" />
           <folding>
-            <element signature="e#0#11713#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#3504#3505#0" expanded="false" />
+            <element signature="e#3542#3543#0" expanded="false" />
+            <element signature="e#4604#4605#0" expanded="false" />
+            <element signature="e#4639#4640#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/util/ArrayDeque.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#6209#6210#0" expanded="false" />
+            <element signature="e#6250#6251#0" expanded="false" />
+            <element signature="e#6511#6512#0" expanded="false" />
+            <element signature="e#6556#6557#0" expanded="false" />
+            <element signature="e#13736#13737#0" expanded="false" />
+            <element signature="e#13771#13772#0" expanded="false" />
+            <element signature="e#14205#14206#0" expanded="false" />
+            <element signature="e#14241#14242#0" expanded="false" />
+            <element signature="e#14663#14664#0" expanded="false" />
+            <element signature="e#14697#14698#0" expanded="false" />
+            <element signature="e#15133#15134#0" expanded="false" />
+            <element signature="e#15166#15167#0" expanded="false" />
+            <element signature="e#15541#15542#0" expanded="false" />
+            <element signature="e#15575#15576#0" expanded="false" />
+            <element signature="e#15966#15967#0" expanded="false" />
+            <element signature="e#15993#15994#0" expanded="false" />
+            <element signature="e#16429#16430#0" expanded="false" />
+            <element signature="e#16465#16466#0" expanded="false" />
+            <element signature="e#18842#18843#0" expanded="false" />
+            <element signature="e#18902#18903#0" expanded="false" />
+            <element signature="e#19086#19087#0" expanded="false" />
+            <element signature="e#19121#19122#0" expanded="false" />
+            <element signature="e#19532#19533#0" expanded="false" />
+            <element signature="e#19572#19573#0" expanded="false" />
+            <element signature="e#19619#19620#0" expanded="false" />
+            <element signature="e#19666#19667#0" expanded="false" />
+            <element signature="e#20263#20264#0" expanded="false" />
+            <element signature="e#20309#20310#0" expanded="false" />
+            <element signature="e#21599#21600#0" expanded="false" />
+            <element signature="e#21645#21646#0" expanded="false" />
+            <element signature="e#23795#23796#0" expanded="false" />
+            <element signature="e#23842#23843#0" expanded="false" />
+            <element signature="e#24893#24894#0" expanded="false" />
+            <element signature="e#24948#24949#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/util/Deque.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="30" column="62" selection-start-line="30" selection-start-column="62" selection-end-line="30" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/jre/jdk/Contents/Home/jre/lib/rt.jar!/javax/swing/text/View.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/jre/jdk/Contents/Home/jre/lib/rt.jar!/javax/swing/text/html/ImageView.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9945">
+          <caret line="715" column="17" selection-start-line="715" selection-start-column="17" selection-end-line="715" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="13273" column="16" selection-start-line="13273" selection-start-column="16" selection-end-line="13273" selection-end-column="16" />
+          <folding>
+            <element signature="e#584245#584246#0" expanded="true" />
+            <element signature="e#584276#584277#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/CircleImageView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#5556#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/ImageView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

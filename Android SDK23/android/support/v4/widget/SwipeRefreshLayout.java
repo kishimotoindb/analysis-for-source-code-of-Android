@@ -672,9 +672,13 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         /*
          * 使SwipeRefreshLayout不弹下拉CirCleView的方式：
          * 1.SwipeRefreshLayout设置为disable(主动)
-         * 2.CircleView正在展示（被动）
+         * 2.mReturningToStart没明白注释说的什么意思
          * 3.子View还可以继续下拉（主动），具体由canChildScrollUp()方法决定，canChildScrollUp()方法
          *   返回true，CircleView不弹出
+         *
+         * 只有在这里，子View才可能不让SwipeRefreshLayout拦截事件，过了这里，就只有SwipeRefreshLayout
+         * 自己可以决定是否拦截。所以如果子View在某些情况下不想让SwipeRefreshLayout拦截事件，那么就
+         * 需要在canChildScrollUp()方法中做手脚。
          */
         if (!isEnabled() || mReturningToStart || canChildScrollUp() /*包含的顶层layout是否可以向上滑动*/ || mRefreshing) {
             // Fail fast if we're not in a state where a swipe is possible
@@ -683,6 +687,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                //目前来看这里的target指的mCircleView
                 setTargetOffsetTopAndBottom(mOriginalOffsetTop - mCircleView.getTop(), true);
                 mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
                 mIsBeingDragged = false;
