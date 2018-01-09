@@ -17,13 +17,12 @@ package okhttp3;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
 import javax.annotation.Nullable;
 
 /**
  * Observes, modifies, and potentially short-circuits requests going out and the corresponding
  * responses coming back in.
- *
- * interceptor的作用：
  * Typically interceptors add, remove, or transform headers on the request
  * or response.
  */

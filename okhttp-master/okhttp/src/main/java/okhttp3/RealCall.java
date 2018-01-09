@@ -18,6 +18,7 @@ package okhttp3;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import okhttp3.internal.NamedRunnable;
 import okhttp3.internal.cache.CacheInterceptor;
 import okhttp3.internal.connection.ConnectInterceptor;
@@ -39,16 +40,46 @@ import static okhttp3.internal.platform.Platform.INFO;
  * 实现的。Call的排队是由dispatcher实现，和connection的复用是两码事儿。每一个Call会创建一个供自己
  * 使用的RealInterceptorChain对象。
  *
- * okhttp的三大部件：（猜测）
+ * okhttp的主要部件：（猜测）
+ * Client
  * Call
  * Dispatcher
  * InterceptorChain ->streamAllocation，connection啥的好像都是在各个chain中完成的。
+ *
+ * okHttp的执行流程：
+ * Client初始化各种参数 -> Client生成RealCall -> RealCall.getResponseWithInterceptorChain()
+ * -> InterceptorChain接管这个网络请求，并返回response。
+ * 1.connection, streamAllocation, 这个那个的都是在每一个Interceptor中生成并使用的。
+ *
+ * interceptors的顺序：
+ * 1.interceptors(自己配置的)
+ * 2.retryAndFollowUpInterceptor
+ * 2.BridgeInterceptor
+ * 3.CacheInterceptor
+ * 4.ConnectInterceptor
+ * 5.networkInterceptor(自己配置的)
+ * 6.CallServerInterceptor
  *
  * StreamAllocation的作用：
  * 1.寻找可用的connection：1)当前streamAllocation正在使用的connection，2)connectionPool中找一个
  *                        能用的，3）创建一个新的connection
  * 2.给connection分配stream
  * 3.将connection提供给call使用。
+ *
+ * connection里包含了socket
+ *
+ * InterceptorChain疑问：
+ * 对于单个InterceptorChain对象来说，streamAllocation是创建全新的还是复用的？
+ * connectionPool是全局的，一个okhttpclient对应一个connectionPool
+ *
+ * 对于单个OkHttpClient对象来说，哪些对象是全局的：
+ * 1.connectionPool
+ * 2.dispathcer
+ *
+ * 对于每一次网络请求，哪些对象需要重新创建
+ * 1.request
+ * 2.call
+ * 3.InterceptorChain
  *
  */
 

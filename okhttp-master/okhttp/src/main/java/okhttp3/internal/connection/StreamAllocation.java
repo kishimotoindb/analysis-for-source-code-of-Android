@@ -155,6 +155,8 @@ public final class StreamAllocation {
   /**
    * Returns a connection to host a new stream. This prefers the existing connection if it exists,
    * then the pool, finally building a new connection.
+   *
+   * 这里只是寻找connection，connection里获取stream是newStream()方法实现的。
    */
   private RealConnection findConnection(int connectTimeout, int readTimeout, int writeTimeout,
       boolean connectionRetryEnabled) throws IOException {
@@ -170,6 +172,7 @@ public final class StreamAllocation {
 
       // Attempt to use an already-allocated connection. We need to be careful here because our
       // already-allocated connection may have been restricted from creating new streams.
+      // 1.streamAllocation已存在的connection
       releasedConnection = this.connection;
       toClose = releaseIfNoNewStreams();
       if (this.connection != null) {
@@ -366,7 +369,7 @@ public final class StreamAllocation {
   }
 
   /**
-   * Releases resources held by this allocation. If sufficient resources are allocated, the
+   * Releases resources held by this allocation(indicating a connection). If sufficient resources are allocated, the
    * connection will be detached or closed. Callers must be synchronized on the connection pool.
    *
    * <p>Returns a closeable that the caller should pass to {@link Util#closeQuietly} upon completion

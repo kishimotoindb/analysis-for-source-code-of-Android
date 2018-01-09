@@ -18,6 +18,7 @@ package okhttp3.internal.http;
 
 import java.io.IOException;
 import java.util.List;
+
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.Headers;
@@ -62,6 +63,7 @@ public final class BridgeInterceptor implements Interceptor {
         requestBuilder.header("Content-Length", Long.toString(contentLength));
         requestBuilder.removeHeader("Transfer-Encoding");
       } else {
+        // 传递文件的时候，自动使用分块传输
         requestBuilder.header("Transfer-Encoding", "chunked");
         requestBuilder.removeHeader("Content-Length");
       }
@@ -77,6 +79,7 @@ public final class BridgeInterceptor implements Interceptor {
 
     // If we add an "Accept-Encoding: gzip" header field we're responsible for also decompressing
     // the transfer stream.
+    // 在没有range头的情况下，okHttp自动将gzip加入到header中
     boolean transparentGzip = false;
     if (userRequest.header("Accept-Encoding") == null && userRequest.header("Range") == null) {
       transparentGzip = true;

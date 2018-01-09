@@ -17,6 +17,7 @@ package okhttp3.internal.platform;
 
 import android.os.Build;
 import android.util.Log;
+
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -28,10 +29,12 @@ import java.security.cert.Certificate;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
 import java.util.List;
+
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
+
 import okhttp3.Protocol;
 import okhttp3.internal.Util;
 import okhttp3.internal.tls.BasicTrustRootIndex;
