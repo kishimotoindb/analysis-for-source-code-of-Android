@@ -62,6 +62,8 @@ import static okhttp3.internal.Util.checkDuration;
  * all of your HTTP calls. This is because each client holds its own connection pool and thread
  * pools. Reusing connections and threads reduces latency and saves memory. Conversely, creating a
  * client for each request wastes resources on idle pools.
+ * 一个OkHttpClient对应一套connection pool和tread pool。一个应用可以使用多个OkHttpClient的实例，
+ * 但是每个实例只会复用自己的connection pool和tread pool。如果没有特殊需求，还是全局使用同一个OkHttpClient的实例。
  *
  * <p>Use {@code new OkHttpClient()} to create a shared instance with the default settings:
  * <pre>   {@code
@@ -126,6 +128,7 @@ public class OkHttpClient implements Cloneable, Call.Factory, WebSocket.Factory 
   static final List<Protocol> DEFAULT_PROTOCOLS = Util.immutableList(
       Protocol.HTTP_2, Protocol.HTTP_1_1);
 
+  //CLEARTEXT只http传输的时候内容不加密，不认证。说白了就是指内容是明文，对任何人可见。
   static final List<ConnectionSpec> DEFAULT_CONNECTION_SPECS = Util.immutableList(
       ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT);
 
@@ -437,6 +440,8 @@ public class OkHttpClient implements Cloneable, Call.Factory, WebSocket.Factory 
     return webSocket;
   }
 
+  // 已经配置好的okHttpClient，可以通过这个builder重新配置。但本质是重新创建一个client，只不过这个
+  // client复制了原有client的配置。
   public Builder newBuilder() {
     return new Builder(this);
   }
@@ -775,6 +780,9 @@ public class OkHttpClient implements Cloneable, Call.Factory, WebSocket.Factory 
      *   <li><strong>Unreachable IP addresses.</strong> If the URL's host has multiple IP addresses,
      *       failure to reach any individual IP address doesn't fail the overall request. This can
      *       increase availability of multi-homed services.
+     *
+     *       复用connection的时候，的确会出现在正要复用或复用过程中，被复用的connection被回收的情况。
+     *       这种情况下会自动重新发送请求。
      *   <li><strong>Stale pooled connections.</strong> The {@link ConnectionPool} reuses sockets
      *       to decrease request latency, but these connections will occasionally time out.
      *   <li><strong>Unreachable proxy servers.</strong> A {@link ProxySelector} can be used to
@@ -855,7 +863,9 @@ public class OkHttpClient implements Cloneable, Call.Factory, WebSocket.Factory 
     }
 
     /**
-     * Returns a modifiable list of interceptors that observe the full span of each call: from
+     * the full span of each call
+     *
+     * Returns a modifiable list of interceptors that observe /** the full span of each call **\ : from
      * before the connection is established (if any) until after the response source is selected
      * (either the origin server, cache, or both).
      */
@@ -870,7 +880,9 @@ public class OkHttpClient implements Cloneable, Call.Factory, WebSocket.Factory 
     }
 
     /**
-     * Returns a modifiable list of interceptors that observe a single network request and response.
+     * a single network request and response
+     *
+     * Returns a modifiable list of interceptors that observe /** a single network request and response.**\
      * These interceptors must call {@link Interceptor.Chain#proceed} exactly once: it is an error
      * for a network interceptor to short-circuit or repeat a network request.
      */

@@ -313,6 +313,11 @@ public final class Http1Codec implements HttpCodec {
   /**
    * An HTTP body with alternating chunk sizes and chunk bodies. It is the caller's responsibility
    * to buffer chunks; typically by using a buffered sink with this sink.
+   *
+   * Transfer-encode: chuncked，对应的生成chunck的类
+   * 讲解Transfer-encode的文章：
+   * https://imququ.com/post/transfer-encoding-header-in-http.html
+   *
    */
   private final class ChunkedSink implements Sink {
     private final ForwardingTimeout timeout = new ForwardingTimeout(sink.timeout());
@@ -329,6 +334,8 @@ public final class Http1Codec implements HttpCodec {
       if (closed) throw new IllegalStateException("closed");
       if (byteCount == 0) return;
 
+      //每个chunck第一行用十六进制表示chunck中的字节数
+      //然后换行后是chunck的内容
       sink.writeHexadecimalUnsignedLong(byteCount);
       sink.writeUtf8("\r\n");
       sink.write(source, byteCount);
@@ -340,9 +347,11 @@ public final class Http1Codec implements HttpCodec {
       sink.flush();
     }
 
+    // 这里close的只是stream，不是connection和socket
     @Override public synchronized void close() throws IOException {
       if (closed) return;
       closed = true;
+      //在Transfer-encode编码中，表示传输结束的chunck需要传递一个空的chunck
       sink.writeUtf8("0\r\n\r\n");
       detachTimeout(timeout);
       state = STATE_READ_RESPONSE_HEADERS;

@@ -38,6 +38,11 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
 import static okhttp3.internal.Util.verifyAsIpAddress;
 
 /**
+ * 应该是用于app自己充当server时，服务器的自签名证书。
+ * 这个类本质不是一个证书，因为他没有继承Certificate类，这个类只是用来描述okHttp所持有的证书，
+ * 所以叫held Certificate。
+ *
+ *
  * A certificate and its private key. This can be used on the server side by HTTPS servers, or on
  * the client side to verify those HTTPS servers. A held certificate can also be used to sign other
  * held certificates, as done in practice by certificate authorities.
@@ -94,7 +99,7 @@ public final class HeldCertificate {
 
     /**
      * Set this certificate to be a certificate authority, with up to {@code maxIntermediateCas}
-     * intermediate certificate authorities beneath it.
+     * intermediate(中间的) certificate authorities beneath it.
      */
     public Builder ca(int maxIntermediateCas) {
       this.maxIntermediateCas = maxIntermediateCas;
@@ -166,6 +171,7 @@ public final class HeldCertificate {
 
     public KeyPair generateKeyPair() throws GeneralSecurityException {
       KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", "BC");
+      //默认的key是1024位
       keyPairGenerator.initialize(1024, new SecureRandom());
       return keyPairGenerator.generateKeyPair();
     }

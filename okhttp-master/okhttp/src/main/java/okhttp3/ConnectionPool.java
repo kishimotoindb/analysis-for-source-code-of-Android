@@ -211,6 +211,7 @@ public final class ConnectionPool {
 
         // If the connection is in use, keep searching.
         // prune删减
+        // connection里有stream，就算 in use
         if (pruneAndGetAllocationCount(connection, now) > 0) {
           inUseConnectionCount++;
           continue;
@@ -283,6 +284,8 @@ public final class ConnectionPool {
    */
   private int pruneAndGetAllocationCount(RealConnection connection, long now) {
     List<Reference<StreamAllocation>> references = connection.allocations;
+
+    //这里只是一个判断僵尸连接的代码，与connection的allocationCount没有关系。
     for (int i = 0; i < references.size(); ) {
       Reference<StreamAllocation> reference = references.get(i);
 

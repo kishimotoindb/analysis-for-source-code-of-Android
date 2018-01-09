@@ -64,6 +64,9 @@ class AndroidPlatform extends Platform {
     this.setAlpnProtocols = setAlpnProtocols;
   }
 
+  /*
+   * 这里其实就是将socket连接至server。
+   */
   @Override public void connectSocket(Socket socket, InetSocketAddress address,
       int connectTimeout) throws IOException {
     try {

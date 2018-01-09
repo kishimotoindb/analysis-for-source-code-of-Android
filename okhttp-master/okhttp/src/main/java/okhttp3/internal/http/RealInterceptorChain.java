@@ -123,6 +123,8 @@ public final class RealInterceptorChain implements Interceptor.Chain {
 
   public Response proceed(Request request, StreamAllocation streamAllocation, HttpCodec httpCodec,
       RealConnection connection) throws IOException {
+    // 如果所有interceptor都获取到response，说明这个请求是有问题的。
+    // 这个index在创建InterceptorChain对象的时候，初始化为0，然后每经过一个interceptor，index+1
     if (index >= interceptors.size()) throw new AssertionError();
 
     calls++;

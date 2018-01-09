@@ -30,8 +30,31 @@ import okhttp3.internal.platform.Platform;
 
 import static okhttp3.internal.platform.Platform.INFO;
 
+/*
+ * call.excute()和enqueue()的同步和异步，其实描述的是Call是否在dispatcher中排队。排队就是异步，
+ * 不排队就是同步。本身不论是excute()和enqueue()，都是通过getResponseWithInterceptorChain()
+ * 这个同步方法来执行网络请求。
+ *
+ * 网络请求的实现过程，是一个interceptor chain的处理过程。connection复用应该是在interceptor中
+ * 实现的。Call的排队是由dispatcher实现，和connection的复用是两码事儿。每一个Call会创建一个供自己
+ * 使用的RealInterceptorChain对象。
+ *
+ * okhttp的三大部件：（猜测）
+ * Call
+ * Dispatcher
+ * InterceptorChain ->streamAllocation，connection啥的好像都是在各个chain中完成的。
+ *
+ * StreamAllocation的作用：
+ * 1.寻找可用的connection：1)当前streamAllocation正在使用的connection，2)connectionPool中找一个
+ *                        能用的，3）创建一个新的connection
+ * 2.给connection分配stream
+ * 3.将connection提供给call使用。
+ *
+ */
+
 final class RealCall implements Call {
   final OkHttpClient client;
+  // 与当前Call的生命周期相同，用于全程记录Call的状态并进行控制。
   final RetryAndFollowUpInterceptor retryAndFollowUpInterceptor;
 
   /**
@@ -147,9 +170,11 @@ final class RealCall implements Call {
         Response response = getResponseWithInterceptorChain();
         if (retryAndFollowUpInterceptor.isCanceled()) {
           signalledCallback = true;
+          // 被取消的Call都会返回一个IOException，message为Canceled
           responseCallback.onFailure(RealCall.this, new IOException("Canceled"));
         } else {
           signalledCallback = true;
+          // OkHttp的onResponse回调，针对的是传输层的请求成功来说的
           responseCallback.onResponse(RealCall.this, response);
         }
       } catch (IOException e) {
