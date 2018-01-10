@@ -198,6 +198,11 @@ public final class StreamAllocation {
 
       if (result == null) {
         // Attempt to get a connection from the pool.
+        /*
+         * 这个复用的connection需要满足的条件很苛刻。
+         * 这个方法会从connectionPool中寻找一个可被复用的connection，然后将它赋值给当前allocation
+         * 的成员变量connection。
+         */
         Internal.instance.get(connectionPool, address, this, null);
         if (connection != null) {
           foundPooledConnection = true;

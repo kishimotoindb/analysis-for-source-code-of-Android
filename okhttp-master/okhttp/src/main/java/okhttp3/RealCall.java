@@ -92,6 +92,14 @@ import static okhttp3.internal.platform.Platform.INFO;
  *
  * 对于一个Call，retryAndFollowUpInterceptor和streamAllocation是唯一的。
  *
+ *
+ * ***********
+ * SSL/TLS握手：
+ * 1.首先经过TCP握手获得一个可用的socket，然后从socket中拿到stream，接着通过这里的stream进行SSL/TLS
+ *   握手，最后使用这个stream进行https通讯。
+ * 2.上面的过程说明stream在TLS握手之前就已经产生了，就stream本身来说，http和https是没有差别的，用的
+ *   是同一个stream。只不过http在stream中传输的明文，https在stream中传输的是经过加密的内容。
+ *
  */
 
 final class RealCall implements Call {

@@ -107,9 +107,20 @@ public final class RealConnection extends Http2Connection.Listener implements Co
    * The maximum number of concurrent streams that can be carried by this connection. If {@code
    * allocations.size() < allocationLimit} then new streams can be created on this connection.
    */
+  /*
+   * 这个其实只对HTTP有意义，一个connection可以同时承载多个stream。
+   */
   public int allocationLimit = 1;
 
   /** Current streams carried by this connection. */
+  /*
+   * 一个Call对应一个StreamAllocation，一个Call是一个单一的请求，所以基本上可以理解为一个
+   * StreamAllocation在同一时间只对应一个stream。所以connection记录自己对应了几个StreamAllocation，
+   * 也就等于对应了几个stream。之所以使用streamallocation，是因为stream在一个call的请求过程中是变化的，
+   * 但是streamallocation是不变的，只有唯一的一个。
+   *
+   * 其实对于SPDY和HTTP2才有意义，因为 HTTP/1.x 一个connection同一时间内只可以承载一个stream。
+   */
   public final List<Reference<StreamAllocation>> allocations = new ArrayList<>();
 
   /** Nanotime timestamp when {@code allocations.size()} reached zero. */
@@ -418,12 +429,18 @@ public final class RealConnection extends Http2Connection.Listener implements Co
    */
   public boolean isEligible(Address address, @Nullable Route route) {
     // If this connection is not accepting new streams, we're done.
+    // 对于http/1.x来说，allocationLimit默认值为1.所以只要connection承载了stream，就不可以复用。
     if (allocations.size() >= allocationLimit || noNewStreams) return false;
 
     // If the non-host fields of the address don't overlap, we're done.
     if (!Internal.instance.equalsNonHost(this.route.address(), address)) return false;
 
-    // If the host exactly matches, we're done: this connection can carry the address.
+    // If the host exactly matches, we're done: this connection can carry the address.allocationLimit
+    /*
+     * 如果hostname相同，对于http/1.x来说，条件就足够了，可以复用。
+     * 如果hostname不相同，对于http/2来说，还是有可能被复用的。
+     * 这里有一点没有整明白，为什么上面两个条件相同的情况下，host不同，当前连接就一定是http2
+     */
     if (address.url().host().equals(this.route().address().url().host())) {
       return true; // This connection is a perfect match.
     }

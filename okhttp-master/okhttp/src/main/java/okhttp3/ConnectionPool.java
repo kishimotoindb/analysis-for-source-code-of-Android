@@ -124,6 +124,7 @@ public final class ConnectionPool {
   @Nullable RealConnection get(Address address, StreamAllocation streamAllocation, Route route) {
     assert (Thread.holdsLock(this));
     for (RealConnection connection : connections) {
+      // 复用的条件很严格，具体看Connection.isEligible()和Address.equalNonHost()方法
       if (connection.isEligible(address, route)) {
         streamAllocation.acquire(connection, true);
         return connection;

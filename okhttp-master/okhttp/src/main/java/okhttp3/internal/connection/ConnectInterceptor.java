@@ -39,6 +39,13 @@ public final class ConnectInterceptor implements Interceptor {
 
     // We need the network to satisfy this request. Possibly for validating a conditional GET.
     boolean doExtensiveHealthChecks = !request.method().equals("GET");
+    /*
+     * 这里返回的codec和connection，已经是可以直接使用的了。
+     * 如果是https，已经经过了ssl握手，直接可以传输数据。
+     * 如果是http，直接可以传输数据。
+     *
+     * TCP握手，SSL/TLS握手这些操作，都是在streamAllocation.newStream()方法里执行的。
+     */
     HttpCodec httpCodec = streamAllocation.newStream(client, chain, doExtensiveHealthChecks);
     RealConnection connection = streamAllocation.connection();
 
