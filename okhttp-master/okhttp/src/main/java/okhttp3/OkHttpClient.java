@@ -126,6 +126,13 @@ import static okhttp3.internal.Util.checkDuration;
  * <p>OkHttp also uses daemon threads for HTTP/2 connections. These will exit automatically if they
  * remain idle.
  */
+
+ /*
+  * 1.connectionPool是在okHttpClient初始化的时候自动创建的（默认实现），不是在InterceptorChain中创建的。
+  * 如果需要自定义connectionPool，在client初始化时传入即可。
+  *
+  *
+  */
 public class OkHttpClient implements Cloneable, Call.Factory, WebSocket.Factory {
   static final List<Protocol> DEFAULT_PROTOCOLS = Util.immutableList(
       Protocol.HTTP_2, Protocol.HTTP_1_1);

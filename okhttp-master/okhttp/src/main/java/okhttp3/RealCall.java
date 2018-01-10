@@ -65,6 +65,8 @@ import static okhttp3.internal.platform.Platform.INFO;
  *                        能用的，3）创建一个新的connection
  * 2.给connection分配stream
  * 3.将connection提供给call使用。
+ * 一个InterceptorChain对应一个自己的streamAllocation，所有streamAllocation内的connectionPool
+ * 都是同一个，即OkHttpClient初始化时创建的那个。
  *
  * connection里包含了socket
  *
@@ -80,6 +82,8 @@ import static okhttp3.internal.platform.Platform.INFO;
  * 1.request
  * 2.call
  * 3.InterceptorChain
+ *
+ * 对于一个Call，retryAndFollowUpInterceptor和streamAllocation是唯一的。
  *
  */
 

@@ -57,6 +57,13 @@ import static okhttp3.internal.http.StatusLine.HTTP_TEMP_REDIRECT;
  * This interceptor recovers from failures and follows redirects as necessary. It may throw an
  * {@link IOException} if the call was canceled.
  */
+
+/*
+ * Interceptors中第一个被调用的Interceptor
+ *
+ * recover的是失败的call
+ * follow的是redirects，而不是整个call
+ */
 public final class RetryAndFollowUpInterceptor implements Interceptor {
   /**
    * How many redirects and auth challenges should we attempt? Chrome follows 21 redirects; Firefox,
@@ -108,11 +115,24 @@ public final class RetryAndFollowUpInterceptor implements Interceptor {
     Call call = realChain.call();
     EventListener eventListener = realChain.eventListener();
 
+    //在RetryAndFollowUpInterceptor中创建了streamAllocation
     streamAllocation = new StreamAllocation(client.connectionPool(), createAddress(request.url()),
         call, eventListener, callStackTrace);
 
     int followUpCount = 0;
     Response priorResponse = null;
+    /*
+     *
+     * 网络请求重试的情况：
+     * 1.RouteException
+     * 2.IOException
+     * 在以上两种异常的情况下，okHttp会自动重新发送请求
+     *
+     * 通过循环，执行redirect
+     * redirect会根据前一个response生成一个新的request，然后直接请求。但是redirect的次数有上限，
+     * 数量为20次。
+     *
+     */
     while (true) {
       if (canceled) {
         streamAllocation.release();

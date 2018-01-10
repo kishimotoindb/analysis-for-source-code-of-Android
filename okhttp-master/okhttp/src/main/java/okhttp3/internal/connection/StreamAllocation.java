@@ -20,6 +20,7 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.net.Socket;
 import java.util.List;
+
 import okhttp3.Address;
 import okhttp3.Call;
 import okhttp3.Connection;
@@ -74,6 +75,13 @@ import static okhttp3.internal.Util.closeQuietly;
  * but not the other streams sharing its connection. But if the TLS handshake is still in progress
  * then canceling may break the entire connection.
  */
+
+/*
+ * StreamAllocation在RetryAndFollowUpInterceptor中被创建，用来协调Call, Connection, Stream(httpCodec)三者
+ * 间的关系。
+ *
+ *
+ */
 public final class StreamAllocation {
   public final Address address;
   private RouteSelector.Selection routeSelection;
@@ -90,7 +98,7 @@ public final class StreamAllocation {
   private boolean reportedAcquired;
   private boolean released;
   private boolean canceled;
-  private HttpCodec codec;
+  private HttpCodec codec;  //stream以codec的形式出现
 
   public StreamAllocation(ConnectionPool connectionPool, Address address, Call call,
       EventListener eventListener, Object callStackTrace) {
@@ -339,6 +347,7 @@ public final class StreamAllocation {
     return connection;
   }
 
+  //关闭socket和connection
   public void release() {
     Socket socket;
     Connection releasedConnection;
@@ -369,7 +378,8 @@ public final class StreamAllocation {
   }
 
   /**
-   * Releases resources held by this allocation(indicating a connection). If sufficient resources are allocated, the
+   * Releases resources held by this allocation(指的是当前这个StreamAllocation，这个allocation
+   * 管理着connection和stream). If sufficient resources are allocated, the
    * connection will be detached or closed. Callers must be synchronized on the connection pool.
    *
    * <p>Returns a closeable that the caller should pass to {@link Util#closeQuietly} upon completion
@@ -389,8 +399,10 @@ public final class StreamAllocation {
       if (noNewStreams) {
         connection.noNewStreams = true;
       }
+      // 如果stream内的数据传输完毕，并且connection需要被释放（connection不能再被复用），释放这个connection
       if (this.codec == null && (this.released || connection.noNewStreams)) {
         release(connection);
+        // 一个connection可以被同时分配给多个allocation？目的是什么？
         if (connection.allocations.isEmpty()) {
           connection.idleAtNanos = System.nanoTime();
           if (Internal.instance.connectionBecameIdle(connectionPool, connection)) {
