@@ -3,10 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java" afterPath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/RealCall.java" afterPath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/RealCall.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/StreamAllocation.java" afterPath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/StreamAllocation.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/CallServerInterceptor.java" afterPath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/CallServerInterceptor.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RetryAndFollowUpInterceptor.java" afterPath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RetryAndFollowUpInterceptor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http1/Http1Codec.java" afterPath="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http1/Http1Codec.java" />
     </list>
     <ignored path="analysis-for-source-code-of-Android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,82 +27,69 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="OkHttpClient.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="492" column="39" selection-start-line="492" selection-start-column="39" selection-end-line="492" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="RealCall.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/RealCall.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="505">
-              <caret line="85" column="61" selection-start-line="85" selection-start-column="61" selection-end-line="85" selection-end-column="61" />
+            <state relative-caret-position="355">
+              <caret line="73" column="26" selection-start-line="73" selection-start-column="26" selection-end-line="73" selection-end-column="26" />
               <folding>
-                <element signature="e#0#8468#0" expanded="true" />
-                <element signature="e#5261#5262#0" expanded="true" />
-                <element signature="e#5307#5308#0" expanded="true" />
+                <element signature="e#0#8697#0" expanded="true" />
+                <element signature="e#5490#5491#0" expanded="true" />
+                <element signature="e#5536#5537#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RetryAndFollowUpInterceptor.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RetryAndFollowUpInterceptor.java">
+      <file leaf-file-name="CallServerInterceptor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/CallServerInterceptor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="132" column="14" selection-start-line="132" selection-start-column="14" selection-end-line="132" selection-end-column="14" />
+            <state relative-caret-position="-30">
+              <caret line="42" column="44" selection-start-line="42" selection-start-column="44" selection-end-line="42" selection-end-column="44" />
               <folding>
-                <element signature="e#0#14905#0" expanded="true" />
+                <element signature="e#0#6218#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StreamAllocation.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ConnectInterceptor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/ConnectInterceptor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="465">
+              <caret line="39" column="94" selection-start-line="39" selection-start-column="94" selection-end-line="39" selection-end-column="94" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#1311#1312#0" expanded="false" />
+                <element signature="e#1341#1342#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConnectionPool.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1695">
+              <caret line="51" column="65" selection-start-line="51" selection-start-column="47" selection-end-line="51" selection-end-column="65" />
+              <folding>
+                <element signature="e#0#11811#0" expanded="false" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#3504#3505#0" expanded="false" />
+                <element signature="e#3542#3543#0" expanded="false" />
+                <element signature="e#4604#4605#0" expanded="false" />
+                <element signature="e#4639#4640#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StreamAllocation.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/StreamAllocation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="678">
-              <caret line="466" column="25" selection-start-line="466" selection-start-column="4" selection-end-line="466" selection-end-column="25" />
+            <state relative-caret-position="468">
+              <caret line="184" column="58" selection-start-line="184" selection-start-column="58" selection-end-line="184" selection-end-column="58" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Util.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/Util.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="498">
-              <caret line="122" column="22" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
-              <folding>
-                <element signature="e#0#22788#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BridgeInterceptor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="778">
-              <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RealInterceptorChain.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RealInterceptorChain.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="363">
-              <caret line="166" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#7290#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -109,8 +97,8 @@
       <file leaf-file-name="RealConnection.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/RealConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="745">
-              <caret line="546" column="18" selection-start-line="546" selection-start-column="18" selection-end-line="546" selection-end-column="18" />
+            <state relative-caret-position="258">
+              <caret line="474" column="19" selection-start-line="474" selection-start-column="19" selection-end-line="474" selection-end-column="19" />
               <folding>
                 <element signature="e#0#22257#0" expanded="false" />
                 <element signature="imports" expanded="false" />
@@ -132,33 +120,11 @@
       <file leaf-file-name="Http1Codec.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http1/Http1Codec.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-216">
-              <caret line="42" column="19" selection-start-line="42" selection-start-column="19" selection-end-line="42" selection-end-column="19" />
+            <state relative-caret-position="508">
+              <caret line="204" column="29" selection-start-line="204" selection-start-column="29" selection-end-line="204" selection-end-column="29" />
               <folding>
-                <element signature="e#6282#6283#0" expanded="false" />
-                <element signature="e#6320#6321#0" expanded="false" />
-                <element signature="e#10678#10679#0" expanded="false" />
-                <element signature="e#10728#10729#0" expanded="false" />
-                <element signature="e#10770#10771#0" expanded="false" />
-                <element signature="e#10798#10799#0" expanded="false" />
-                <element signature="e#12267#12268#0" expanded="false" />
-                <element signature="e#12295#12296#0" expanded="false" />
-                <element signature="e#13479#13480#0" expanded="false" />
-                <element signature="e#13507#13508#0" expanded="false" />
-                <element signature="e#16049#16050#0" expanded="false" />
-                <element signature="e#16077#16078#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Interceptor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Interceptor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
-              <folding>
-                <element signature="e#0#1660#0" expanded="true" />
+                <element signature="e#0#18947#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -209,14 +175,16 @@
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/platform/AndroidPlatform.java" />
         <option value="$PROJECT_DIR$/okhttp-master/mockwebserver/src/main/java/okhttp3/internal/tls/HeldCertificate.java" />
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Request.java" />
-        <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http1/Http1Codec.java" />
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RealInterceptorChain.java" />
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Interceptor.java" />
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java" />
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java" />
+        <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http1/Http1Codec.java" />
+        <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/HttpMethod.java" />
+        <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/CallServerInterceptor.java" />
+        <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RetryAndFollowUpInterceptor.java" />
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/RealCall.java" />
         <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/StreamAllocation.java" />
-        <option value="$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RetryAndFollowUpInterceptor.java" />
       </list>
     </option>
   </component>
@@ -864,7 +832,14 @@
       <option name="project" value="LOCAL" />
       <updated>1515506976941</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="okHttp的interceptor的调用顺序和interceptor的分析，StreamAllocation和RetryAndFollowUpInterceptor&#10;">
+      <created>1515557258202</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1515557258202</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -925,7 +900,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="SwipeRefreshLayout的OnInterceptTouchEvent" />
     <MESSAGE value="在Activity onDestory()时调用Fragment的onCreateView()的原因分析" />
     <MESSAGE value="ViewPager源码解析" />
     <MESSAGE value="FragmentPagerAdapter分析" />
@@ -950,7 +924,8 @@
     <MESSAGE value="OkHttp的Connection" />
     <MESSAGE value="OkHttp的RealCall, InterceptorChain, streamAllocation" />
     <MESSAGE value="okHttp的interceptor的调用顺序和interceptor的分析，BridgeInterceptor" />
-    <option name="LAST_COMMIT_MESSAGE" value="okHttp的interceptor的调用顺序和interceptor的分析，BridgeInterceptor" />
+    <MESSAGE value="okHttp的interceptor的调用顺序和interceptor的分析，StreamAllocation和RetryAndFollowUpInterceptor&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="okHttp的interceptor的调用顺序和interceptor的分析，StreamAllocation和RetryAndFollowUpInterceptor&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -959,48 +934,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$APPLICATION_HOME_DIR$/jre/jdk/Contents/Home/jre/lib/rt.jar!/javax/swing/text/View.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/jre/jdk/Contents/Home/jre/lib/rt.jar!/javax/swing/text/html/ImageView.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9945">
-          <caret line="715" column="17" selection-start-line="715" selection-start-column="17" selection-end-line="715" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="13273" column="16" selection-start-line="13273" selection-start-column="16" selection-end-line="13273" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/support/v4/widget/CircleImageView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/ImageView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1050,21 +983,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="769">
           <caret line="1288" column="64" selection-start-line="1288" selection-start-column="64" selection-end-line="1288" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="51" column="65" selection-start-line="51" selection-start-column="47" selection-end-line="51" selection-end-column="65" />
-          <folding>
-            <element signature="e#0#11811#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#3504#3505#0" expanded="false" />
-            <element signature="e#3542#3543#0" expanded="false" />
-            <element signature="e#4604#4605#0" expanded="false" />
-            <element signature="e#4639#4640#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1348,10 +1266,142 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Interceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#1660#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/Long.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="363">
+          <caret line="467" column="15" selection-start-line="467" selection-start-column="15" selection-end-line="467" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#26172#0" expanded="false" />
+            <element signature="e#15295#15296#0" expanded="false" />
+            <element signature="e#15338#15339#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/EventListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RealInterceptorChain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="363">
+          <caret line="166" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#7290#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/Util.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="498">
+          <caret line="122" column="22" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#22788#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/java/com/sun/jmx/interceptor/DefaultMBeanServerInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#84329#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/StatusLine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/HttpMethod.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-90">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#2061#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RetryAndFollowUpInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-540">
+          <caret line="121" column="49" selection-start-line="121" selection-start-column="49" selection-end-line="121" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/cache/CacheInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="80" column="19" selection-start-line="73" selection-start-column="11" selection-end-line="80" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#1811#1812#0" expanded="false" />
+            <element signature="e#1839#1840#0" expanded="false" />
+            <element signature="e#7087#7088#0" expanded="false" />
+            <element signature="e#7128#7129#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/RealCall.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="73" column="26" selection-start-line="73" selection-start-column="26" selection-end-line="73" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#8697#0" expanded="true" />
+            <element signature="e#5490#5491#0" expanded="true" />
+            <element signature="e#5536#5537#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="492" column="39" selection-start-line="492" selection-start-column="39" selection-end-line="492" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/RealConnection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="745">
-          <caret line="546" column="18" selection-start-line="546" selection-start-column="18" selection-end-line="546" selection-end-column="18" />
+        <state relative-caret-position="258">
+          <caret line="474" column="19" selection-start-line="474" selection-start-column="19" selection-end-line="474" selection-end-column="19" />
           <folding>
             <element signature="e#0#22257#0" expanded="false" />
             <element signature="imports" expanded="false" />
@@ -1369,122 +1419,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/Interceptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#1660#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http1/Http1Codec.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-216">
-          <caret line="42" column="19" selection-start-line="42" selection-start-column="19" selection-end-line="42" selection-end-column="19" />
+        <state relative-caret-position="508">
+          <caret line="204" column="29" selection-start-line="204" selection-start-column="29" selection-end-line="204" selection-end-column="29" />
           <folding>
-            <element signature="e#6282#6283#0" expanded="false" />
-            <element signature="e#6320#6321#0" expanded="false" />
-            <element signature="e#10678#10679#0" expanded="false" />
-            <element signature="e#10728#10729#0" expanded="false" />
-            <element signature="e#10770#10771#0" expanded="false" />
-            <element signature="e#10798#10799#0" expanded="false" />
-            <element signature="e#12267#12268#0" expanded="false" />
-            <element signature="e#12295#12296#0" expanded="false" />
-            <element signature="e#13479#13480#0" expanded="false" />
-            <element signature="e#13507#13508#0" expanded="false" />
-            <element signature="e#16049#16050#0" expanded="false" />
-            <element signature="e#16077#16078#0" expanded="false" />
+            <element signature="e#0#18947#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/java/lang/Long.java">
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/CallServerInterceptor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="467" column="15" selection-start-line="467" selection-start-column="15" selection-end-line="467" selection-end-column="15" />
+        <state relative-caret-position="-30">
+          <caret line="42" column="44" selection-start-line="42" selection-start-column="44" selection-end-line="42" selection-end-column="44" />
           <folding>
-            <element signature="e#0#26172#0" expanded="false" />
-            <element signature="e#15295#15296#0" expanded="false" />
-            <element signature="e#15338#15339#0" expanded="false" />
+            <element signature="e#0#6218#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java">
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/ConnectInterceptor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="778">
-          <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/EventListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
+        <state relative-caret-position="465">
+          <caret line="39" column="94" selection-start-line="39" selection-start-column="94" selection-end-line="39" selection-end-column="94" />
           <folding>
             <element signature="imports" expanded="false" />
+            <element signature="e#1311#1312#0" expanded="false" />
+            <element signature="e#1341#1342#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/OkHttpClient.java">
+    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/ConnectionPool.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="492" column="39" selection-start-line="492" selection-start-column="39" selection-end-line="492" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/Util.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="122" column="22" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
+        <state relative-caret-position="-1695">
+          <caret line="51" column="65" selection-start-line="51" selection-start-column="47" selection-end-line="51" selection-end-column="65" />
           <folding>
-            <element signature="e#0#22788#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/RealCall.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="85" column="61" selection-start-line="85" selection-start-column="61" selection-end-line="85" selection-end-column="61" />
-          <folding>
-            <element signature="e#0#8468#0" expanded="true" />
-            <element signature="e#5261#5262#0" expanded="true" />
-            <element signature="e#5307#5308#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RealInterceptorChain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="166" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#7290#0" expanded="true" />
+            <element signature="e#0#11811#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#3504#3505#0" expanded="false" />
+            <element signature="e#3542#3543#0" expanded="false" />
+            <element signature="e#4604#4605#0" expanded="false" />
+            <element signature="e#4639#4640#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/connection/StreamAllocation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="678">
-          <caret line="466" column="25" selection-start-line="466" selection-start-column="4" selection-end-line="466" selection-end-column="25" />
+        <state relative-caret-position="468">
+          <caret line="184" column="58" selection-start-line="184" selection-start-column="58" selection-end-line="184" selection-end-column="58" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/okhttp-master/okhttp/src/main/java/okhttp3/internal/http/RetryAndFollowUpInterceptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="132" column="14" selection-start-line="132" selection-start-column="14" selection-end-line="132" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#14905#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

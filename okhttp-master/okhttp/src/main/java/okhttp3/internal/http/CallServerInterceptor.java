@@ -30,6 +30,9 @@ import okio.Okio;
 import okio.Sink;
 
 /** This is the last interceptor in the chain. It makes a network call to the server. */
+/*
+ * 到这里的时候已经开始写流或者读流了，说明ssl握手应该是在connectInterceptor中完成的（待确定）
+ */
 public final class CallServerInterceptor implements Interceptor {
   private final boolean forWebSocket;
 
@@ -37,6 +40,8 @@ public final class CallServerInterceptor implements Interceptor {
     this.forWebSocket = forWebSocket;
   }
 
+  // 这个方法中，再没有出现调用Chain.proceed()方法语句，这个也从侧面说明了CallServerInterceptor是最后
+  // 一个被执行的Interceptor
   @Override public Response intercept(Chain chain) throws IOException {
     RealInterceptorChain realChain = (RealInterceptorChain) chain;
     HttpCodec httpCodec = realChain.httpStream();
@@ -51,10 +56,15 @@ public final class CallServerInterceptor implements Interceptor {
     realChain.eventListener().requestHeadersEnd(realChain.call(), request);
 
     Response.Builder responseBuilder = null;
+
+    // 各种需要传输request body的request，传输request body
     if (HttpMethod.permitsRequestBody(request.method()) && request.body() != null) {
       // If there's a "Expect: 100-continue" header on the request, wait for a "HTTP/1.1 100
       // Continue" response before transmitting the request body. If we don't get that, return
       // what we did get (such as a 4xx response) without ever transmitting the request body.
+      // header中放入expect：100 continue，表示服务器需要首先检查头部信息是否正确，如果正确返回给
+      // 客户端一个响应码（100 continue），此时客户端再继续传递requestBody的内容。客户端不清楚服务器
+      // 是否想要body时，可以采用这种请求方式。但应该服务器需要配合。
       if ("100-continue".equalsIgnoreCase(request.header("Expect"))) {
         httpCodec.flushRequest();
         realChain.eventListener().responseHeadersStart(realChain.call());
@@ -62,6 +72,10 @@ public final class CallServerInterceptor implements Interceptor {
       }
 
       if (responseBuilder == null) {
+        // 1.100-continue，在服务器返回100-continue时，responseBuilder = httpCodec.readResponseHeaders(true);
+        //   方法返回的responseBuilder==null
+        // 2.其他请求到这里responseBuilder一定是null，也需要开始写body
+        //
         // Write the request body if the "Expect: 100-continue" expectation was met.
         realChain.eventListener().requestBodyStart(realChain.call());
         long contentLength = request.body().contentLength();
@@ -74,6 +88,13 @@ public final class CallServerInterceptor implements Interceptor {
         realChain.eventListener()
             .requestBodyEnd(realChain.call(), requestBodyOut.successfulCount);
       } else if (!connection.isMultiplexed()) {
+        /*
+         * 只有在"100-continue"的情况下，执行到这里时，responseBuider才可能不为空。又因为100-continue
+         * 的情况下，如果服务器正常处理并且表示需要requestBody，那么responsebuilder应该为空，只有在
+         * 服务器处理这种情况出现问题时，requestbuilder才可能不为空，如果是这种情况，那么说明当前的连接
+         * 出现问题了，所以
+         *
+         */
         // If the "Expect: 100-continue" expectation wasn't met, prevent the HTTP/1 connection
         // from being reused. Otherwise we're still obligated to transmit the request body to
         // leave the connection in a consistent state.
@@ -83,6 +104,7 @@ public final class CallServerInterceptor implements Interceptor {
 
     httpCodec.finishRequest();
 
+    //读取response：status line 和 headers
     if (responseBuilder == null) {
       realChain.eventListener().responseHeadersStart(realChain.call());
       responseBuilder = httpCodec.readResponseHeaders(false);
@@ -98,6 +120,7 @@ public final class CallServerInterceptor implements Interceptor {
     realChain.eventListener()
         .responseHeadersEnd(realChain.call(), response);
 
+    //读取responseBody
     int code = response.code();
     if (forWebSocket && code == 101) {
       // Connection is upgrading, but we need to ensure interceptors see a non-null response body.

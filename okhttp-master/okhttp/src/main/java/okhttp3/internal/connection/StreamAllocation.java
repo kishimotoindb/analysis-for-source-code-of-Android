@@ -163,8 +163,6 @@ public final class StreamAllocation {
   /**
    * Returns a connection to host a new stream. This prefers the existing connection if it exists,
    * then the pool, finally building a new connection.
-   *
-   * 这里只是寻找connection，connection里获取stream是newStream()方法实现的。
    */
   private RealConnection findConnection(int connectTimeout, int readTimeout, int writeTimeout,
       boolean connectionRetryEnabled) throws IOException {
@@ -180,7 +178,12 @@ public final class StreamAllocation {
 
       // Attempt to use an already-allocated connection. We need to be careful here because our
       // already-allocated connection may have been restricted from creating new streams.
-      // 1.streamAllocation已存在的connection
+      /*
+       * 1.使用streamAllocation里已存在的connection。正常情况下，一个Call对应一个StreamAllocation，
+       *   所以如果是正常请求，第一次到这里的时候，StreamAllocation的connection为空。如果到这里有
+       *   connection，目前知道的有两种情况，1.请求失败再次发起请求的情况 2.redirect的情况。这两种
+       *   情况下，是一种复用的策略。这样可以省去重新在connectionPool寻找或新建的时间消耗。
+       */
       releasedConnection = this.connection;
       toClose = releaseIfNoNewStreams();
       if (this.connection != null) {

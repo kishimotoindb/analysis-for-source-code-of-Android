@@ -22,10 +22,12 @@ import java.net.ProtocolException;
 import java.net.Proxy;
 import java.net.SocketTimeoutException;
 import java.security.cert.CertificateException;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSocketFactory;
+
 import okhttp3.Address;
 import okhttp3.Call;
 import okhttp3.CertificatePinner;
@@ -115,7 +117,10 @@ public final class RetryAndFollowUpInterceptor implements Interceptor {
     Call call = realChain.call();
     EventListener eventListener = realChain.eventListener();
 
-    //在RetryAndFollowUpInterceptor中创建了streamAllocation
+    /*
+     * 在RetryAndFollowUpInterceptor中创建了streamAllocation
+     * 这里只是new了一个streamAllocation，并没有创建connection
+     */
     streamAllocation = new StreamAllocation(client.connectionPool(), createAddress(request.url()),
         call, eventListener, callStackTrace);
 

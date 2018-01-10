@@ -53,11 +53,18 @@ import static okhttp3.internal.platform.Platform.INFO;
  *
  * interceptors的顺序：
  * 1.interceptors(自己配置的)
+ *   这个位置的Interceptor，是在connection被打开之前，做某些操作用的
  * 2.retryAndFollowUpInterceptor
+ *   1）创建了streamAllocation
+ *   2）请求失败后重试
+ *   3）请求转发后转发，最多转发20次
  * 2.BridgeInterceptor
+ *   1）给请求和响应增加和移除 http header
  * 3.CacheInterceptor
  * 4.ConnectInterceptor
  * 5.networkInterceptor(自己配置的)
+ *   这个位置的Interceptor，是在connection和stream已经打开之后，做某些操作用的。如果需要对原始的
+ *   stream数据做操作，需要
  * 6.CallServerInterceptor
  *
  * StreamAllocation的作用：

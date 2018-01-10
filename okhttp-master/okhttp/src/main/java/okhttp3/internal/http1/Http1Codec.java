@@ -181,6 +181,7 @@ public final class Http1Codec implements HttpCodec {
     state = STATE_OPEN_REQUEST_BODY;
   }
 
+  // 读取status line 和 headers
   @Override public Response.Builder readResponseHeaders(boolean expectContinue) throws IOException {
     if (state != STATE_OPEN_REQUEST_BODY && state != STATE_READ_RESPONSE_HEADERS) {
       throw new IllegalStateException("state: " + state);
@@ -189,6 +190,7 @@ public final class Http1Codec implements HttpCodec {
     try {
       StatusLine statusLine = StatusLine.parse(readHeaderLine());
 
+      //status line: HTTP/1.1 200 Ok
       Response.Builder responseBuilder = new Response.Builder()
           .protocol(statusLine.protocol)
           .code(statusLine.code)
