@@ -161,8 +161,6 @@ public final class RealConnection extends Http2Connection.Listener implements Co
     }
 
     while (true) {
-      // TODO: 15/12/2017 这里应该涉及到请求失败自动重新请求的逻辑
-      //问题：1.什么情况下会重新请求？2.失败的请求会不会走回调方法
       try {
         if (route.requiresTunnel()) {
           connectTunnel(connectTimeout, readTimeout, writeTimeout, call, eventListener);
@@ -281,6 +279,7 @@ public final class RealConnection extends Http2Connection.Listener implements Co
     }
 
     eventListener.secureConnectStart(call);
+    //TLS握手
     connectTls(connectionSpecSelector);
     eventListener.secureConnectEnd(call, handshake);
 

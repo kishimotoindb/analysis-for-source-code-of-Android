@@ -1275,6 +1275,7 @@ final public class SSLSocketImpl extends BaseSSLSocketImpl {
      *          certain exception. If <code>resumable</code>, the socket will
      *          be reserved for exceptions like timeout; otherwise, the socket
      *          will be closed, no further communications could be done.
+     *
      *          如果resumable，那么如果ssl握手因为超时等原因失败，socket（注意是socket，不是
      *          sslSocket）会保持连接状态。
      */
