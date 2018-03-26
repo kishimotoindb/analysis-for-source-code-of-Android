@@ -27,7 +27,7 @@ import java.util.Map;
 public final class ServiceManager {
     private static final String TAG = "ServiceManager";
 
-    private static IServiceManager sServiceManager;
+    private static IServiceManager sServiceManager; //Client端使用
     private static HashMap<String, IBinder> sCache = new HashMap<String, IBinder>();
 
     private static IServiceManager getIServiceManager() {

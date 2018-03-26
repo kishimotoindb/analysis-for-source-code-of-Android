@@ -250,7 +250,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
      *
      * <p>If the lock is held by another thread then the
      * current thread becomes disabled for thread scheduling
-     * purposes and lies dormant until the lock has been acquired,
+     * purposes and lies dormant(休眠的，睡眠状态) until the lock has been acquired,
      * at which time the lock hold count is set to one.
      */
     public void lock() {

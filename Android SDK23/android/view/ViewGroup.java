@@ -2236,7 +2236,8 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
 		    * 1.该if方法体的作用：
 			*  	1）判断ViewGroup是否拦截Down事件
 			*	2）如果ViewGroup在Down事件来临的时候拦截了事件，那么后面的代码中就不再能够得到mFirstTouchTarget，这样
-			×		mFirstTouchTarget就等于null，此时后面的事件来临时，就不会再进入这个if。
+			*		mFirstTouchTarget就等于null，此时后面的事件来临时，就不会再进入这个if。
+            * 2.一旦拦截事件之后，因为mFirstTouchTarget会被清空，之后就再也不会进入onInterceptTouchEvent()方法
 			*/
             if (actionMasked == MotionEvent.ACTION_DOWN
                     || mFirstTouchTarget != null) {

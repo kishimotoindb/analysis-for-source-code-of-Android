@@ -11859,6 +11859,9 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * it, since those are outside of the frame of your view on screen.
      *
      * @return The top edge of the displayed part of your view, in pixels.
+     *
+     * mScrollX:View的左边缘和View内容左边缘在x轴上的距离,即View左边缘x轴坐标-View内容左边缘的x轴坐标
+     *
      */
     public final int getScrollY() {
         return mScrollY;

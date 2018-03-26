@@ -20,8 +20,14 @@ package android.os;
  * Base class for Binder interfaces.  When defining a new interface,
  * you must derive it from IInterface.
  */
-public interface IInterface
-{
+
+/*
+ * Binder通讯中传递的Interface必须继承自IInterface接口。
+ * Service通过接口定义客户端可以执行的操作，通过Binder进行通信。
+ * 所以客户端实质上在调用服务时，需要拿到两个东西：1.定义服务内容的接口 2.通信使用的Binder
+ */
+
+public interface IInterface {
     /**
      * Retrieve the Binder object associated with this interface.
      * You must use this instead of a plain cast, so that proxy objects

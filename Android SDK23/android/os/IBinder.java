@@ -40,7 +40,7 @@ import java.io.FileDescriptor;
  * <p>The data sent through transact() is a {@link Parcel}, a generic buffer
  * of data that also maintains some meta-data about its contents.  The meta
  * data is used to manage IBinder object references in the buffer, so that those
- * references can be maintained as the buffer moves across processes.  This
+ * references can be maintained as the buffer moves across processes.  lThis
  * mechanism ensures that when an IBinder is written into a Parcel and sent to
  * another process, if that other process sends a reference to that same IBinder
  * back to the original process, then the original process will receive the

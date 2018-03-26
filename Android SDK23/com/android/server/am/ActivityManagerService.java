@@ -260,6 +260,12 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+/*
+ * ActivityManagerService本质是一个Binder对象，并不是Android的四大组件之一的Service对象。项目中
+ * 使用的Service，与ActivityManagerService本质上并不是一个东西。Service中onBind()等方法返回的Binder
+ * 对象，才是与ActivityManagerService等价的"服务"。Service可能只是google特别设计的一种用在App中的组件，
+ * 在系统中实现服务，并不需要依赖Service这种组件的结构。
+ */
 public final class ActivityManagerService extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
 

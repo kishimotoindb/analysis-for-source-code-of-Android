@@ -58,6 +58,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@hide} */
+/*
+ * 之所以ActivityMangerService与Binder中间有一层ActivityManagerNative，目的是为了将Binder通讯的
+ * 逻辑与实际的Service业务逻辑分离。虽然ActivityManagerNative继承了IActivityManager，好像是对业务
+ * 逻辑进行了处理，但实际上IActivityManager中的方法在当前类中并没有实际的实现代码。业务逻辑的实现代码
+ * 仍然是留给ActivityMangerService这一层来实现。
+ *
+ * Native这一层主要处理的就是Binder通讯相关的逻辑。这一层的逻辑其实比较复杂并且繁琐，所以在AIDL中，
+ * 这一层是由AIDL解析器自动完成的，用户只需要自己实现ActivityMangerService这一层即可。
+ */
 public abstract class ActivityManagerNative extends Binder implements IActivityManager
 {
     /**
