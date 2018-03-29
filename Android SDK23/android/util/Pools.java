@@ -1,7 +1,7 @@
 package android.util;
 
 /**
- * Helper class for crating pools of objects. An example use looks like this:
+ * Helper class for creating pools of objects. An example use looks like this:
  * <pre>
  * public class MyPooledClass {
  *
@@ -58,6 +58,9 @@ public final class Pools {
      * Simple (non-synchronized) pool of objects.
      *
      * @param <T> The pooled type.
+     */
+    /*
+     * SimplePool使用数组实现的，所以SynchronizedPool也是基于数组实现的。
      */
     public static class SimplePool<T> implements Pool<T> {
         private final Object[] mPool;

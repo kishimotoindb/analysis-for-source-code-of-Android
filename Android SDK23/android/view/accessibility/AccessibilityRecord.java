@@ -23,6 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 记录View产生的状态变化，会保存为一个Record。之所以AccessibilityEvent中会有多个Record，是因为
+ * 上下文环境也会提供Record。
+ *
+ * 开发者可以根据需要，自己通过NodeInfo构建一个逻辑上的View Hierarchy，以便AccessibilityService
+ * 能够理解。
+ *
  * Represents a record in an {@link AccessibilityEvent} and contains information
  * about state change of its source {@link android.view.View}. When a view fires
  * an accessibility event it requests from its parent to dispatch the

@@ -36,6 +36,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 从AccessibilityService的角度来看，当前Window所展示的内容，使用树的结构进行描述，树的节点使用
+ * AccessibilityNodeInfo来表示。
+ *
  * This class represents a node of the window content as well as actions that
  * can be requested from its source. From the point of view of an
  * {@link android.accessibilityservice.AccessibilityService} a window content is
@@ -86,7 +89,7 @@ public class AccessibilityNodeInfo implements Parcelable {
     public static final int ANY_WINDOW_ID = -2;
 
     /** @hide */
-    public static final int FLAG_PREFETCH_PREDECESSORS = 0x00000001;
+    public static final int FLAG_PREFETCH_PREDECESSORS(前辈) = 0x00000001;
 
     /** @hide */
     public static final int FLAG_PREFETCH_SIBLINGS = 0x00000002;

@@ -6,8 +6,8 @@
 
 package java.util.concurrent.locks;
 
-import java.util.concurrent.TimeUnit;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A reentrant mutual exclusion {@link Lock} with the same basic
