@@ -8,6 +8,10 @@ import android.view.accessibility.AccessibilityEvent;
  * Defines the responsibilities for a class that will be a parent of a View.
  * This is the API that a view sees when it wants to interact with its parent.
  * ViewGroup extends ViewParent
+ *
+ * 只是一个接口，描述了一下职责。这些职责是作为View的Parent应该具备的能力,所以ViewParent也可以改名为
+ * ViewParentMethods。ViewParent这个名字容易使人误解为它本身是一个View，其实仔细想一下，ViewHierachy
+ * 里都是View，位于其它View上方的都是某个View的parent,那岂不是所有这些View都要extends ViewParent。
  */
 public interface ViewParent {
     /**

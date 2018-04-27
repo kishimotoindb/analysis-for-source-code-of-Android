@@ -11164,10 +11164,11 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 		 * 系统反映出来的好像事件被处理了，但是实际上只不过是return true而已，并没有对事件进行任何处理。即使重写了onclick方法，
 		 * 也不会被执行。说白了，就是如果一个控件disable，onTouchEvent方法中就不会真正的处理事件，但可能返回true。
 		 * 
-		 * 2.able的情况下，触摸事件完成之前，onTouchEvent返回的一直是true。
+		 * 2.enable的情况下，触摸事件完成之前，onTouchEvent返回的一直是true。
 		 */
         if ((viewFlags & ENABLED_MASK) == DISABLED) {
             if (action == MotionEvent.ACTION_UP && (mPrivateFlags & PFLAG_PRESSED) != 0) {
+                //pressed状态复位
                 setPressed(false);
             }
             // A disabled view that is clickable still consumes the touch
@@ -11191,8 +11192,9 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 //2.**************************************代理处理onTouchEvent：结束****************************************************
 
 //3.**********************************Enable View 事件处理：开始*******************************************************
-        //View默认的onTouchEvent其实就是在处理Click事件
-        //Contextclick应该就是鼠标右击，所以其实是用不到的。
+        // View默认的onTouchEvent其实就是在处理各种Click事件。即所有View，只要不覆盖掉父类的onTouchEvent()实现，
+        // 都有click,longClick,ContextClick的能力
+        // Contextclick应该就是鼠标右击，所以其实是用不到的。
         if (((viewFlags & CLICKABLE) == CLICKABLE ||
                 (viewFlags & LONG_CLICKABLE) == LONG_CLICKABLE) ||
                 (viewFlags & CONTEXT_CLICKABLE) == CONTEXT_CLICKABLE) {
