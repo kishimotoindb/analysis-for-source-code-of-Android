@@ -4,7 +4,6 @@
     <list default="true" id="38b1527b-3b9a-4651-8f5c-862a93aaa478" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/view/View.java" afterPath="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Android SDK23/android/view/ViewParent.java" afterPath="$PROJECT_DIR$/Android SDK23/android/view/ViewParent.java" />
     </list>
     <ignored path="analysis-for-source-code-of-Android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -23,7 +22,48 @@
     <favorites_list name="analysis-for-source-code-of-Android" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="Editor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/Editor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18">
+              <caret line="2444" column="74" selection-start-line="2444" selection-start-column="74" selection-end-line="2444" selection-end-column="74" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TextView.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/TextView.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="54">
+              <caret line="8303" column="20" selection-start-line="8303" selection-start-column="20" selection-end-line="8303" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="View.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="295">
+              <caret line="23113" column="22" selection-start-line="23113" selection-start-column="22" selection-end-line="23113" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ViewGroup.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="295">
+              <caret line="753" column="19" selection-start-line="753" selection-start-column="19" selection-end-line="753" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -122,8 +162,8 @@
         <option value="$PROJECT_DIR$/Android SDK23/android/view/accessibility/AccessibilityRecord.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/view/accessibility/AccessibilityNodeInfo.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/util/Pools.java" />
-        <option value="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
         <option value="$PROJECT_DIR$/Android SDK23/android/view/ViewParent.java" />
+        <option value="$PROJECT_DIR$/Android SDK23/android/view/View.java" />
       </list>
     </option>
   </component>
@@ -214,7 +254,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/bear/DemoProject/analysis-for-source-code-of-Android/Android SDK23/mock_android/view/View.java&#10;Activity.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/app/Activity.java&#10;FragmentActivi&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v4/app/FragmentActivity.java&#10;Linearlayoutman&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/recyclerview-v7/LinearLayoutManager.java&#10;View.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/view/View.java&#10;Recyclerview&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v7/widget/RecyclerView.java&#10;Relativelayout&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/RelativeLayout.java&#10;Circleima&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v4/widget/CircleImageView.java&#10;CircleView&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/com/android/datetimepicker/time/CircleView.java&#10;SwipeRe&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/support/v4/widget/SwipeRefreshLayout.java&#10;Toast&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/Toast.java&#10;ActivityThre&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/app/ActivityThread.java&#10;abstrStringbuilder&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/AbstractStringBuilder.java&#10;StringBuilder.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/StringBuilder.java&#10;Stringbuilder.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/java/java/lang/StringBuilder.java&#10;Stringfactory&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/StringFactory.java&#10;String.java&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/java/lang/String.java&#10;Linearlayout.j&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/mock_android/widget/LinearLayout.java&#10;Linearlayout&#9;FILE&#9;file:///Users/bear/StudioProjects/analysis-for-source-code-of-Android/Android SDK23/android/widget/LinearLayout.java&#10;FrameLayout.java&#9;null&#9;null&#10;View&#9;ACTION&#9;ViewMenu" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="http.proxy" />
     <property name="FullScreen" value="true" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
@@ -759,7 +799,14 @@
       <option name="project" value="LOCAL" />
       <updated>1522055297248</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="view's onTouchEvent() and ViewParent&#10;">
+      <created>1524825602050</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1524825602050</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TodoView">
@@ -773,15 +820,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.49753347" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.55845773" sideWeight="0.5024665" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.73917633" sideWeight="0.5047091" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5895522" sideWeight="0.49753347" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.73917633" sideWeight="0.49753347" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.73917633" sideWeight="0.49529085" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4268116" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24919786" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -830,8 +877,8 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.OkHttp: Http1Codec 2.ViewPager: setAdapter(),onMeasure()" />
-    <MESSAGE value="1.ViewPager: 初始化ViewPager过程中，onMeasure()中调用populate()。分析ViewPager初始化的过程" />
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="1.ViewPager的populate(int)方法分析" />
     <MESSAGE value="1.ViewPager的onMeasure()方法分析" />
     <MESSAGE value="1.ViewPager的onLayout()方法分析" />
@@ -855,7 +902,9 @@
     <MESSAGE value="okHttp：ConnectInterceptor" />
     <MESSAGE value="okHttp：ConnectInterceptor中的connection connect" />
     <MESSAGE value="ActivityManagerService" />
-    <option name="LAST_COMMIT_MESSAGE" value="ActivityManagerService" />
+    <MESSAGE value="view and ViewParent&#10;" />
+    <MESSAGE value="view's onTouchEvent() and ViewParent&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="view's onTouchEvent() and ViewParent&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1047,34 +1096,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/Editor.java">
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewParent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-53542">
-          <caret line="2444" column="74" selection-start-line="2444" selection-start-column="74" selection-end-line="2444" selection-end-column="74" />
+        <state relative-caret-position="306">
+          <caret line="17" column="78" selection-start-line="17" selection-start-column="78" selection-end-line="17" selection-end-column="78" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/TextView.java">
+    <entry file="jar://$APPLICATION_HOME_DIR$/jre/jre/lib/rt.jar!/javax/swing/text/View.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1717">
-          <caret line="8316" column="15" selection-start-line="8316" selection-start-column="15" selection-end-line="8316" selection-end-column="15" />
+        <state relative-caret-position="108">
+          <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewGroup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="753" column="19" selection-start-line="753" selection-start-column="19" selection-end-line="753" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/Editor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="2444" column="74" selection-start-line="2444" selection-start-column="74" selection-end-line="2444" selection-end-column="74" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/View.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="11311" column="25" selection-start-line="11311" selection-start-column="25" selection-end-line="11311" selection-end-column="25" />
+        <state relative-caret-position="295">
+          <caret line="23113" column="22" selection-start-line="23113" selection-start-column="22" selection-end-line="23113" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Android SDK23/android/view/ViewParent.java">
+    <entry file="file://$PROJECT_DIR$/Android SDK23/android/widget/TextView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="17" column="78" selection-start-line="17" selection-start-column="78" selection-end-line="17" selection-end-column="78" />
+        <state relative-caret-position="54">
+          <caret line="8303" column="20" selection-start-line="8303" selection-start-column="20" selection-end-line="8303" selection-end-column="20" />
           <folding />
         </state>
       </provider>

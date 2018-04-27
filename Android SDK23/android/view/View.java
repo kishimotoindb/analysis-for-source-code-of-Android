@@ -5726,6 +5726,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
         boolean handled = false;
         final ListenerInfo li = mListenerInfo;
+        /*
+         * longClick的情况：
+         * 1.正常View会只执行onLongClickListener，如果有的话。
+         * 2.如果没有，就会弹出ContextMenu。
+         * 这两种处理是互斥的
+         */
         if (li != null && li.mOnLongClickListener != null) {
             handled = li.mOnLongClickListener.onLongClick(View.this);
         }
@@ -11329,7 +11335,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
                     // For views inside a scrolling container, delay the pressed feedback for
                     // a short period in case this is a scroll.
-					/* 
+					/*
 					 * PFLAG_PREPRESSED是用来delay the pressed feedback。
 					 */
                     if (isInScrollingContainer) {
@@ -22376,6 +22382,8 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         }
     }
 
+    //Runnable，在给定时间内没有被取消，就表明这是一个长按事件。longClick和Click的区别不仅在触发条件上，还有就是
+    //事件的响应时机上，click是up事件的时候执行，longClick是不考虑up事件何时到来，只要时间到了，就开始执行事件处理。
     private final class CheckForLongPress implements Runnable {
         private int mOriginalWindowAttachCount;
         private float mX;
@@ -22383,6 +22391,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
         @Override
         public void run() {
+            /*
+             * 1.长按操作还需要当前View有parent，为啥？的确除了顶层View其他View肯定都有parent。
+             * 2.down事件时attachWindowCount和当前执行时的count是否相同，如果不同，就不执行longClick
+             */
             if (isPressed() && (mParent != null)
                     && mOriginalWindowAttachCount == mWindowAttachCount) {
                 if (performLongClick(mX, mY)) {
@@ -22401,6 +22413,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         }
     }
 
+    //这个任务的目的应该是延缓setPress这个动作，这样在这个任务完成之前如果ACTION_UP事件来了，并不会触发click事件。
+    //checkForTap其实就是字面意思，检查是否是轻敲。在可滚动的Group中，轻敲是不应该被当成click来处理的。至于说Group
+    //是否要拦截事件进行滚动操作，和这里没啥关系，因为一般Group都会在onInterceptTouchEvent()方法中直接拦截事件
+    //感觉这个任务比较鸡肋
     private final class CheckForTap implements Runnable {
         public float x;
         public float y;
