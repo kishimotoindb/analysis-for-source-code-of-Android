@@ -8295,6 +8295,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     public boolean onTouchEvent(MotionEvent event) {
         final int action = event.getActionMasked();
 
+        //判断是不是双击，如果是双击，Editor应该要执行选中文字的操作
         if (mEditor != null && action == MotionEvent.ACTION_DOWN) {
             // Detect double tap and inform the Editor.
             if (mFirstTouch && (SystemClock.uptimeMillis() - mLastTouchUpTime) <=
@@ -8320,6 +8321,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             }
         }
 
+        //TextView自身的click和longClick是由父类View决定的
         final boolean superResult = super.onTouchEvent(event);
 
         /*

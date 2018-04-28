@@ -30,6 +30,8 @@ import android.graphics.Rect;
  * read the <a href="{@docRoot}guide/topics/ui/menus.html#context-menu">Menus</a>
  * developer guide.</p>
  * </div>
+ *
+ * 通过Callback实现页面在不同模式下展示不同的UI，说明文章：https://blog.stylingandroid.com/actionmode/
  */
 public abstract class ActionMode {
 

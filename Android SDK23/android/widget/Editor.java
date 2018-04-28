@@ -769,6 +769,7 @@ public class Editor {
     /**
      * Adjusts selection to the word under last touch offset. Return true if the operation was
      * successfully performed.
+     * 这里说明长按的时候，TextView选中文字的效果是TextView自己完成的，而不是Editor
      */
     private boolean selectCurrentWord() {
         if (!mTextView.canSelectText()) {
@@ -1762,6 +1763,7 @@ public class Editor {
         if (mTextActionMode != null) {
             mTextActionMode.finish();
         }
+        //选中文字的工作不是通过ActionMode实现
         if (!checkFieldAndSelectCurrentWord()) {
             return false;
         }
@@ -1771,6 +1773,7 @@ public class Editor {
         stopTextActionMode();
         mPreserveDetachedSelection = false;
 
+        //弹出光标也不是通过ActionMode实现，ActionMode只是对应于弹菜单的操作
         getSelectionController().enterDrag();
         return true;
     }
@@ -2458,6 +2461,8 @@ public class Editor {
                 vto.addOnPreDrawListener(this);
             }
 
+            //mPositionListeners是个数组，移除的时候有可能造成数组中有非连续的元素，emptySlotIndex用来
+            //记录这个位置，取索引值最小的
             int emptySlotIndex = -1;
             for (int i = 0; i < MAXIMUM_NUMBER_OF_LISTENERS; i++) {
                 TextViewPositionListener listener = mPositionListeners[i];
@@ -3488,6 +3493,15 @@ public class Editor {
         }
     }
 
+    /* Text两旁的Handle，实际是一个popupWindow，popupWindow内部有一个HandleView。所以拖拽handle改变文字选择范围的时候，
+     * 其实未必是拖拽的handle，而是editor处理触摸事件，实时更新选中文字的位置，然后通过回调修改handle的位置。
+     *
+     * 关于PositionListener:
+     * 首先，position指的是TextView自身的位置，不是文字选择范围的起点和终点。
+     * TextView自身的位置发生变化，popupWindow的位置同样需要更新，这个位置更新就是通过positionListener实现。
+     * position不同于selection，没有半毛钱关系。
+     *
+     */
     private abstract class HandleView extends View implements TextViewPositionListener {
         protected Drawable mDrawable;
         protected Drawable mDrawableLtr;
@@ -3738,6 +3752,7 @@ public class Editor {
             }
         }
 
+        //根据选中文字的位置，弹出popupWindow
         public void showAtLocation(int offset) {
             // TODO - investigate if there's a better way to show the handles
             // after the drag accelerator has occured.
@@ -4652,6 +4667,7 @@ public class Editor {
         }
 
         public void show() {
+            //如果是批量操作，不展示handle
             if (mTextView.isInBatchEditMode()) {
                 return;
             }
@@ -4662,6 +4678,7 @@ public class Editor {
 
         private void initDrawables() {
             if (mSelectHandleLeft == null) {
+                //TextView选中文字时的handle样式，是可以在xml中配置的
                 mSelectHandleLeft = mTextView.getContext().getDrawable(
                         mTextView.mTextSelectHandleLeftRes);
             }
@@ -4720,6 +4737,7 @@ public class Editor {
                         hide();
                     } else {
                         // Remember finger down position, to be able to start selection from there.
+                        // 拿到手指放下时按到的字符位置
                         mMinTouchOffset = mMaxTouchOffset = mTextView.getOffsetForPosition(
                                 eventX, eventY);
 
@@ -4732,12 +4750,16 @@ public class Editor {
 
                                 ViewConfiguration viewConfiguration = ViewConfiguration.get(
                                         mTextView.getContext());
+                                //判断doubleTap的时候，两个tap的坐标间距要在一定的范围内，doubleTapSlop
+                                //限制了这个范围
                                 int doubleTapSlop = viewConfiguration.getScaledDoubleTapSlop();
                                 boolean stayedInArea =
                                         distanceSquared < doubleTapSlop * doubleTapSlop;
 
                                 if (stayedInArea && isPositionOnText(eventX, eventY)) {
+                                    //双击弹出两头的光标
                                     selectCurrentWordAndStartDrag();
+                                    //光标开启的情况下，忽略这次事件的UP事件
                                     mDiscardNextActionUp = true;
                                 }
                             }
@@ -4827,6 +4849,8 @@ public class Editor {
                                 startOffset = getWordEnd(mStartOffset);
                             }
                             mLineSelectionIsOn = currLine;
+                            //文本选中的效果是由TextView自己使用Selection类实现的，两侧的选择棒才是Editor
+                            //实现的
                             Selection.setSelection((Spannable) mTextView.getText(),
                                     startOffset, offset);
                         }
