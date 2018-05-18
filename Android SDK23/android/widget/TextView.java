@@ -8313,6 +8313,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         }
 
         if (mEditor != null) {
+            //Editor的onTouchEvent只做处理，不做反馈
             mEditor.onTouchEvent(event);
 
             if (mEditor.mSelectionModifierCursorController != null &&
@@ -8321,7 +8322,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             }
         }
 
-        //TextView自身的click和longClick是由父类View决定的
+        //TextView自身的click和longClick事件触发，是由父类(View)控制的
         final boolean superResult = super.onTouchEvent(event);
 
         /*

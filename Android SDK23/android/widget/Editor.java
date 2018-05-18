@@ -3535,6 +3535,7 @@ public class Editor {
 
         public HandleView(Drawable drawableLtr, Drawable drawableRtl) {
             super(mTextView.getContext());
+            //HandleView放到PopupWindow中进行展示
             mContainer = new PopupWindow(mTextView.getContext(), null,
                     com.android.internal.R.attr.textSelectHandleWindowStyle);
             mContainer.setSplitTouchEnabled(true);
@@ -3698,6 +3699,11 @@ public class Editor {
             boolean offsetChanged = offset != mPreviousOffset;
             if (offsetChanged || parentScrolled) {
                 if (offsetChanged) {
+                    /*
+                     * 更新TextView的选中文字和handle的位置
+                     * 所以说Selection, cursor, handle均是由Editor控制的
+                     */
+
                     updateSelection(offset);
                     addPositionToTouchUpFilter(offset);
                 }
@@ -4672,6 +4678,7 @@ public class Editor {
                 return;
             }
             initDrawables();
+            //show leftHandle and rightHandle
             initHandles();
             hideInsertionPointCursorController();
         }
@@ -4757,7 +4764,7 @@ public class Editor {
                                         distanceSquared < doubleTapSlop * doubleTapSlop;
 
                                 if (stayedInArea && isPositionOnText(eventX, eventY)) {
-                                    //双击弹出两头的光标
+                                    //选中文字，并且弹出选中文字两头的handleView
                                     selectCurrentWordAndStartDrag();
                                     //光标开启的情况下，忽略这次事件的UP事件
                                     mDiscardNextActionUp = true;
@@ -4849,8 +4856,7 @@ public class Editor {
                                 startOffset = getWordEnd(mStartOffset);
                             }
                             mLineSelectionIsOn = currLine;
-                            //文本选中的效果是由TextView自己使用Selection类实现的，两侧的选择棒才是Editor
-                            //实现的
+                            //文本选中的效果和两侧的光标均是Editor控制的
                             Selection.setSelection((Spannable) mTextView.getText(),
                                     startOffset, offset);
                         }

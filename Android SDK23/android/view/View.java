@@ -5736,6 +5736,8 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             handled = li.mOnLongClickListener.onLongClick(View.this);
         }
         if (!handled) {
+            // 只要Down事件的时候获取到了点击的坐标，这里x,y就不会是Nan，那么就是anchored，就会走
+            // showContextMenu(x, y)方法
             final boolean isAnchored = !Float.isNaN(x) && !Float.isNaN(y);
             handled = isAnchored ? showContextMenu(x, y) : showContextMenu();
         }
@@ -9039,6 +9041,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
     private boolean requestFocusNoSearch(int direction, Rect previouslyFocusedRect) {
         // need to be focusable
+        // focusable是前置条件，估计focusableInTouchMode生效的前提也是focusable有效
         if ((mViewFlags & FOCUSABLE_MASK) != FOCUSABLE ||
                 (mViewFlags & VISIBILITY_MASK) != VISIBLE) {
             return false;
@@ -11205,14 +11208,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
                 (viewFlags & LONG_CLICKABLE) == LONG_CLICKABLE) ||
                 (viewFlags & CONTEXT_CLICKABLE) == CONTEXT_CLICKABLE) {
             switch (action) {
-                /**
+                /*
                  * ACTION_UP所处理的问题：
-                 * 1.if ((mPrivateFlags & PFLAG_PRESSED) != 0 || prepressed){...}贯穿整个case ACTION_UP.说明UP的处理
-                 *   内容实际上就是处理PRESSED和PREPRESSED两个情况。基本可以理解为与点击有关的事件。
-                 * 2.获取焦点。从这里来看的话，控件默认是在up事件时才获取焦点。
+                 *
                  */
                 case MotionEvent.ACTION_UP:
-                    /**
+                    /*
                      *1.PFLAG_PREPRESSED：the short time between Action_down and recognizing a "real" press.（64ms）
                      *2.在Down事件的时候，如果view位于一个滚动viewgroup中，那么prepressed会被置“1”。
                      *3.这里如果prepressed为真，说明当前View在一个滚动的viewgroup中，
@@ -11303,12 +11304,16 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
                         //将tapCallBack发送到消息队列，这里需要取消事件。
                         removeTapCallback();
                     }
-                    //如果没有被按下过，就不需要忽略第二个UP事件
+
                     mIgnoreNextUpEvent = false;
                     break;
 
-                /**
-                 * 主要做了两件事：
+                /*
+                 * Down事件主要做了两件事：
+                 * 1.setPressed()，说明当前View被按着，用于触发click
+                 * 2.抛出longClickRunnable，等待触发longClick
+                 *
+                 *
                  * 1.判断是不是在可以滚动的容器中
                  * 2.如果在，提供一个延迟时间，用于判断是滚动还是点击事件
                  * 3.如果不在，直接设置pressed标志并开始计时，等待click和longPress中的一个执行
@@ -11339,7 +11344,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 					 * PFLAG_PREPRESSED是用来delay the pressed feedback。
 					 */
                     if (isInScrollingContainer) {
-                        mPrivateFlags |= PFLAG_PREPRESSED;
+                        mPrivateFlags |= PFLAG_PREPRESSED;  //注意，是 pre-pressed，不是pressed
                         if (mPendingCheckForTap == null) {
                             mPendingCheckForTap = new CheckForTap();
                         }
@@ -11365,7 +11370,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
                     mIgnoreNextUpEvent = false;
                     break;
 
-                // 在手指移出View边界的时候，取消runnable
+                /*
+                 * Move事件的处理：
+                 * 在手指移出View边界的时候，取消各种runnable。在手指位于View内部时，不做任何处理。
+                 */
                 case MotionEvent.ACTION_MOVE:
                     drawableHotspotChanged(x, y);
 
