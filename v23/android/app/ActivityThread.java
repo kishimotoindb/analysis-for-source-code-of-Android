@@ -2513,7 +2513,7 @@ public final class ActivityThread {
 
         if (r.activityInfo.targetActivity != null) {
             component = new ComponentName(r.activityInfo.packageName,
-                    r.activityInfo.targetActivity);
+                    r.activityInfo.targetActivity);dito
         }
 
         Activity activity = null;

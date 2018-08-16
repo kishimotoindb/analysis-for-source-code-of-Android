@@ -1190,12 +1190,14 @@ public final class ViewRootImpl implements ViewParent,
 		//个东西进行重新处理（感觉是三大流程）
         Rect frame = mWinFrame; 	// These are accessed by multiple threads.
 									// frame given by window manager.
-		1.获取DecorView的父容器宽高，也就是测量过程涉及到的最顶层尺寸
-		1）总共分为三种情况：
-			a）第一次加载视图
-				根据DecorView的布局参数中的类型参数，决定DecorView所在window的宽高
-			b）之后加载视图
-		2.attachInfo，屏幕兼容性这些只在第一次加载视图的时候调用			
+        /*
+		 *  1.获取DecorView的父容器宽高,也就是测量过程涉及到的最顶层尺寸
+		 *       1)总共分为三种情况
+		 *	        a)第一次加载视图
+		 *		        根据DecorView的布局参数中的类型参数, 决定DecorView所在window的宽高
+		 *	        b)之后加载视图
+		 *  2.attachInfo，屏幕兼容性这些只在第一次加载视图的时候调用
+         */
 		//获取DecorView父容器的宽高，分两种情况：1） the first time the view is added 2）已经add完成，刷新的时候
         if (mFirst) {	// true for the first time the view is added
             mFullRedrawNeeded = true;	//第一次加载DecorView的时候，肯定是需要全部重绘的

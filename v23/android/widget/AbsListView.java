@@ -6178,6 +6178,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
         /**
          * Unsorted views that can be used by the adapter as a convert view.
+         * 是个ArrayList的数组，所以应该是按照ViewType作为index
          */
         private ArrayList<View>[] mScrapViews;
 
@@ -6272,7 +6273,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
          *
          * @param childCount The minimum number of views mActiveViews should hold
          * @param firstActivePosition The position of the first view that will be stored in
-         *        mActiveViews
+         *        mActiveViews。mActiveViews[]中第一个View使用的data的position
          */
         void fillActiveViews(int childCount, int firstActivePosition) {
             if (mActiveViews.length < childCount) {
@@ -6374,6 +6375,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             int viewType = lp.viewType;
             final boolean scrapHasTransientState = scrap.hasTransientState();
             if (!shouldRecycleViewType(viewType) || scrapHasTransientState) {
+                // 如果View处于临时状态，那么就不应该放入scrapViews中，因为这个view正在做某些操作，不能被重用。
+                // 临时状态的view其实本质上是可以复用的，所以被暂时放倒了mSkippedScrap中
                 if (viewType != ITEM_VIEW_TYPE_HEADER_OR_FOOTER && scrapHasTransientState) {
                     if (mSkippedScrap == null) {
                         mSkippedScrap = new ArrayList<View>();
@@ -6578,6 +6581,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         int size = scrapViews.size();
         if (size > 0) {
             // See if we still have a view for this position.
+            // 意义不大，虽然这里是获取的位置相同的View，但是adapter里并不知道，所以还是要对View做数据和UI的更新操作
+            // 可能就是setVisibility()这种在set的时候会判断新状态与旧状态是否相同的方法有点作用，因为新旧状态
+            // 一致，就不会再set一次。
             for (int i=0; i<size; i++) {
                 View view = scrapViews.get(i);
                 if (((AbsListView.LayoutParams)view.getLayoutParams())

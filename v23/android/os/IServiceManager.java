@@ -59,7 +59,7 @@ public interface IServiceManager extends IInterface
      */
     public void setPermissionController(IPermissionController controller)
             throws RemoteException;
-    
+    dispatchAttachedToWindow
     static final String descriptor = "android.os.IServiceManager";
 
     int GET_SERVICE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION;
