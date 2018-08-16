@@ -6374,6 +6374,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             // into the scrap heap
             int viewType = lp.viewType;
             final boolean scrapHasTransientState = scrap.hasTransientState();
+            // 这里处理的是ViewType<0和处于临时状态的View的回收
             if (!shouldRecycleViewType(viewType) || scrapHasTransientState) {
                 // 如果View处于临时状态，那么就不应该放入scrapViews中，因为这个view正在做某些操作，不能被重用。
                 // 临时状态的view其实本质上是可以复用的，所以被暂时放倒了mSkippedScrap中
