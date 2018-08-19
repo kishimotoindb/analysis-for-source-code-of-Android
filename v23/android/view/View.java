@@ -19792,6 +19792,9 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * This method does not call requestLayout() or forceLayout()
      * on the parent.
      */
+    /*
+     * 设置一个标志位，以便下次layout的时候对其进行layout操作。
+     */
     public void forceLayout() {
         if (mMeasureCache != null) mMeasureCache.clear();
 

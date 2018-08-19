@@ -4804,7 +4804,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
     }
 
     // This method also sets the child's mParent to null
-    private void removeFromArray(int index) {
+    private void checkforemoveFromArray(int index) {
         final View[] children = mChildren;
         if (!(mTransitioningViews != null && mTransitioningViews.contains(children[index]))) {
             children[index].mParent = null;

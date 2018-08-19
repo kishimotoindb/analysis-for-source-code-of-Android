@@ -1,4 +1,4 @@
-package android.widget;
+ package android.widget;
 
 import com.android.internal.R;
 import com.android.internal.util.Predicate;
@@ -41,8 +41,6 @@ import java.util.ArrayList;
 
 
 /**
- * 1.成员变量mAdapter继承自AbsListView，但是这个变量的权限修饰符使用的是默认权限，所以只有同包下才可以使用。
- *   这样就使得我们在继承ListView实现自定义控件的时候不能够直接调用mAdapter。
  * A view that shows items in a vertically scrolling list. The items
  * come from the {@link ListAdapter} associated with this view.
  *
@@ -54,6 +52,21 @@ import java.util.ArrayList;
  * @attr ref android.R.styleable#ListView_dividerHeight
  * @attr ref android.R.styleable#ListView_headerDividersEnabled
  * @attr ref android.R.styleable#ListView_footerDividersEnabled
+ */
+/*
+ * 1.成员变量mAdapter继承自AbsListView，但是这个变量的权限修饰符使用的是默认权限，所以只有同包下才可以使用。
+ *   这样就使得我们在继承ListView实现自定义控件的时候不能够直接调用mAdapter。
+ * 2.ListView的布局逻辑和普通的View没什么两样，都是在onLayout()方法中对子Views进行布局，但是有一个
+ *   特殊的地方，就是ListView在onLayout()中进行的addViewInLayout()操作，即在onLayout()方法中才把
+ *   子View增加到ListView中，而一般的view，addView()和layout是分开的，并且是先addView()，然后才layout()。
+ *   触发布局暂时有四个入口，setAdapter()、DataSetObserver.onChanged()、DataSetObserver.onInvalidated()、
+ *   onTouchEvent()，所以复用View的逻辑也应该是在这个流程中进行的。
+ * 3.在每次调用onLayout()方法时，首先将所有子View移除，然后再重新添加需要展示的view。
+ *   onLayout()中调用了detachAllViewsFromParent()方法。这个方法会将所有ListView当中的子View全部清除
+ *   掉，从而保证第二次Layout过程不会产生一份重复的数据。那有的朋友可能会问了，这样把已经加载好的View
+ *   又清除掉，待会还要再重新加载一遍，这不是严重影响效率吗？不用担心，还记得我们刚刚调用了RecycleBin
+ *   的fillActiveViews()方法来缓存子View吗，待会儿将会直接使用这些缓存好的View来进行加载，而并不会
+ *   重新执行一遍inflate过程，因此效率方面并不会有什么明显的影响。
  */
 @RemoteView
 public class ListView extends AbsListView {
@@ -434,9 +447,11 @@ public class ListView extends AbsListView {
 		//原listView中有一个list集合来存储所有view，在这里进行清空。
 		//setAdapter()会重置ListView
         resetList();
-		//清空垃圾view回收站，这个回收站貌似是可重复利用的
+		//setAdapter的时候，因为adapter变了，所以scrap里保存的复用View也就没用了，这里清空。
         mRecycler.clear();
 
+        // 如果listView有header或者footer，listView里做任何操作使用的position，都是把第一个header作为0，
+        // HeaderViewListAdapter中会对这个全局的position进行调整，进而符合传进来的adapter中item的取值范围。
         if (mHeaderViewInfos.size() > 0|| mFooterViewInfos.size() > 0) {
             mAdapter = new HeaderViewListAdapter(mHeaderViewInfos, mFooterViewInfos, adapter);
         } else {
@@ -460,7 +475,7 @@ public class ListView extends AbsListView {
             mDataSetObserver = new AdapterDataSetObserver();
             mAdapter.registerDataSetObserver(mDataSetObserver);
 			
-			//告诉
+			//根据ViewTypeCount初始化RecycleBin的scrap
             mRecycler.setViewTypeCount(mAdapter.getViewTypeCount());
 
             int position;

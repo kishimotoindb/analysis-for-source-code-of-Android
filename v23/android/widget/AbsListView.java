@@ -1986,6 +1986,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             for (int i = 0; i < childCount; i++) {
                 getChildAt(i).forceLayout();
             }
+            // 这里将RecycleBin的scrap中的废弃的View也进行了forceLayout。这样如果在下一次layout
+            // 开始之前，scrap中的View被复用了，那么在layout的时候，也会进行layout操作。
             mRecycler.markChildrenDirty();
         }
         

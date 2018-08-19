@@ -629,6 +629,11 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
     /**
      * Sets the view to show if the adapter is empty
      */
+    /*
+     * EmptyView不像header和footer，header是listView的子View，是布局在listView里面的。EmptyView
+     * 是独立的，布局文件或者代码中需要对其位置进行布置，传递进来只不过是为了和listView进行联动而且，
+     * 并不是要将EmptyView放到ListView里面。
+     */
     @android.view.RemotableViewMethod
     public void setEmptyView(View emptyView) {
         mEmptyView = emptyView;
@@ -641,9 +646,11 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
 
         final T adapter = getAdapter();
         /*
-         * adapter.isEmpty()根据getCount()==0判断。但是因为getCount()方法包含headers和footers，所以如果需要，
-         * 这个方法自行定义。
-         * 当ListView没有设置adapter，或者数据数量为0的情况下，均会展示emptyView
+         * 1.adapter.isEmpty()根据getCount()==0判断。但是因为getCount()方法包含headers和footers，所以如果需要，
+         *   这个方法自行定义。
+         * 2.当ListView没有设置adapter，或者数据数量为0的情况下，均会展示emptyView
+         * 3.如果有header或者footer，那么adapter会被自动封装为headerViewListAdapter，但是封装后，
+         *   isEmpty()方法，同样是判断的原始adapter中数据数量是否为0.
          */
         final boolean empty = ((adapter == null) || adapter.isEmpty());
         updateEmptyStatus(empty);
@@ -781,8 +788,7 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
         dispatchThawSelfOnly(container);
     }
 
-	//内部类，定义了observer
-	//这个observer
+
     class AdapterDataSetObserver extends DataSetObserver {
 
         private Parcelable mInstanceState = null;
@@ -793,18 +799,8 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
             mDataChanged = true;
 			//将原来list用item的数量存起来
             mOldItemCount = mItemCount;
-			
-			//1.调用adapter的getCount方法，获取当前数据更新后的item数量。这里之所以能够获取最新的item数量，是因为
-			//  实现adapter的时候，重写的getCount()方法return的就是传入adapter的集合的size。所以外部集合数据变化了，
-			//  这里的getCount就可以马上获得最新的数据数量。
-			
-			//2.MVC模式中，数据和View的桥梁是adapter，但adapter只是一个框架，提供了桥梁的两端(A和B)，具体View怎么
-			//  连接到A端，数据怎么连接到B端，也是需要合理设计的，不然即使有了桥梁本身，两端没有连接好，一样没法实
-			//  现View和数据的正确连接。
-			//3.View端的连接方式是系统写好的，所以必须看明白View端的连接方式，才能正确设计数据端的连接方式。getCount()
-			//	方法就是一个很好的例子。这里为了获取实时的数据个数，调用了getCount()方法，所以数据端要能通过getCount()
-			//	方法将数据的实时数量正确传送过来。如何实现呢，就是重写getCount()方法时需要考虑的问题。
-			//adapter连接到View，
+
+            // 包括header和footer
             mItemCount = getAdapter().getCount();
 
             // Detect the case where a cursor that was previously invalidated has
