@@ -25,6 +25,7 @@ import java.util.*;
  * capabilities of {@link ThreadPoolExecutor} (which this class
  * extends) are required.
  *
+ * 任务一置位就执行，但是如果多个任务延时相同，先排队的先执行
  * <p>Delayed tasks execute no sooner than they are enabled, but
  * without any real-time guarantees about when, after they are
  * enabled, they will commence. Tasks scheduled for exactly the same

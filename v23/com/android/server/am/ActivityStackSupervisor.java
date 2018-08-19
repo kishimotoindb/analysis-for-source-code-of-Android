@@ -173,9 +173,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
 
     private final static String VIRTUAL_DISPLAY_BASE_NAME = "ActivityViewVirtualDisplay";
 
-    private static final String LOCK_TASK_TAG = "Lock-to-App";
-
-    // Activity actions an app cannot start if it uses a permission which is not granted.
+private static final String LOCK_TAS~!!!!!!!!!!!!!`it uses a permission which is not granted.
     private static final ArrayMap<String, String> ACTION_TO_RUNTIME_PERMISSION =
             new ArrayMap<>();
     static {

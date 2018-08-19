@@ -64,6 +64,10 @@ public class Selection {
      * Set the selection anchor to <code>start</code> and the selection edge
      * to <code>stop</code>.
      */
+    /*
+     * 并不是设置选中颜色的backgroundColorSpan，而是设置NoCopySpan在Selection的两个边界处。
+     * 估计是为了判断Text选中的范围
+     */
     public static void setSelection(Spannable text, int start, int stop) {
         // int len = text.length();
         // start = pin(start, 0, len);  XXX remove unless we really need it

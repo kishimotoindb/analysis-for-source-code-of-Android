@@ -68,6 +68,7 @@ public class LongArray implements Cloneable {
 
         ensureCapacity(1);
 
+        //同步处理
         if (mSize - index != 0) {
             System.arraycopy(mValues, index, mValues, index + 1, mSize - index);
         }
