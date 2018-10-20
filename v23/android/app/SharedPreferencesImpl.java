@@ -38,6 +38,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -351,6 +352,8 @@ final class SharedPreferencesImpl implements SharedPreferences {
             }
         }
 
+        // clear是将当前的mMap清空，不是清空Editor中已经put进来的值。如果put了值又不想commit了，
+        // 需要使用方法remove()。
         public Editor clear() {
             synchronized (this) {
                 mClear = true;
@@ -358,8 +361,28 @@ final class SharedPreferencesImpl implements SharedPreferences {
             }
         }
 
+        /*
+         * 每一次commit或apply，都会将整个mMap重新写入到磁盘一遍，所以尽量一次性修改多个值，减少磁盘
+         * 写入操作。
+         *
+         * 虽然apply是在子线程中写入磁盘，但是还是有可能在Activity.onPause()的时候阻塞住主线程，所
+         * 以不要进行大量的apply操作。
+         */
         public void apply() {
+            // 不论是apply还是commit，写入内存的操作都是同步的。
             final MemoryCommitResult mcr = commitToMemory();
+            /*
+             * apply的所有写入磁盘的操作，都需要在onPause回调结束之前完成（看QueuedWork注释和
+             * 方法waitToFinish()）。
+             *
+             * 因为apply的写操作是在子线程中进行的，那么这个子线程怎么能阻塞主线程呢？
+             *
+             * 在onPause的时候系统会遍历QueuedWork，并依次执行各个runnable(awaitCommit)，这时
+             * 写入操作对应的writtenToDiskLatch就会起到阻塞主线程的作用了。在写入磁盘任务完成之前，
+             * writtenToDiskLatch的值一直是1，所以await()方法就会阻塞主线程，当任务完成后，
+             * writtenToDiskLatch归零，唤醒主线程。主线程接着从QueuedWork中取出下一个awaitCommit，
+             * 同样执行上面的步骤，直到所有写入任务完成。
+             */
             final Runnable awaitCommit = new Runnable() {
                     public void run() {
                         try {
@@ -394,6 +417,11 @@ final class SharedPreferencesImpl implements SharedPreferences {
                 // We optimistically don't make a deep copy until
                 // a memory commit comes in when we're already
                 // writing to disk.
+                // 每次commitToMemory都会便随一次writeToDisk的操作，所以每次commitToMemory都会将
+                // mDiskWritesInFlight+1，然后在writeToDisk结束之后减1。当mDiskWritesInFlight > 0
+                // 时，因为writeToDisk时使用的数据源是当前的mMap，所以本次的commitToMemory不能改变
+                // 当前mMap的值，不然会影响到写入操作，所以这里将当前的mMap克隆一份并重新赋值为自己，
+                // 这样writeToDisk持有的mMap对象就不会被影响。
                 if (mDiskWritesInFlight > 0) {
                     // We can't modify our mMap as a currently
                     // in-flight write owns it.  Clone it before
@@ -434,6 +462,7 @@ final class SharedPreferencesImpl implements SharedPreferences {
                         } else {
                             if (mMap.containsKey(k)) {
                                 Object existingValue = mMap.get(k);
+                                // 如果put的值与原值相同，就不会提交
                                 if (existingValue != null && existingValue.equals(v)) {
                                     continue;
                                 }
@@ -454,14 +483,24 @@ final class SharedPreferencesImpl implements SharedPreferences {
         }
 
         public boolean commit() {
+            // Editor的commitToMemory和SharedPreferenceImpl.getX()是加锁的，因为都是操作内存中的
+            // Map，一旦保存到内存之后，后面writeToDisk的操作就不会锁住get操作了。
             MemoryCommitResult mcr = commitToMemory();
             SharedPreferencesImpl.this.enqueueDiskWrite(
                 mcr, null /* sync write on this thread okay */);
             try {
+                // 如果是在singleThreadPool中执行写入操作，通过await()暂停主线程，知道写入操作完成。
+                // commit的同步性就是通过这里完成的。
+                // 所以可以说只要是在主线程commit，一定会发生阻塞。
                 mcr.writtenToDiskLatch.await();
             } catch (InterruptedException e) {
                 return false;
             }
+            /*
+             * 回调的时机：
+             * 1. commit是在内存和硬盘操作均结束时回调
+             * 2. apply是内存操作结束时就进行回调
+             */
             notifyListeners(mcr);
             return mcr.writeToDiskResult;
         }
@@ -528,6 +567,22 @@ final class SharedPreferencesImpl implements SharedPreferences {
         // Typical #commit() path with fewer allocations, doing a write on
         // the current thread.
         if (isFromSyncCommit) {
+            /*
+             * 如果调用的是Editor.commit()，那么在本次commit之前，没有其他的writeToDisk任务要完成
+             * 的话，直接在当前线程执行writeToFile()。但是如果在本次commit之前有其他的writeToDisk任务
+             * 还没有完成，那么即使是commit，一样需要放到子线程去执行。
+             *
+             * 所以说commit有可能是在当前线程，也有可能是在子线程。如果当前线程是主线程，就有可能发生
+             * 在主线程进行io操作的可能。
+             *
+             * 这样做的目的有一点，就是如果先apply后commit，那么不放到一个线程中去执行，就有可能出现
+             * apply的数据在commit之后被写入到磁盘，这样磁盘中的数据其实就会是错误的，并且和内存中的
+             * 数据不一致。
+             *
+             * 那么如果扔到了子线程，commit的同步是怎么保证的？
+             * mcr里有个CountDownLatch，通过CountDownLatch.await()进行等待。
+             *
+             */
             boolean wasEmpty = false;
             synchronized (SharedPreferencesImpl.this) {
                 wasEmpty = mDiskWritesInFlight == 1;

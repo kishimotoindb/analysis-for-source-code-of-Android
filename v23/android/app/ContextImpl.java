@@ -112,6 +112,12 @@ class ContextImpl extends Context {
 
     /**
      * Map from package name, to preference name, to cached preferences.
+     * å› ä¸ºä¸€ä¸ªè¿›ç¨‹åªä¼šå­˜åœ¨ä¸€ä¸ªContextImpl.classå¯¹è±¡ï¼Œæ‰€ä»¥åŒä¸€è¿›ç¨‹å†…çš„æ‰€æœ‰sharedPreferenceéƒ½ä¿å­˜åœ¨
+     * äº†è¿™ä¸ªé™æ€åˆ—è¡¨é‡Œã€‚
+     * æ³›å‹ï¼š
+     * 1) String: packageName
+     * 2) String: fileName
+     * 3) SharedPreferenceImpl: fileNameå¯¹åº”çš„impl
      */
     private static ArrayMap<String, ArrayMap<String, SharedPreferencesImpl>> sSharedPrefs;
 
@@ -1187,7 +1193,7 @@ class ContextImpl extends Context {
         }
     }
 
-	//È·ÈÏÆô¶¯ServiceµÄintentÊÇÓĞĞ§µÄ,5.0ÒÔºóÖ»¿ÉÒÔÏÔÊ½Æô¶¯
+	//È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Serviceï¿½ï¿½intentï¿½ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½,5.0ï¿½Ôºï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½
     private void validateServiceIntent(Intent service) 
         if (service.getComponent() == null && service.getPackage() == null) {
             if (getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.LOLLIPOP) {
@@ -1218,7 +1224,7 @@ class ContextImpl extends Context {
         return startServiceCommon(service, user);
     }
 
-	//UserHandle´ú±íÒ»¸öÉè±¸ÉÏµÄÓÃ»§ÓÃ»§
+	//UserHandleï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½è±¸ï¿½Ïµï¿½ï¿½Ã»ï¿½ï¿½Ã»ï¿½
     private ComponentName startServiceCommon(Intent service, UserHandle user) {
         try {
             validateServiceIntent(service);

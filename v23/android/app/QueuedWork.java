@@ -35,6 +35,7 @@ public class QueuedWork {
 
     // The set of Runnables that will finish or wait on any async
     // activities started by the application.
+    // 这个队列不会抛出"并发修改"异常
     private static final ConcurrentLinkedQueue<Runnable> sPendingWorkFinishers =
             new ConcurrentLinkedQueue<Runnable>();
 
