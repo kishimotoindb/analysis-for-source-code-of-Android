@@ -362,6 +362,9 @@ final class SharedPreferencesImpl implements SharedPreferences {
         }
 
         /*
+         * 即使是apply，因为写入内存的操作是在当前线程完成的，所以apply调用之后，马上就就可以在当前
+         * 线程做getX()操作。
+         *
          * 每一次commit或apply，都会将整个mMap重新写入到磁盘一遍，所以尽量一次性修改多个值，减少磁盘
          * 写入操作。
          *
@@ -417,6 +420,7 @@ final class SharedPreferencesImpl implements SharedPreferences {
                 // We optimistically don't make a deep copy until
                 // a memory commit comes in when we're already
                 // writing to disk.
+                //
                 // 每次commitToMemory都会便随一次writeToDisk的操作，所以每次commitToMemory都会将
                 // mDiskWritesInFlight+1，然后在writeToDisk结束之后减1。当mDiskWritesInFlight > 0
                 // 时，因为writeToDisk时使用的数据源是当前的mMap，所以本次的commitToMemory不能改变
