@@ -102,7 +102,7 @@ public final class LoadedApk {
     private ClassLoader mClassLoader;
     private Application mApplication;
 
-    private final ArrayMap<Context, ArrayMap<BroadcastReceiver, ReceiverDispatcher>> mReceivers
+    private final ArrayMap<Context, ArrayMap<BroadcastReceiver, LoadedApk.ReceiverDispatcher>> mReceivers
         = new ArrayMap<Context, ArrayMap<BroadcastReceiver, LoadedApk.ReceiverDispatcher>>();
     private final ArrayMap<Context, ArrayMap<BroadcastReceiver, LoadedApk.ReceiverDispatcher>> mUnregisteredReceivers
         = new ArrayMap<Context, ArrayMap<BroadcastReceiver, LoadedApk.ReceiverDispatcher>>();
@@ -710,6 +710,7 @@ public final class LoadedApk {
             LoadedApk.ReceiverDispatcher rd = null;
             ArrayMap<BroadcastReceiver, LoadedApk.ReceiverDispatcher> map = null;
             if (registered) {
+                // 这里的context是通过context.getOuterContext()拿到的，所以对应的实际是Activity，Service等
                 map = mReceivers.get(context);
                 if (map != null) {
                     rd = map.get(r);

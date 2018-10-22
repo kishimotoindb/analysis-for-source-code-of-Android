@@ -3018,6 +3018,10 @@ class ActivityManagerProxy implements IActivityManager
         filter.writeToParcel(data, 0);
         data.writeString(perm);
         data.writeInt(userId);
+        /*
+         * 到这里都是当前线程，不知道mRemote.transact()里会不会切换线程？
+         * 感觉不会，应该就是在当前线程执行
+         */
         mRemote.transact(REGISTER_RECEIVER_TRANSACTION, data, reply, 0);
         reply.readException();
         Intent intent = null;
