@@ -395,6 +395,7 @@ final class SharedPreferencesImpl implements SharedPreferences {
                     }
                 };
 
+            // 在ActivityThread.handlePauseActivity()中执行QueuedWork.waitToFinish()
             QueuedWork.add(awaitCommit);
 
             Runnable postWriteRunnable = new Runnable() {
