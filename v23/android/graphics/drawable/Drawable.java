@@ -56,6 +56,13 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
+ * Drawable保存了一幅图像的绘制方法，即绘制图像的步骤、参数等。它不像bitmap，bitmap是将
+ * 构成一幅图像的所有像素点保存在自身之中，这些像素点就是图像本身，可以直接用来显示图像。
+ * Drawable是绘制图像的方式，只有通过在canvas上按照这种方式绘制之后，才实质上生成了这幅图像。
+ * 也正因为此，canvas有drawBitmap()方法，而没有drawDrawable()方法，因为canvas.drawBitmap(bitmap)
+ * 就是将bitmap中保存的像素点拷贝到canvas中，而drawable本身是没有保存像素点信息的，所以
+ * drawable是需要传入canvas，然后drawable自己去在canvas上draw出实际的图像。
+ *
  * A Drawable is a general abstraction for "something that can be drawn."  Most
  * often you will deal with Drawable as the type of resource retrieved for
  * drawing things to the screen; the Drawable class provides a generic API for
@@ -72,6 +79,14 @@ import java.util.Collection;
  *     should respect the requested size, often simply by scaling their
  *     imagery.  A client can find the preferred size for some Drawables with
  *     the {@link #getIntrinsicHeight} and {@link #getIntrinsicWidth} methods.
+ *     说明：
+ *     setBounds()方法设置的rect表示了两层含义。
+ *     1）drawable的大小，这个好理解，rect有个大小，drawable就是这个大小。
+ *     2）drawable的位置，这个其实单独来理解的话并不是很好理解，因为位置都是相对于某个坐标原
+ *     点来定义的，所以要想理解好位置的含义，就需要知道坐标原点在哪。这个需要看draw(canvas)方法，
+ *     canvas的坐标原点其实就是drawable的位置需要相对的坐标原点，所以说理解位置的含义，需要与canvas
+ *     一起来看。另外，通过setBounds()设置的位置是一定的，并不代表其在画布中的位置就是固定的，
+ *     因为当draw()方法传入的canvas坐标原点不同时，drawable在画布中的位置也是不同的。
  *
  *     <li> The {@link #getPadding} method can return from some Drawables
  *     information about how to frame content that is placed inside of them.
