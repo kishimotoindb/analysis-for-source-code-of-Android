@@ -321,6 +321,13 @@ public abstract class Drawable {
      * to supply your implementation of the interface to the drawable; it uses
      * this interface to schedule and execute animation changes.
      */
+    /*
+     * 为什么CallBack的方法叫invalidateDrawable，而不是onDrawableInvalidate()？
+     * 因为drawable自己没法更新UI，只能通过告诉自己的宿主View去刷新Drawable所在的范围
+     * 来间接的刷新自己。即实际进行刷新操作的，还是View，而不是Drawable。所以这个CallBack
+     * 的行为是一种主动的行为，主动的行为就不应该起名为on***()，虽然CallBack在大多数时候
+     * 描述的是一种被动的行为。
+     */
     public static interface Callback {
         /**
          * Called when the drawable needs to be redrawn.  A view at this point
@@ -393,6 +400,15 @@ public abstract class Drawable {
      * @see Callback#invalidateDrawable
      * @see #getCallback()
      * @see #setCallback(android.graphics.drawable.Drawable.Callback)
+     */
+    /*
+     * 1.drawable对自己无能为力，因为自己并不是一幅图，而只是一整套绘制方法，所以invalidateSelf()
+     *   必须通过宿主View间接进行。
+     * 2.为什么CallBack的方法叫invalidateDrawable，而不是onDrawableInvalidate()？
+     *   因为drawable自己没法更新UI，只能通过告诉自己的宿主View去刷新Drawable所在的范围
+     *   来间接的刷新自己。即实际进行刷新操作的，还是View，而不是Drawable。所以这个CallBack
+     *   的行为是一种主动的行为，主动的行为就不应该起名为on***()，虽然CallBack在大多数时候
+     *   是一种被动的行为。
      */
     public void invalidateSelf() {
         final Callback callback = getCallback();

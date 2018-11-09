@@ -2749,6 +2749,10 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         TouchTarget target = mFirstTouchTarget;
         while (target != null) {
             final TouchTarget next = target.next;
+            /*
+             * 生成TouchTarget的时候，传递给target的view保存在child字段上，所以child
+             * 就是targetView。
+             */
             if (target.child == view) {
                 if (predecessor == null) {
                     mFirstTouchTarget = next;
@@ -3904,7 +3908,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
     ArrayList<View> buildOrderedChildList() {
         final int childrenCount = mChildrenCount;
 		//ViewGroup只有一个子View，或者没有子View有Z轴，就不用重新排序了
-		//ViewGroup打气View Hierarchy的时候应该是已经按照绘图顺序(drawing order)创建了一个View[],
+		//ViewGroup生成View Hierarchy的时候应该是已经按照绘图顺序(drawing order)创建了一个View[],
 		//所以没有Z轴的时候，也不需要重新排序
         if (childrenCount <= 1 || !hasChildWithZ()) return null;
 

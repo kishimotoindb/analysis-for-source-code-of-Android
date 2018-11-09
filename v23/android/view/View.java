@@ -17803,8 +17803,30 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      *
      * @param drawable the drawable to invalidate
      */
+    /*
+     * /->
+     *   感觉应该起名叫onDrawableInvalidate(Drawable)，就是drawable自身invalidate的时候，告诉
+     *   View一声，以便View做相应的处理。这个回调里根本就不会对drawable做任何处理，需要对drawable
+     *   做的，都已经在drawable自己的类里做了。
+     *  <-/ 这段理解是错误的，详细原因可以看Drawable的invalidateSelf()方法
+     */
     @Override
     public void invalidateDrawable(@NonNull Drawable drawable) {
+        /*
+         * verifyDrawable(drawable)说明：
+         * /->
+         *   像上面注释所说的，invalidateDrawable(Drawable)这个回调，是说drawable发生变化的时候，
+         *   View需要做相应的处理。
+         *   但是是说当前View所使用的所有drawable中，任意一个发生变化，View都需要处理么？其实是不
+         *   一定的，这个就看View的需求了。所以就有了verifyDrawable(drawable)这个方法，用来告诉
+         *   View是否需要跟随当前的drawable做相应的处理。
+         *  <-/ 这段理解是错误的，详细原因可以看Drawable的invalidateSelf()方法
+         *
+         *  这个方法是由View所使用的drawable对象主动发出的调用，但是并不是说当前View所使用的所有
+         *  drawable中任意一个drawable都可以触发View重绘，所以这里验证一下，View需要自定义验证
+         *  方式。
+         *
+         */
         if (verifyDrawable(drawable)) {
             final Rect dirty = drawable.getDirtyBounds();
             final int scrollX = mScrollX;

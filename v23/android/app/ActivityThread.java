@@ -2495,6 +2495,13 @@ public final class ActivityThread {
         sendMessage(H.CLEAN_UP_CONTEXT, cci);
     }
 
+    /*
+     * Activity的启动流程
+     * 1.Instrumentation -> new Activity对象
+     * 2.Instrumentation -> new Application对象
+     * 3.Application.onCreate()
+     * 4.
+     */
     private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) {
         // System.out.println("##### [" + System.currentTimeMillis() + "] ActivityThread.performLaunchActivity(" + r + ")");
 
@@ -2513,12 +2520,13 @@ public final class ActivityThread {
 
         if (r.activityInfo.targetActivity != null) {
             component = new ComponentName(r.activityInfo.packageName,
-                    r.activityInfo.targetActivity);dito
+                    r.activityInfo.targetActivity);
         }
 
         Activity activity = null;
         try {
             java.lang.ClassLoader cl = r.packageInfo.getClassLoader();
+            // mInstrumentation仅仅是通过反射创建了一个Activity对象
             activity = mInstrumentation.newActivity(
                     cl, component.getClassName(), r.intent);
             StrictMode.incrementExpectedActivityCount(activity.getClass());
@@ -2536,6 +2544,9 @@ public final class ActivityThread {
         }
 
         try {
+            /*
+             * 1.在mInstrumentation里通过反射创建了一个Application对象，然后调用Application.onCreate();
+             */
             Application app = r.packageInfo.makeApplication(false, mInstrumentation);
 
             if (localLOGV) Slog.v(TAG, "Performing launch of " + r);
@@ -2576,6 +2587,10 @@ public final class ActivityThread {
                     activity.setTheme(theme);
                 }
 
+                /*
+                 * Activity.onCreate()
+                 * Fragment.onActivityCreated()
+                 */
                 activity.mCalled = false;
                 if (r.isPersistable()) {
                     mInstrumentation.callActivityOnCreate(activity, r.state, r.persistentState);
@@ -2589,10 +2604,20 @@ public final class ActivityThread {
                 }
                 r.activity = activity;
                 r.stopped = true;
+                /*
+                 * activity.onStart()
+                 * Fragment.onStart()
+                 * 注：
+                 * Fragment的onAttach(),onCreate(),onCreateView(),onViewCreated()，
+                 * 是在fragment.onActivityCreated()之前完成的，所以这里onActivityCreated()
+                 * 之后就是onStart()，是没有问题的。
+                 */
                 if (!r.activity.mFinished) {
                     activity.performStart();
                     r.stopped = false;
                 }
+
+                // Activity.onRestoreInstanceState()
                 if (!r.activity.mFinished) {
                     if (r.isPersistable()) {
                         if (r.state != null || r.persistentState != null) {
@@ -2603,6 +2628,7 @@ public final class ActivityThread {
                         mInstrumentation.callActivityOnRestoreInstanceState(activity, r.state);
                     }
                 }
+                // Activity.onPostCreate()
                 if (!r.activity.mFinished) {
                     activity.mCalled = false;
                     if (r.isPersistable()) {
@@ -2668,6 +2694,10 @@ public final class ActivityThread {
         return baseContext;
     }
 
+    /*
+     * 1.开启Activity涉及到的所有生命周期方法，是在这个方法中一口气全部执行完的，所以任何一步有阻塞，
+     * 都有可能造成ANR
+     */
     private void handleLaunchActivity(ActivityClientRecord r, Intent customIntent, String reason) {
         // If we are getting ready to gc after going to the background, well
         // we are back active so skip it.

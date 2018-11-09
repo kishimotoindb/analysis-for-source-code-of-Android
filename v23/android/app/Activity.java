@@ -1208,6 +1208,7 @@ public class Activity extends ContextThemeWrapper
     @CallSuper
     protected void onPostResume() {
         final Window win = getWindow();
+        // resumeæ‰§è¡Œä¹‹åActivityå°±å¯ä»¥è¿›è¡Œäº¤äº’ï¼Œå…¶æœ¬è´¨çš„åŸå› å°±æ˜¯è¿™å¥è¯ï¼Œwindowç½®ä¸ºæœ‰æ•ˆ
         if (win != null) win.makeActive();
         if (mActionBar != null) mActionBar.setShowHideAnimationEnabled(true);
         mCalled = true;
@@ -4839,8 +4840,8 @@ public class Activity extends ContextThemeWrapper
             if (false) Log.v(TAG, "Finishing self: token=" + mToken);
             try {
                 if (resultData != null) {
-					//resultDataÊÇÒ»¸öintent£¬intentµÄ´¦ÀíÊÇÔÚµ±Ç°Ó¦ÓÃ½ø³ÌÍâµÄ£¬
-					//ËùÒÔÕâÀïÎªintentÀë¿ªµ±Ç°½ø³Ì×ö×¼±¸
+					//resultDataï¿½ï¿½Ò»ï¿½ï¿½intentï¿½ï¿½intentï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Ç°Ó¦ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªintentï¿½ë¿ªï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½
                     resultData.prepareToLeaveProcess();
                 }
                 if (ActivityManagerNative.getDefault()
