@@ -60,6 +60,13 @@ import java.util.List;
  * implementation is described to the system through an AndroidManifest.xml's
  * &lt;instrumentation&gt; tag.
  */
+/*
+ * 测试工具类，可以用来独立地控制某个组件的生命周期，通过直接调用生命周期方法，测试组件的实现是
+ * 否正确。为了完成以上的功能，这里调用组件生命周期的方式必须与系统调用生命周期的方式一致，也就
+ * 是为什么ActivityThread(即系统)调用组件生命周期是通过Instrumentation来完成的原因。并不是
+ * 说ActivityThread一定要使用Instrumentation来调用组件的生命周期，只是为了便于两端流程的维护，
+ * 才采用了这种方式。
+ */
 public class Instrumentation {
 
     /**
