@@ -553,6 +553,10 @@ public final class LoadedApk {
 
     public Application makeApplication(boolean forceDefaultAppClass,
             Instrumentation instrumentation) {
+        /*
+         * 一个进程里创建的Application，是被保存在自己package的LoadedApk里的，一个进程可以
+         * 有多个LoadedApk
+         */
         if (mApplication != null) {
             return mApplication;
         }
@@ -569,6 +573,35 @@ public final class LoadedApk {
             if (!mPackageName.equals("android")) {
                 initializeJavaContextClassLoader();
             }
+
+            /*
+             * context造成的内存泄漏说明：
+             * 首先说明一点，之前对context造成的内存泄漏产生的原因理解是片面的。
+             * 以前一直认为是因为context对应的组件不能够被回收，所以造成了内存泄漏。其实
+             * 这么理解是错误的，下面对具体原因一步一步进行说明。
+             * 1. context是怎么产生的？
+             * 2. context与组件（四大组件和Application）之间的关系？
+             *
+             * 答：
+             * 1. 每一个组件在初始化之前，系统都会new一个ContextImpl对象，这个对象会包含很多内容，
+             *    其中包括一个很重要的内容——packageInfo，packageInfo是一个LoadedApk类型的对象，
+             *    LoadedApk感觉就是apk在内存中的数据结构。
+             * 2. 四大组件与Application，在通过反射创建完自身的对象之后，都会将一个系统为自己单独
+             *    准备的ContextImpl对象保存在自己的成员变量中。然后再将自己也保存到ContextImpl对
+             *    象的成员变量mOuterContext中。即互相引用。
+             *
+             * 到这里，我们就可以按照原来片面的方式理解context的内存泄漏问题了。即，某个地方长期持
+             * 有了context（contextImpl）对象，造成即使Activity已经关闭了，Activity对象却不能
+             * 被gc，从而引发Activity的内存泄漏。所以一般的解决办法都是讲context换成Application
+             * 对应的context。
+             *
+             * 其实上面这种解释是片面的，本质上其实是context对象发生了内存泄漏，只不过context对象
+             * 持有Activity等组件，所以同时造成了Activity等组件的内存泄漏。
+             *
+             * 因为Application持有的contextImpl对象的生命周期是与当前package的Application一致的，
+             * 所以长期持有这个context对象，不会发生内存泄漏。
+             *
+             */
             ContextImpl appContext = ContextImpl.createAppContext(mActivityThread, this);
             app = mActivityThread.mInstrumentation.newApplication(
                     cl, appClass, appContext);

@@ -1631,9 +1631,14 @@ private static final String LOCK_TAS~!!!!!!!!!!!!!`it uses a permission which is
             return ActivityManager.START_SUCCESS;
         }
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /*
+         * 1. 将要启动的Activity的ActivityRecord
+         */
         ActivityRecord r = new ActivityRecord(mService, callerApp, callingUid, callingPackage,
                 intent, resolvedType, aInfo, mService.mConfiguration, resultRecord, resultWho,
                 requestCode, componentSpecified, voiceSession != null, this, container, options);
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         if (outActivity != null) {
             outActivity[0] = r;
         }
@@ -1668,10 +1673,16 @@ private static final String LOCK_TAS~!!!!!!!!!!!!!`it uses a permission which is
             mService.mDidAppSwitch = true;
         }
 
+        // 这里会循环开启所有待开启的Activity
         doPendingActivityLaunchesLocked(false);
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        /*
+         * 2. 待着第一步创建的ActivityRecord去开启Activity
+         */
         err = startActivityUncheckedLocked(r, sourceRecord, voiceSession, voiceInteractor,
                 startFlags, true, options, inTask);
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         if (err < 0) {
             // If someone asked to have the keyguard dismissed on the next

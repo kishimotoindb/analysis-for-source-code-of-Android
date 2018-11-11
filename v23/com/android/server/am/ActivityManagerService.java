@@ -6019,6 +6019,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         EventLog.writeEvent(EventLogTags.AM_PROC_BOUND, app.userId, app.pid, app.processName);
 
+        // 执行完这一句代码，processRecord里就已经保存了ApplicationThreadProxy对象。之后通过
+        // 这个proxy对象，就可以在AMS里与相应Process进行通信了。
         app.makeActive(thread, mProcessStats);
         app.curAdj = app.setAdj = -100;
         app.curSchedGroup = app.setSchedGroup = Process.THREAD_GROUP_DEFAULT;
@@ -6029,6 +6031,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         app.cached = false;
         app.killedByAm = false;
 
+        // 进程创建超时时间为10s
         mHandler.removeMessages(PROC_START_TIMEOUT_MSG, app);
 
         boolean normalMode = mProcessesReady || isAllowedWhileBooting(app.info);

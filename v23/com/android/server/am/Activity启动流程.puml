@@ -1,0 +1,31 @@
+@startuml
+participant ActivityA as a
+participant Instrumentation as instrument
+participant ActivityManagerProxy as amp
+participant ActivityManagerService as ams
+participant Zygote as zygote
+participant Process as proc
+participant ActivityB as b
+
+
+a -> a: startActivity()
+activate a
+a->a: startActivityForResult()
+activate a
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml

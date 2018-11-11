@@ -1821,6 +1821,7 @@ class ContextImpl extends Context {
         mDisplay = (createDisplayWithId == Display.INVALID_DISPLAY) ? display
                 : ResourcesManager.getInstance().getAdjustedDisplay(displayId, mDisplayAdjustments);
 
+        // 如果手机配置没有改变，resource只会初始化一次，然后之后用现成的
         Resources resources = packageInfo.getResources(mainThread);
         if (resources != null) {
             if (displayId != Display.DEFAULT_DISPLAY
