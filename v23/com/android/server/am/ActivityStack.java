@@ -2020,7 +2020,12 @@ final class ActivityStack {
                 if (DEBUG_SWITCH) Slog.v(TAG_SWITCH, "Restarting: " + next);
             }
             if (DEBUG_STATES) Slog.d(TAG_STATES, "resumeTopActivityLocked: Restarting " + next);
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+/*
+ * 如果是在新进程中开启Activity，pause完前一个Activity之后，就会执行到这里，开始真正的开启流程
+ */
             mStackSupervisor.startSpecificActivityLocked(next, true, true);
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         }
 
         if (DEBUG_STACK) mStackSupervisor.validateTopActivitiesLocked();

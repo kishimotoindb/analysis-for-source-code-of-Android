@@ -615,6 +615,7 @@ private static final String LOCK_TAS~!!!!!!!!!!!!!`it uses a permission which is
                 if (!isFrontStack(stack)) {
                     continue;
                 }
+// 只会启动顶部的第一个Activity
                 ActivityRecord hr = stack.topRunningActivityLocked(null);
                 if (hr != null) {
                     if (hr.app == null && app.uid == hr.info.applicationInfo.uid

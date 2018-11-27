@@ -6097,6 +6097,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
             ProfilerInfo profilerInfo = profileFile == null ? null
                     : new ProfilerInfo(profileFile, profileFd, samplingInterval, profileAutoStop);
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             thread.bindApplication(processName, appInfo, providers, app.instrumentationClass,
                     profilerInfo, app.instrumentationArguments, app.instrumentationWatcher,
                     app.instrumentationUiAutomationConnection, testMode, enableOpenGlTrace,
@@ -6104,6 +6105,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     new Configuration(mConfiguration), app.compat,
                     getCommonServicesLocked(app.isolated),
                     mCoreSettingsObserver.getCoreSettingsLocked());
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             updateLruProcessLocked(app, false, null);
             app.lastRequestedGc = app.lastLowMemory = SystemClock.uptimeMillis();
         } catch (Exception e) {
@@ -18925,7 +18927,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         mAdjSeq++;
 
-        // This is the desired cached adjusment we want to tell it to use.
+        // This is the desired cached adjustment we want to tell it to use.
         // If our app is currently cached, we know it, and that is it.  Otherwise,
         // we don't know it yet, and it needs to now be cached we will then
         // need to do a complete oom adj.

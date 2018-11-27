@@ -31,6 +31,11 @@ import java.util.concurrent.Executors;
  *
  * @hide
  */
+
+/*
+ * 以下的位置调用了QueuedWork.waitToFinish():
+ * 1.ActivityThread.handleServiceArgs()，会影响Service的启动？
+ */
 public class QueuedWork {
 
     // The set of Runnables that will finish or wait on any async

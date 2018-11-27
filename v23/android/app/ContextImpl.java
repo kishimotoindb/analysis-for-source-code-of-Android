@@ -1194,7 +1194,7 @@ class ContextImpl extends Context {
     }
 
 	//ȷ������Service��intent����Ч��,5.0�Ժ�ֻ������ʽ����
-    private void validateServiceIntent(Intent service) 
+    private void validateServiceIntent(Intent service) {
         if (service.getComponent() == null && service.getPackage() == null) {
             if (getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.LOLLIPOP) {
                 IllegalArgumentException ex = new IllegalArgumentException(
@@ -2008,6 +2008,7 @@ class ContextImpl extends Context {
 
         @Override
         protected IContentProvider acquireUnstableProvider(Context c, String auth) {
+            // mMainThread并不是主线程，mainLooper才是，所以即使通过mMainThread调用，一样是子线程
             return mMainThread.acquireProvider(c,
                     ContentProvider.getAuthorityWithoutUserId(auth),
                     resolveUserIdFromAuthority(auth), false);

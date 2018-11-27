@@ -323,7 +323,7 @@ public final class ActiveServices {
             callerFg = true;
         }
 
-
+// 1. 搜寻目标ServiceRecord(ServiceRecord和permission)
         ServiceLookupResult res =
             retrieveServiceLocked(service, resolvedType, callingPackage,
                     callingPid, callingUid, userId, true, callerFg);
@@ -355,8 +355,10 @@ public final class ActiveServices {
 
         final ServiceMap smap = getServiceMap(r.userId);
         boolean addToStarting = false;
+        // r.app==null，说明Service所在的进程不存在
         if (!callerFg && r.app == null && mAm.mStartedUsers.get(r.userId) != null) {
             ProcessRecord proc = mAm.getProcessRecordLocked(r.processName, r.appInfo.uid, false);
+            // 大于PROCESS_STATE_RECEIVER，说明进程更不重要
             if (proc == null || proc.curProcState > ActivityManager.PROCESS_STATE_RECEIVER) {
                 // If this is not coming from a foreground caller, then we may want
                 // to delay the start if there are already other background services
@@ -430,6 +432,7 @@ public final class ActiveServices {
         synchronized (r.stats.getBatteryStats()) {
             r.stats.startRunningLocked();
         }
+// 1.开启service
         String error = bringUpServiceLocked(r, service.getFlags(), callerFg, false);
         if (error != null) {
             return new ComponentName("!!", error);
@@ -1032,6 +1035,12 @@ public final class ActiveServices {
         userId = mAm.handleIncomingUser(callingPid, callingUid, userId,
                 false, ActivityManagerService.ALLOW_NON_FULL_IN_PROFILE, "service", null);
 
+        /*
+         * 从系统搜索某个service的流程
+         * 1. userId对应的map中搜索，根据service的名称（自己应用定义的service）
+         * 2. userId对应的map中搜索，根据intent（自己应用定义的service）
+         * 3. AppGlobal的PackageManager中搜索（全局搜索要开启的service）
+         */
         ServiceMap smap = getServiceMap(userId);
         final ComponentName comp = service.getComponent();
         if (comp != null) {
@@ -1084,6 +1093,10 @@ public final class ActiveServices {
                     smap.mServicesByIntent.put(filter, r);
 
                     // Make sure this component isn't in the pending list.
+                    /*
+                     * 如果在待启动列表中，把待启动的service移除，重新去开启。有可能是因为新的
+                     * intent里数据是新的，如果将新的取消，继续启动旧的，那么可能会出现数据错误。
+                     */
                     for (int i=mPendingServices.size()-1; i>=0; i--) {
                         ServiceRecord pr = mPendingServices.get(i);
                         if (pr.serviceInfo.applicationInfo.uid == sInfo.applicationInfo.uid
@@ -1363,7 +1376,8 @@ public final class ActiveServices {
             boolean whileRestarting) throws TransactionTooLargeException {
         //Slog.i(TAG, "Bring up service:");
         //r.dump("  ");
-
+// 1. r.app!=null，应该是不仅说明service所在进程存在，还说明Service已经create。不然里面调用的方法
+//    就有问题，sendServiceArgsLocked()仅仅是调用了Service的onStartCommand()
         if (r.app != null && r.app.thread != null) {
             sendServiceArgsLocked(r, execInFg, false);
             return null;
@@ -1422,6 +1436,7 @@ public final class ActiveServices {
                         + " app=" + app);
             if (app != null && app.thread != null) {
                 try {
+// 2.如果process存在，开始创建Service
                     app.addPackage(r.appInfo.packageName, r.appInfo.versionCode, mAm.mProcessStats);
                     realStartServiceLocked(r, app, execInFg);
                     return null;
@@ -1446,6 +1461,7 @@ public final class ActiveServices {
 
         // Not running -- get it started, and enqueue this service record
         // to be executed when the app comes up.
+// 3. 启动进程
         if (app == null) {
             if ((app=mAm.startProcessLocked(procName, r.appInfo, true, intentFlags,
                     "service", r.name, false, isolated, false)) == null) {
@@ -1461,7 +1477,7 @@ public final class ActiveServices {
                 r.isolatedProc = app;
             }
         }
-
+// 4. 把Service加到pendingServices里，等process启动之后再启动
         if (!mPendingServices.contains(r)) {
             mPendingServices.add(r);
         }
@@ -1501,7 +1517,9 @@ public final class ActiveServices {
         r.restartTime = r.lastActivity = SystemClock.uptimeMillis();
 
         final boolean newService = app.services.add(r);
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         bumpServiceExecutingLocked(r, execInFg, "create");
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         mAm.updateLruProcessLocked(app, false, null);
         mAm.updateOomAdjLocked();
 
@@ -1519,9 +1537,12 @@ public final class ActiveServices {
             }
             mAm.ensurePackageDexOpt(r.serviceInfo.packageName);
             app.forceProcessStateUpTo(ActivityManager.PROCESS_STATE_SERVICE);
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// scheduleCreateService()其实就是发送一个message(CREATE_SERVICE)
             app.thread.scheduleCreateService(r, r.serviceInfo,
                     mAm.compatibilityInfoForPackageLocked(r.serviceInfo.applicationInfo),
                     app.repProcState);
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             r.postNotification();
             created = true;
         } catch (DeadObjectException e) {
@@ -1606,7 +1627,9 @@ public final class ActiveServices {
                     mAm.grantUriPermissionUncheckedFromIntentLocked(si.neededGrants,
                             si.getUriPermissionsLocked());
                 }
+// 1. 发送service超时message
                 bumpServiceExecutingLocked(r, execInFg, "start");
+                // oomAdj是什么？
                 if (!oomAdjusted) {
                     oomAdjusted = true;
                     mAm.updateOomAdjLocked(r.app);
@@ -1618,6 +1641,7 @@ public final class ActiveServices {
                 if (si.doneExecutingCount > 0) {
                     flags |= Service.START_FLAG_REDELIVERY;
                 }
+// 2. 向Service所在进程发送开启service的消息
                 r.app.thread.scheduleServiceArgs(r, si.taskRemoved, si.id, flags, si.intent);
             } catch (TransactionTooLargeException e) {
                 if (DEBUG_SERVICE) Slog.v(TAG_SERVICE, "Transaction too large: intent="

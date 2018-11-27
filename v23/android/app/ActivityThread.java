@@ -3298,6 +3298,7 @@ public final class ActivityThread {
         }
     }
 
+    // 这个方法应该是这个Service已经create过了，然后每次调用的时候去回调onStartCommand()
     private void handleServiceArgs(ServiceArgsData data) {
         Service s = mServices.get(data.token);
         if (s != null) {
@@ -3633,10 +3634,26 @@ public final class ActivityThread {
         return thumbnail;
     }
 
+    /*
+     * ActivityThread在处理PauseActivity流程的过程中，会依次顺序调用下面几个方法，这几个方法的执行
+     * 是同步的，所以说Activity的各个生命周期，并不是指执行时间点上的差异，并不是说不同的生命周期回调
+     * 是由不同的message触发的，生命周期的划分依据主要还是以当前节点的Activity状态来区分的。即Activity
+     * 的生命周期是以自身状态来划分，不同的状态下，Activity的成员变量的状态不同，基本上与时间没有什么
+     * 关系，更与异步或同步执行没有关系。下面三个Activity的生命周期方法，就是由一个message触发，并且
+     * 顺序同步执行的。
+     *
+     * 既然Activity的生命周期是由Activity的状态划分的，那么这个状态又是怎么控制的，并且由谁控制的？
+     *
+     * 1. onUserLeaving()
+     * 2. 调用onSaveInstanceState()
+     * 3. 调用Fragment.dispatchPause()
+     * 4. 调用onPause()
+     */
     private void handlePauseActivity(IBinder token, boolean finished,
             boolean userLeaving, int configChanges, boolean dontReport, int seq) {
         ActivityClientRecord r = mActivities.get(token);
         if (DEBUG_ORDER) Slog.d(TAG, "handlePauseActivity " + r + ", seq: " + seq);
+        // 检查当前要执行的生命周期方法，是否是
         if (!checkAndUpdateLifecycleSeq(seq, r, "pauseActivity")) {
             return;
         }
@@ -3647,6 +3664,11 @@ public final class ActivityThread {
             }
 
             r.activity.mConfigChangeFlags |= configChanges;
+            /*
+             * 1. 调用onSaveInstanceState()
+             * 2. 调用Fragment.dispatchPause()
+             * 3. 调用onPause()
+             */
             performPauseActivity(token, finished, r.isPreHoneycomb(), "handlePauseActivity");
 
             // Make sure any pending writes are now committed.
@@ -3676,6 +3698,11 @@ public final class ActivityThread {
         return r != null ? performPauseActivity(r, finished, saveState, reason) : null;
     }
 
+    /*
+     * 1. 调用onSaveInstanceState()
+     * 2. 调用Fragment.dispatchPause()
+     * 3. 调用onPause()
+     */
     final Bundle performPauseActivity(ActivityClientRecord r, boolean finished,
             boolean saveState, String reason) {
         if (r.paused) {
@@ -3695,6 +3722,10 @@ public final class ActivityThread {
         }
 
         // Next have the activity save its current state and managed dialogs...
+        /*
+         * 其实只要不是正常调用finish()关闭Activity，在onPause之前都会调用这个方法在保存
+         * 一些临时的状态，以便之后恢复状态的时候用。
+         */
         if (!r.activity.mFinished && saveState) {
             callCallActivityOnSaveInstanceState(r);
         }
@@ -3927,6 +3958,7 @@ public final class ActivityThread {
         if (r == null) {
             return true;
         }
+        // This represents the latest processed message that is related to lifecycle events/
         if (seq < r.lastProcessedSeq) {
             if (DEBUG_ORDER) Slog.d(TAG, action + " for " + r + " ignored, because seq=" + seq
                     + " < mCurrentLifecycleSeq=" + r.lastProcessedSeq);
@@ -5060,6 +5092,7 @@ public final class ActivityThread {
         // to the front of the list.
         LocaleList.setDefault(new LocaleList(bestLocale, newLocaleList));
     }
+
 
     private void handleBindApplication(AppBindData data) {
         // Register the UI Thread as a sensitive thread to the runtime.
