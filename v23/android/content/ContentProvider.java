@@ -1745,6 +1745,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
                 mSingleUser = (info.flags & ProviderInfo.FLAG_SINGLE_USER) != 0;
                 setAuthorities(info.authority);
             }
+// 调用Provider.onCreate()
             ContentProvider.this.onCreate();
         }
     }

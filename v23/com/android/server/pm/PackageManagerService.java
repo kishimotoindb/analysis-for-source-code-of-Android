@@ -5440,6 +5440,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
+    // 为什么要全局搜索，而不是针对自己的进程？
     @Override
     public ParceledListSlice<ProviderInfo> queryContentProviders(String processName,
             int uid, int flags) {

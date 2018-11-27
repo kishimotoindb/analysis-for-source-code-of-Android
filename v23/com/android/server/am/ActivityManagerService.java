@@ -6037,6 +6037,14 @@ public final class ActivityManagerService extends ActivityManagerNative
         boolean normalMode = mProcessesReady || isAllowedWhileBooting(app.info);
         List<ProviderInfo> providers = normalMode ? generateApplicationProvidersLocked(app) : null;
 
+        if (providers != null && checkAppInLaunchingProvidersLocked(app)) {
+            Message msg = mHandler.obtainMessage(CONTENT_PROVIDER_PUBLISH_TIMEOUT_MSG);
+            msg.obj = app;
+            mHandler.sendMessageDelayed(msg, CONTENT_PROVIDER_PUBLISH_TIMEOUT);
+        }
+
+        checkTime(startTime, "attachApplicationLocked: before bindApplication");
+
         if (!normalMode) {
             Slog.i(TAG, "Launching preboot mode app: " + app);
         }
@@ -9170,6 +9178,8 @@ public final class ActivityManagerService extends ActivityManagerNative
     // =========================================================
     // CONTENT PROVIDERS
     // =========================================================
+    // 1. 从Package中获取当前App所有的provider
+    // 2. 并且添加到mProviderMap中
 
     private final List<ProviderInfo> generateApplicationProvidersLocked(ProcessRecord app) {
         List<ProviderInfo> providers = null;
