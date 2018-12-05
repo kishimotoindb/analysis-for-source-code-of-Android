@@ -44,6 +44,10 @@ import java.util.Set;
  * item, it may reduce the capacity to better match the current size.  In the future an
  * explicit call to set the capacity should turn off this aggressive shrinking behavior.</p>
  */
+/*
+ * mHashes[] 和 mArray[] 里的元素在插入时是从索引0开始连续的，所以节省内存。
+ * 在插入时按照key的hash值排好序
+ */
 public final class ArrayMap<K, V> implements Map<K, V> {
     private static final boolean DEBUG = false;
     private static final String TAG = "ArrayMap";
@@ -461,6 +465,7 @@ public final class ArrayMap<K, V> implements Map<K, V> {
         }
 
         index = ~index;
+        // 扩容的逻辑
         if (mSize >= mHashes.length) {
             final int n = mSize >= (BASE_SIZE*2) ? (mSize+(mSize>>1))
                     : (mSize >= BASE_SIZE ? (BASE_SIZE*2) : BASE_SIZE);
@@ -480,6 +485,7 @@ public final class ArrayMap<K, V> implements Map<K, V> {
             freeArrays(ohashes, oarray, mSize);
         }
 
+        // 插入操作有可能涉及数组元素的后移，所以不适合大量的插入和删除操作
         if (index < mSize) {
             if (DEBUG) Log.d(TAG, "put: move " + index + "-" + (mSize-index)
                     + " to " + (index+1));
@@ -573,6 +579,7 @@ public final class ArrayMap<K, V> implements Map<K, V> {
                 mSize = N;
             }
         } else {
+            // 执行N次put操作，意味着可能后移数组N次
             for (int i=0; i<N; i++) {
                 put(array.keyAt(i), array.valueAt(i));
             }
