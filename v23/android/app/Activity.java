@@ -6153,6 +6153,8 @@ public class Activity extends ContextThemeWrapper
         mParent = parent;
     }
 
+    // attachd的意义在于将AMS发送过来的ActivityRecord信息与new出来的Activity进行关联，与View的attachToWindow
+    // 完全不是一回事儿
     final void attach(Context context, ActivityThread aThread,
             Instrumentation instr, IBinder token, int ident,
             Application application, Intent intent, ActivityInfo info,

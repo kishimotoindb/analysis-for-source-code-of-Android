@@ -2694,10 +2694,6 @@ public final class ActivityThread {
         return baseContext;
     }
 
-    /*
-     * 1.开启Activity涉及到的所有生命周期方法，是在这个方法中一口气全部执行完的，所以任何一步有阻塞，
-     * 都有可能造成ANR
-     */
     private void handleLaunchActivity(ActivityClientRecord r, Intent customIntent, String reason) {
         // If we are getting ready to gc after going to the background, well
         // we are back active so skip it.

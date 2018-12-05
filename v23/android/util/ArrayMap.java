@@ -90,7 +90,7 @@ public final class ArrayMap<K, V> implements Map<K, V> {
 
         // Important fast case: if nothing is in here, nothing to look for.
         if (N == 0) {
-            return ~0;
+            return ~0; // -1
         }
 
         int index = ContainerHelpers.binarySearch(mHashes, N, hash);
@@ -106,6 +106,7 @@ public final class ArrayMap<K, V> implements Map<K, V> {
         }
 
         // Search for a matching key after the index.
+        // 如果key的hash一样，但是key没有在mArray中，那么在相同hash值的下一个位置放置这个键值对
         int end;
         for (end = index + 1; end < N && mHashes[end] == hash; end++) {
             if (key.equals(mArray[end << 1])) return end;
@@ -161,6 +162,11 @@ public final class ArrayMap<K, V> implements Map<K, V> {
         return ~end;
     }
 
+    /*
+     * 1.创建的时候，有两个缓存池可以使用，缓存池中的ArrayMap的size=4 or 8，两个缓存池的数量上限都是10个。
+     * 2.缓存池的实现比较巧妙，本质是一个链表结构，但是直接利用数组本身实现的链表结构。具体的实现可以
+     *   看freeArrays()方法
+     */
     private void allocArrays(final int size) {
         if (mHashes == EMPTY_IMMUTABLE_INTS) {
             throw new UnsupportedOperationException("ArrayMap is immutable");
@@ -275,6 +281,13 @@ public final class ArrayMap<K, V> implements Map<K, V> {
 
     /**
      * Make the array map empty.  All storage is released.
+     */
+    /*
+     * 按照当前的逻辑，如果size不是 BASE_SIZE ，那么clear频繁的clear操作会造成频繁的创建新的
+     * 数组对象。慎用clear，但是这样也有个好处，比如当前的ArrayMap的size比较大，那么clear的时候
+     * 就会将之前扩容到很大的数组释放掉。ArrayList就没有这样的操作，这可能就和两个容器的使用场景
+     * 有关了，ArrayMap是针对嵌入式设备设计的，所以内存是重要考量的因素，所以clear的时候尽量释放
+     * 更多的内存，而ArrayList是Java的基础容器，对于速度的要求要高于内存。
      */
     @Override
     public void clear() {
