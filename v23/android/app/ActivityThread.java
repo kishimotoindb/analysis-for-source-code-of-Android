@@ -2502,6 +2502,12 @@ public final class ActivityThread {
      * 3.Application.onCreate()
      * 4.
      */
+    /*
+     * 1. OnCreate()
+     * 2. onStart()
+     * 3. onRestoreInstanceState()
+     * 4. onPostOnCreate()
+     */
     private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) {
         // System.out.println("##### [" + System.currentTimeMillis() + "] ActivityThread.performLaunchActivity(" + r + ")");
 

@@ -159,6 +159,10 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     TypedValue mFixedHeightMajor;
     TypedValue mFixedHeightMinor;
 
+    /*
+     * window 的视图层级结构：
+     * decor -> contentRoot -> contentParent
+     */
     // This is the top-level view of the window, containing the window decor.
     private DecorView mDecor;
 
@@ -166,6 +170,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     // mDecor itself, or a child of mDecor where the contents go.
     private ViewGroup mContentParent;
 
+    // This is the top-level view of the decor.
     private ViewGroup mContentRoot;
 
     Callback2 mTakeSurfaceCallback;
@@ -374,6 +379,9 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         return mContentScene;
     }
 
+    /*
+     * 这里只是new和inflate了decor，但并没有addView，所以onCreate的时候的确UI是不可见的
+     */
     @Override
     public void setContentView(int layoutResID) {
         // Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window
@@ -392,6 +400,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         } else {
             mLayoutInflater.inflate(layoutResID, mContentParent);
         }
+        // 一直调用的mParent.requestFitSystemWindows()，但是decor的mParent==null，等于最终
+        // 什么都没有调用，那这句代码为了什么？还是没找到入口？
         mContentParent.requestApplyInsets();
         final Callback cb = getCallback();
         if (cb != null && !isDestroyed()) {
@@ -2210,7 +2220,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         private boolean mWatchingForMenu;
         private int mDownY;
 
-        private ActionMode mPrimaryActionMode;
+        private ActionMode mPrimaryActionMode
         private ActionMode mFloatingActionMode;
         private ActionBarContextView mPrimaryActionModeView;
         private PopupWindow mPrimaryActionModePopup;
@@ -2819,6 +2829,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             drawableChanged();
         }
 
+        // window background 就是 DecorView 的 background，实际也就是设置了一个View的background
+        // 属性
         public void setWindowBackground(Drawable drawable) {
             if (getBackground() != drawable) {
                 setBackgroundDrawable(drawable);
@@ -3748,6 +3760,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             requestFeature(FEATURE_ACTIVITY_TRANSITIONS);
         }
 
+        // the context of window fro a Activity is activity itself.
         final Context context = getContext();
         final int targetSdk = context.getApplicationInfo().targetSdkVersion;
         final boolean targetPreHoneycomb = targetSdk < android.os.Build.VERSION_CODES.HONEYCOMB;
@@ -3789,6 +3802,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             if (a.getBoolean(
                     R.styleable.Window_windowCloseOnTouchOutside,
                     false)) {
+                // 这个感觉是给Dialog用的
                 setCloseOnTouchOutsideIfNotSet(true);
             }
         }
@@ -3843,7 +3857,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         }
 
         // Inflate the window decor.
-
         int layoutResource;
         int features = getLocalFeatures();
         // System.out.println("Features: 0x" + Integer.toHexString(features));
@@ -3943,6 +3956,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             } else {
                 frame = null;
             }
+            // window frame 就是 Decor 的 foreground，即 View 的 foreground
             mDecor.setWindowFrame(frame);
 
             mDecor.setElevation(mElevation);
@@ -3970,7 +3984,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
     private void installDecor() {
         if (mDecor == null) {
-            mDecor = generateDecor();
+            mDecor = generateDecor();  // new了一个DecorView而已
             mDecor.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
             mDecor.setIsRootNamespace(true);
             if (!mInvalidatePanelMenuPosted && mInvalidatePanelMenuFeatures != 0) {

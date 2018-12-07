@@ -6165,6 +6165,7 @@ public class Activity extends ContextThemeWrapper
 
         mFragments.attachHost(null /*parent*/);
 
+        // Activity的phoneWindow的context是Activity
         mWindow = new PhoneWindow(this);
         mWindow.setCallback(this);
         mWindow.setOnWindowDismissedCallback(this);
@@ -6299,7 +6300,7 @@ public class Activity extends ContextThemeWrapper
         mCalled = false;
         // mResumed is set by the instrumentation
         mInstrumentation.callActivityOnResume(this);
-        if (!mCalled) {
+        if (!mCalled)
             throw new SuperNotCalledException(
                 "Activity " + mComponent.toShortString() +
                 " did not call through to super.onResume()");
