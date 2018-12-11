@@ -2354,6 +2354,12 @@ public class WindowManagerService extends IWindowManager.Stub
             Rect outContentInsets, Rect outStableInsets, Rect outOutsets,
             InputChannel outInputChannel) {
         int[] appOp = new int[1];
+        /*
+         * 只能添加这三种：application window, sub window , system window
+         * application window 和 sub window 是可以随意添加的，system window 中只有toast
+         * 是可以随意添加的，其他的system window都需要权限（UID=1000的系统进程不需要申请这个
+         * 权限，可以直接使用）
+         */
         int res = mPolicy.checkAddPermission(attrs, appOp);
         if (res != WindowManagerGlobal.ADD_OKAY) {
             return res;
@@ -2393,6 +2399,7 @@ public class WindowManagerService extends IWindowManager.Stub
                           + attrs.token + ".  Aborting.");
                     return WindowManagerGlobal.ADD_BAD_SUBWINDOW_TOKEN;
                 }
+                // window的层级最多两层，sub window 下不可以再有 window
                 if (attachedWindow.mAttrs.type >= FIRST_SUB_WINDOW
                         && attachedWindow.mAttrs.type <= LAST_SUB_WINDOW) {
                     Slog.w(TAG, "Attempted to add window with token that is a sub-window: "
@@ -2409,6 +2416,7 @@ public class WindowManagerService extends IWindowManager.Stub
             boolean addToken = false;
             WindowToken token = mTokenMap.get(attrs.token);
             if (token == null) {
+                // 所有sub window 和 toast 都不需要提前add token，系统会自动为其生成
                 if (type >= FIRST_APPLICATION_WINDOW && type <= LAST_APPLICATION_WINDOW) {
                     Slog.w(TAG, "Attempted to add application window with unknown token "
                           + attrs.token + ".  Aborting.");
@@ -2569,6 +2577,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 moveInputMethodDialogsLocked(findDesiredInputMethodWindowIndexLocked(true));
                 imMayMove = false;
             } else {
+// 决定window的顺序
                 addWindowToListInOrderLocked(win, true);
                 if (type == TYPE_WALLPAPER) {
                     mLastWallpaperTimeoutTime = 0;
