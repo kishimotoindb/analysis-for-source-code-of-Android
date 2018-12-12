@@ -3387,6 +3387,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 & ~mForceClearedSystemUiFlags;
     }
 
+    // 所有的参数赋值，可以看beginLayoutLw()方法
     @Override
     public void getInsetHintLw(WindowManager.LayoutParams attrs, int displayRotation,
             Rect outContentInsets, Rect outStableInsets, Rect outOutsets) {
@@ -3421,6 +3422,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 availRight = mRestrictedScreenLeft + mRestrictedScreenWidth;
                 availBottom = mRestrictedScreenTop + mRestrictedScreenHeight;
             }
+            // 从这里可以看出，contentInsets就是window中除去system bar以外的区域，用来放置
+            // app的layout。这个区域不会被system decoration遮盖
             if ((systemUiVisibility & View.SYSTEM_UI_FLAG_LAYOUT_STABLE) != 0) {
                 if ((fl & FLAG_FULLSCREEN) != 0) {
                     outContentInsets.set(mStableFullscreenLeft, mStableFullscreenTop,
@@ -3458,6 +3461,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     @Override
     public void beginLayoutLw(boolean isDefaultDisplay, int displayWidth, int displayHeight,
                               int displayRotation) {
+        // 下面几个关于范围的概念，见 https://www.cnblogs.com/all-for-fiona/p/4054527.html
+
+        // 模拟信号的显示设备才需要overscan，比如模拟信号的电视机，现在的手机屏幕都是数字信号，
+        // 所以 overscan 均是0.
         mDisplayRotation = displayRotation;
         final int overscanLeft, overscanTop, overscanRight, overscanBottom;
         if (isDefaultDisplay) {
@@ -3580,7 +3587,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     // It's a system nav bar or a portrait screen; nav bar goes on bottom.
                     int top = displayHeight - overscanBottom
                             - mNavigationBarHeightForRotation[displayRotation];
+
+                    // navigation bar 的 frame
+                    // 表示的是navigation bar所占用的屏幕区域
+                    // 0 - 表示对齐屏幕的左边界
+                    // top - 表示导航栏的上边界在屏幕中的坐标， displayHeight - overscanBottom - mNavigationBarHeightForRotation[displayRotation]，
+                    //       因为overscanBottom=0，所以导航栏的上边界就是屏幕的高度减去导航栏的高度
+                    // displayWidth - 导航栏的宽度就是屏幕的宽度
+                    // displayHeight - overscanBottom : 导航栏的下边界坐标，就是屏幕的高度，即与屏幕底部对齐。overscanBottom因为数字信号没有overscan区域，所以是0.
+                    // 从这里也可以看出，系统中所有定义的 **Frame ，都是指**在屏幕中所占的区域范围。
                     mTmpNavigationFrame.set(0, top, displayWidth, displayHeight - overscanBottom);
+
+                    // stable frame的参数
                     mStableBottom = mStableFullscreenBottom = mTmpNavigationFrame.top;
                     if (transientNavBarShowing) {
                         mNavigationBarController.setBarShowingLw(true);

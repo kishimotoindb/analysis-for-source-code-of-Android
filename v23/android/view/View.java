@@ -20456,6 +20456,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      *                   {@link #SYSTEM_UI_FLAG_LAYOUT_STABLE}, {@link #SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION},
      *                   {@link #SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN}, {@link #SYSTEM_UI_FLAG_IMMERSIVE},
      *                   and {@link #SYSTEM_UI_FLAG_IMMERSIVE_STICKY}.
+     *
+     *
+     * 名称中是否有Layout的区别说明：
+     * SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, SYSTEM_UI_FLAG_HIDE_NAVIGATION
+     * 没有layout，是真的隐藏 navigation bar，有layout，是说在View hierarchy layout的时候忽略 navigation bar
+     *
+     * Stable:
+     * 根部的viewgroup会有一个稳定的padding，这个padding top是status bar，bottom padding 是 navigation bar 和
      */
     public void setSystemUiVisibility(int visibility) {
         if (visibility != mSystemUiVisibility) {

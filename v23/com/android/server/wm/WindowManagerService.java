@@ -2599,6 +2599,8 @@ public class WindowManagerService extends IWindowManager.Stub
             winAnimator.mEnterAnimationPending = true;
             winAnimator.mEnteringAnimation = true;
 
+            // ContentInsets: 刨去system decoration以外的区域
+            // StableInsets: 不论system decoration是否显示，均刨去所占的区域，剩下的区域就是这个stableInsets
             if (displayContent.isDefaultDisplay) {
                 mPolicy.getInsetHintLw(win.mAttrs, mRotation, outContentInsets, outStableInsets,
                         outOutsets);

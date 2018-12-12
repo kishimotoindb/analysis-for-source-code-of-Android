@@ -9904,6 +9904,13 @@ public final class ActivityManagerService extends ActivityManagerNative
                             NL--;
                         }
                     }
+
+
+                    //成功pubish则移除该消息
+                    if (wasInLaunchingProviders) {
+                        mHandler.removeMessages(CONTENT_PROVIDER_PUBLISH_TIMEOUT_MSG, r);
+                    }
+
                     synchronized (dst) {
                         dst.provider = src.provider;
                         dst.proc = r;
