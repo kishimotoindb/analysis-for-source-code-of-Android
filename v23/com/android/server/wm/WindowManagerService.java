@@ -2577,7 +2577,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 moveInputMethodDialogsLocked(findDesiredInputMethodWindowIndexLocked(true));
                 imMayMove = false;
             } else {
-// 决定window的顺序
+// 将window按照显示顺序插入到DisplayContent的mWindows中
                 addWindowToListInOrderLocked(win, true);
                 if (type == TYPE_WALLPAPER) {
                     mLastWallpaperTimeoutTime = 0;

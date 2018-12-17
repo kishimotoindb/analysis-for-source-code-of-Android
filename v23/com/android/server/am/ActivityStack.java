@@ -2125,6 +2125,8 @@ final class ActivityStack {
                                 + task, new RuntimeException("here").fillInStackTrace());
                         task.addActivityToTop(r);
                         r.putInHistory();
+
+                        // 向WindowManagerService注册windowToken
                         mWindowManager.addAppToken(task.mActivities.indexOf(r), r.appToken,
                                 r.task.taskId, mStackId, r.info.screenOrientation, r.fullscreen,
                                 (r.info.flags & ActivityInfo.FLAG_SHOW_FOR_ALL_USERS) != 0,

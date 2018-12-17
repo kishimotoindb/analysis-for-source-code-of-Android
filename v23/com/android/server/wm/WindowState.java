@@ -442,6 +442,7 @@ final class WindowState implements WindowManagerPolicy.WindowState {
                         // We insert the child window into the list ordered by the sub-layer. For
                         // same sub-layers, the negative one should go below others; the positive
                         // one should go above others.
+                        // sublayer相同，负的在下面，正的在上面
                         childWindows.add(i, this);
                         added = true;
                         break;
