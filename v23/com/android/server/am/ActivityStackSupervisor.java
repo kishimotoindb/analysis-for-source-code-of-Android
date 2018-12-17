@@ -941,6 +941,7 @@ private static final String LOCK_TAS~!!!!!!!!!!!!!`it uses a permission which is
         ActivityInfo aInfo =
                 resolveActivity(intent, resolvedType, startFlags, profilerInfo, userId);
 
+        // Activity.startActivity()执行到这里的时候，iContainer是null
         ActivityContainer container = (ActivityContainer)iContainer;
         synchronized (mService) {
             if (container != null && container.mParentActivity != null &&
@@ -962,6 +963,8 @@ private static final String LOCK_TAS~!!!!!!!!!!!!!`it uses a permission which is
 
             final ActivityStack stack;
             if (container == null || container.mStack.isOnHomeDisplay()) {
+                // 怎么确定当前的focusedStack？按照这里的逻辑，Activity开启在哪个stack里，只能由startActivity()
+                // 调用的位置决定，而不是由flag啥的决定
                 stack = mFocusedStack;
             } else {
                 stack = container.mStack;
@@ -1537,6 +1540,7 @@ private static final String LOCK_TAS~!!!!!!!!!!!!!`it uses a permission which is
             }
         }
 
+        // startActivityForResult()接收result的activity所在的stack
         final ActivityStack resultStack = resultRecord == null ? null : resultRecord.task.stack;
 
         if (err != ActivityManager.START_SUCCESS) {

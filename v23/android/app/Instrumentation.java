@@ -1511,6 +1511,8 @@ public class Instrumentation {
         try {
             intent.migrateExtraStreamToClipData();
             intent.prepareToLeaveProcess();
+            // 这里的token是调用startActivity的Activity的token，不是目标Activity的token。
+            // 这个token是用来返回result的时候寻找目标activity用的。
             int result = ActivityManagerNative.getDefault()
                 .startActivity(whoThread, who.getBasePackageName(), intent,
                         intent.resolveTypeIfNeeded(who.getContentResolver()),
