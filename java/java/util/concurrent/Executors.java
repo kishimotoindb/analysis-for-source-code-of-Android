@@ -459,6 +459,9 @@ public class Executors {
 
     /**
      * A callable that runs given task and returns given result
+     * Runnable实际上是不返回结果的，但是有些情况下可能需要在任务执行成功的时候返回一个信号，这个result
+     * 就可以作为这个信号使用，用户自行设置result是什么。注意，这个result是预设好的，不需要通过runnable
+     * 运行得到。
      */
     static final class RunnableAdapter<T> implements Callable<T> {
         final Runnable task;

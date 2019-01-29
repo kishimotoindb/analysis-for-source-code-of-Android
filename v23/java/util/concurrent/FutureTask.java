@@ -224,6 +224,11 @@ public class FutureTask<V> implements RunnableFuture<V> {
         }
     }
 
+    /*
+     * 两个地方可以cancel掉task
+     * 1. 执行之前
+     * 2. 执行中，并且thread.interrupt()生效，call()方法抛异常
+     */
     public void run() {
         if (state != NEW ||
             !U.compareAndSwapObject(this, RUNNER, null, Thread.currentThread()))

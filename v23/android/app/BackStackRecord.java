@@ -790,6 +790,9 @@ final class BackStackRecord extends FragmentTransaction implements
             op = op.next;
         }
 
+        // 未确定：
+        // Activity的状态其实是通过mManager.mCurState这个变量表达给Manager所管理的所有Fragment，所以
+        // 新开启的Fragment的生命周期状态，应该和这个mCurState保持一致。
         mManager.moveToState(mManager.mCurState, mTransition,
                 mTransitionStyle, true);
 

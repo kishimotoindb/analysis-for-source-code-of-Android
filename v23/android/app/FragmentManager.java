@@ -869,6 +869,7 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
         }
     }
 
+    // newState表示当前Activity的状态，即当前Fragment需要同步到的状态
     void moveToState(Fragment f, int newState, int transit, int transitionStyle,
             boolean keepActive) {
         if (DEBUG && false) Log.v(TAG, "moveToState: " + f
@@ -903,6 +904,8 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
                 f.mAnimatingAway = null;
                 moveToState(f, f.mStateAfterAnimating, 0, 0, true);
             }
+
+            // 特别注意：这里的所有case都没有break，所以直到变更到新状态之前，Fragment的生命周期会一直连续变化
             switch (f.mState) {
                 case Fragment.INITIALIZING:
                     if (DEBUG) Log.v(TAG, "moveto CREATED: " + f);
@@ -1185,7 +1188,6 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
             }
             f.setIndex(mActive.size(), mParent);
             mActive.add(f);
-            
         } else {
             f.setIndex(mAvailIndices.remove(mAvailIndices.size()-1), mParent);
             mActive.set(f.mIndex, f);
