@@ -206,6 +206,7 @@ public final class SQLiteConnectionPool implements Closeable {
     }
 
     private void dispose(boolean finalized) {
+        // StrictMode检测io流关闭的代码
         if (mCloseGuard != null) {
             if (finalized) {
                 mCloseGuard.warnIfOpen();

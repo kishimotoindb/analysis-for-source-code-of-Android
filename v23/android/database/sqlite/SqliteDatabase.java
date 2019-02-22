@@ -48,6 +48,24 @@ import java.util.WeakHashMap;
  * to the current locale.
  * </p>
  */
+
+/*
+ * SQLiteDatabase开闭操作注意事项：
+ * 1. Java层的SQLiteDatabase对象是通过SQLiteConnectionPool与底层数据库进行交互的，所以本质上Database只是个
+ * 入口，关键在connectionPool。
+ *
+ * 2. Database对象里connectionPool的销毁通过引用计数的方式控制的。每次执行增删改查时，方法内部会首先增加引用计
+ * 数，在方法执行结束时减少引用计数。引用计数的控制不需要使用者管理。
+ *
+ * 3. db.openDatabase()时并不会增加connectionPool的引用计数，所以就不需要调用db.close()方法手动释放引用计数。
+ *
+ * 4. 关于同步的问题：增删改查加锁，只需要考虑对数据库的同步操作即可，无需考虑对connectionPool引用计数的影响，
+ * 引用计数增加在增删改查四个方法中始终会成对执行，所以即使增删改查不加锁，也不会造成引用计数错误，进而出现
+ * “Cannot perform this operation because the connection pool has been closed.”的异常。
+ *
+ * 5. db.close()方法不要随便使用，因为openDatabase()的时候并没有增加引用计数，而close()会减少引用计数，这样
+ * 正常增删改查配对增加的引用计数就会出现错误。
+ */
 public final class SQLiteDatabase extends SQLiteClosable {
     private static final String TAG = "SQLiteDatabase";
 
@@ -259,6 +277,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     private void dispose(boolean finalized) {
         final SQLiteConnectionPool pool;
         synchronized (mLock) {
+            // StrictMode检测io流关闭的代码
             if (mCloseGuardLocked != null) {
                 if (finalized) {
                     mCloseGuardLocked.warnIfOpen();
@@ -271,6 +290,8 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
 
         if (!finalized) {
+            // sActiveDatabases Stores reference to all databases opened in the current process.
+            // 将当前数据库从process中移除
             synchronized (sActiveDatabases) {
                 sActiveDatabases.remove(this);
             }
@@ -782,6 +803,8 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
+    // Java层的Database对象是通过SQLiteConnectionPool与底层数据库进行交互的，所以本质上Database只是个
+    // 入口，关键在connectionPool
     private void openInner() {
         synchronized (mLock) {
             assert mConnectionPoolLocked == null;

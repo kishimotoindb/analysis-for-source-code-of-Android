@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-/*
-1.Êı¾İ¿â°æ±¾½ö¿ÉÒÔÉı¼¶£¨upgrade£©£¬½µ¼¶·½·¨£¨downgrade£©µÄ·½·¨Ìå´úÂë¾ÍÊÇÊä³ö´íÎóĞÅÏ¢¡£
-2.Èç¹ûÊı¾İ¿â´ò¿ªµÄÊ±ºòÊÇ¶ÁĞ´×´Ì¬£¬µ«ÊÇÊ¹ÓÃ¹ı³ÌÖĞÄÚ´æÂúÁË£¬ÔõÃ´´¦Àí£¿
-  ´ğ£º
-3.helper¶ÔÏó´´½¨µÄÊı¾İ¿âÎÄ¼ş¼´Ê¹µ÷ÓÃdb.close()·½·¨¹Ø±ÕÁË£¬»¹¿ÉÒÔÓÃhelper¶ÔÏóÖØĞÂ´´½¨£¬
-µ±³õ´´½¨helperµÄ²ÎÊıÒÀÈ»´æÔÚ¡£µ÷ÓÃdb.close()·½·¨¹Ø±ÕÎÄ¼şÖ®ºó£¬ÖØĞÂ´ò¿ªÎÄ¼ş»¹ÊÇÖØĞÂ´´½¨
-Ò»¸öÎÄ¼ş£¿
-*/
-
 package android.database.sqlite;
 
 import android.content.Context;
@@ -58,40 +49,33 @@ public abstract class SQLiteOpenHelper {
     // many applications.  For debugging purposes it can be useful to turn on strict
     // read-only semantics to catch applications that call getReadableDatabase when they really
     // wanted getWritableDatabase.
-	//google¶¨ËÀÎªfalse£¬ÊÇÒòÎªÕâ¸ö±äÁ¿ÉèÖÃµÄ²»ºÃ£¬²¢ÇÒ»áÊ¹Ğí¶àÓ¦ÓÃ±ÀÀ£¡£
+    //googleå®šæ­»ä¸ºfalseï¼Œæ˜¯å› ä¸ºè¿™ä¸ªå˜é‡è®¾ç½®çš„ä¸å¥½ï¼Œå¹¶ä¸”ä¼šä½¿è®¸å¤šåº”ç”¨å´©æºƒã€‚
     private static final boolean DEBUG_STRICT_READONLY = false;
 
-    private final Context mContext; //´æ´¢´´½¨¶ÔÏóÊ±Ìá¹©µÄÉÏÏÂÎÄ
-    
-	//1.´æ´¢Êı¾İ¿âµÄÃû×Ö£¬Ò»µ©helper´´½¨Íê³É£¬Õâ¸öhelper¶ÔÏóÖ»¿ÉÒÔ´´½¨Õâ¸öÃû×ÖµÄÊı¾İ¿â¡£
-	//ÒòÎª¸Ã³ÉÔ±±äÁ¿ÓÉfinalĞŞÊÎ¡£Ò»¸öhelperÖ»¿ÉÒÔ²Ù×÷Ò»¸öÖ¸¶¨µÄÊı¾İ¿âÎÄ¼ş¡£DriverManager
-	//ÖĞ´æ´¢DriverµÄ³ÉÔ±±äÁ¿ÊÇ¾²Ì¬µÄ£¬¿ÉÒÔ¹ÜÀíËùÓĞµÄÊı¾İ¿âÇı¶¯¡£Á½ÕßÔÚÕâ·½Ãæ´æÔÚÇø±ğ¡£
-	//2.Ãû×Ö¿ÉÒÔÎª¿Õ£¬ÕâÑù¾Í¿ÉÒÔ´´½¨Ò»¸ö´æ´¢ÓÚÄÚ´æÖĞµÄÊı¾İ¿â¡£
-	//3.ÄÇÎªÊ²Ã´helper²»ÄÜÓÃÀ´¹ÜÀí¶à¸öÊı¾İ¿â£¿
-	//´ğ£º
-	private final String mName;    
-	
-	//ÓÃÀ´´æ´¢×Ô¶¨ÒåµÄCursor¹¤³§£¬Ä¬ÈÏ¾Í¿ÉÒÔÁË¡£
+    private final Context mContext; //å­˜å‚¨åˆ›å»ºå¯¹è±¡æ—¶æä¾›çš„ä¸Šä¸‹æ–‡
+
+    //1.å­˜å‚¨æ•°æ®åº“çš„åå­—ï¼Œä¸€æ—¦helperåˆ›å»ºå®Œæˆï¼Œè¿™ä¸ªhelperå¯¹è±¡åªå¯ä»¥åˆ›å»ºè¿™ä¸ªåå­—çš„æ•°æ®åº“ã€‚
+    //å› ä¸ºè¯¥æˆå‘˜å˜é‡ç”±finalä¿®é¥°ã€‚ä¸€ä¸ªhelperåªå¯ä»¥æ“ä½œä¸€ä¸ªæŒ‡å®šçš„æ•°æ®åº“æ–‡ä»¶ã€‚DriverManager
+    //ä¸­å­˜å‚¨Driverçš„æˆå‘˜å˜é‡æ˜¯é™æ€çš„ï¼Œå¯ä»¥ç®¡ç†æ‰€æœ‰çš„æ•°æ®åº“é©±åŠ¨ã€‚ä¸¤è€…åœ¨è¿™æ–¹é¢å­˜åœ¨åŒºåˆ«ã€‚
+    //2.åå­—å¯ä»¥ä¸ºç©ºï¼Œè¿™æ ·å°±å¯ä»¥åˆ›å»ºä¸€ä¸ªå­˜å‚¨äºå†…å­˜ä¸­çš„æ•°æ®åº“ã€‚
+    private final String mName;
+
+    //ç”¨æ¥å­˜å‚¨è‡ªå®šä¹‰çš„Cursorå·¥å‚ï¼Œé»˜è®¤å°±å¯ä»¥äº†ã€‚
     private final CursorFactory mFactory;
 
-	//´æ´¢ÓÃ»§¶¨ÒåµÄ°æ±¾ºÅ
+    //å­˜å‚¨ç”¨æˆ·å®šä¹‰çš„ç‰ˆæœ¬å·
     private final int mNewVersion;
 
-    //´æ´¢±¾Àà¶ÔÏóÉú³ÉµÄÊı¾İ¿âÎÄ¼ş
     private SQLiteDatabase mDatabase;
 
-	//ÓÃÀ´Ö¸Ê¾Êı¾İ¿â³õÊ¼»¯µÄ×´Ì¬£¬¸Ğ¾õ³õÊ¼»¯µÄ¹ı³ÌÊÇ²»ÄÜ±»´ò¶ÏµÄ
-	//
     private boolean mIsInitializing;
 
-	//
     private boolean mEnableWriteAheadLogging;
-
 
     private final DatabaseErrorHandler mErrorHandler;
 
     /**
-     * Create a helper object to create, open, and/or manage£¨ÄÄÀïÌåÏÖµÄ¹ÜÀí£© a database.
+     * Create a helper object to create, open, and/or manageï¼ˆå“ªé‡Œä½“ç°çš„ç®¡ç†ï¼‰ a database.
      * This method always returns very quickly.  The database is not actually
      * created or opened until one of {@link #getWritableDatabase} or
      * {@link #getReadableDatabase} is called.
@@ -125,9 +109,9 @@ public abstract class SQLiteOpenHelper {
      * corruption, or null to use the default error handler.
      */
 
-	 //°æ±¾ºÅ±ØĞë´óÓÚ1
+    //ç‰ˆæœ¬å·å¿…é¡»å¤§äº1
     public SQLiteOpenHelper(Context context, String name, CursorFactory factory, int version,
-            DatabaseErrorHandler errorHandler) {
+                            DatabaseErrorHandler errorHandler) {
         if (version < 1) throw new IllegalArgumentException("Version must be >= 1, was " + version);
 
         mContext = context;
@@ -191,8 +175,8 @@ public abstract class SQLiteOpenHelper {
      * @return a read/write database object valid until {@link #close} is called
      */
 
-	 //upgrade»á»¨·Ñ´óÁ¿Ê±¼ä£¬ËùÒÔ²»½¨Òé½«ĞŞ¸ÄÊı¾İ¿â°æ±¾µÄ´úÂë·ÅÔÚÖ÷Ïß³Ì¡£
-	 //new Helper£¨£©Ê±¾ö¶¨°æ±¾ºÅ£¬ËùÒÔÆäÊµ¾ÍÊÇ²»½¨ÒéÔÚÖ÷Ïß³Ì´´½¨helper¶ÔÏó
+    //upgradeä¼šèŠ±è´¹å¤§é‡æ—¶é—´ï¼Œæ‰€ä»¥ä¸å»ºè®®å°†ä¿®æ”¹æ•°æ®åº“ç‰ˆæœ¬çš„ä»£ç æ”¾åœ¨ä¸»çº¿ç¨‹ã€‚
+    //new Helperï¼ˆï¼‰æ—¶å†³å®šç‰ˆæœ¬å·ï¼Œæ‰€ä»¥å…¶å®å°±æ˜¯ä¸å»ºè®®åœ¨ä¸»çº¿ç¨‹åˆ›å»ºhelperå¯¹è±¡
     public SQLiteDatabase getWritableDatabase() {
         synchronized (this) {
             return getDatabaseLocked(true);
@@ -224,17 +208,17 @@ public abstract class SQLiteOpenHelper {
     }
 
     private SQLiteDatabase getDatabaseLocked(boolean writable) {
-        //Èç¹ûÊı¾İ¿âÎÄ¼şÒÑ¾­´´½¨
-		if (mDatabase != null) {
-			//Êı¾İ¿âÎÄ¼şÒÑ¾­´´½¨£¬µ«ÊÇ²»´¦ÓÚ´ò¿ª×´Ì¬£»±»ÓÃ»§.close()¹ØÁË
+        //å¦‚æœæ•°æ®åº“æ–‡ä»¶å·²ç»åˆ›å»º
+        if (mDatabase != null) {
+            //æ•°æ®åº“æ–‡ä»¶å·²ç»åˆ›å»ºï¼Œä½†æ˜¯ä¸å¤„äºæ‰“å¼€çŠ¶æ€ï¼›è¢«ç”¨æˆ·.close()å…³äº†
             if (!mDatabase.isOpen()) {
                 // Darn!  The user closed the database by calling mDatabase.close().
-				//¸³Öµnull£¬×¼±¸ÖØĞÂ´´½¨Êı¾İ¿âÎÄ¼ş
+                //èµ‹å€¼nullï¼Œå‡†å¤‡é‡æ–°åˆ›å»ºæ•°æ®åº“æ–‡ä»¶
                 mDatabase = null;
-			//Readable»ñÈ¡Êı¾İ¿âÎÄ¼şÊ±£¬Ö»ÒªÊı¾İ¿âÎÄ¼ş¿ª×Å£¬¾Í±»·µ»Ø¡£
-			//writable»ñÈ¡Êı¾İ¿âÎÄ¼şÊ±£¬µ±Ç°´ò¿ªµÄÊı¾İ¿âÎÄ¼ş±ØĞë²»ÊÇÖ»¶ÁµÄ£¬²ÅÄÜ·µ»Ø¡£
-			//±ÈÈçÉÏÒ»´Îµ÷ÓÃReadable»ñÈ¡µÄÊı¾İ¿âÎÄ¼ş£¬ÇÒÕıºÃ·µ»ØµÄÊÇread-onlyµÄ£¬ÏÂÒ»´Î
-			//µ÷ÓÃWritable»ñÈ¡Êı¾İ¿âÎÄ¼şÊ±£¬¾ÍÒªÖØĞÂ´´½¨·ÇÖ»¶ÁµÄÎÄ¼ş¡£
+                //Readableè·å–æ•°æ®åº“æ–‡ä»¶æ—¶ï¼Œåªè¦æ•°æ®åº“æ–‡ä»¶å¼€ç€ï¼Œå°±è¢«è¿”å›ã€‚
+                //writableè·å–æ•°æ®åº“æ–‡ä»¶æ—¶ï¼Œå½“å‰æ‰“å¼€çš„æ•°æ®åº“æ–‡ä»¶å¿…é¡»ä¸æ˜¯åªè¯»çš„ï¼Œæ‰èƒ½è¿”å›ã€‚
+                //æ¯”å¦‚ä¸Šä¸€æ¬¡è°ƒç”¨Readableè·å–çš„æ•°æ®åº“æ–‡ä»¶ï¼Œä¸”æ­£å¥½è¿”å›çš„æ˜¯read-onlyçš„ï¼Œä¸‹ä¸€æ¬¡
+                //è°ƒç”¨Writableè·å–æ•°æ®åº“æ–‡ä»¶æ—¶ï¼Œå°±è¦é‡æ–°åˆ›å»ºéåªè¯»çš„æ–‡ä»¶ã€‚
             } else if (!writable || !mDatabase.isReadOnly()) {
                 // The database is already open for business.
                 return mDatabase;
@@ -244,53 +228,53 @@ public abstract class SQLiteOpenHelper {
         if (mIsInitializing) {
             throw new IllegalStateException("getDatabase called recursively");
         }
-		//´ËÊ±£¬Êı¾İ¿âÎÄ¼şmDatabase»òÕßÎª¿Õ£¬»òÕßÊÇÓÃ»§µ÷ÓÃµÄÊÇWritable·½·¨£¬ÇÒ´ËÊ±µÄÊı¾İ¿âÎÄ¼ş
-		//ÊÇÖ»¶ÁµÄ¡£
+        //æ­¤æ—¶ï¼Œæ•°æ®åº“æ–‡ä»¶mDatabaseæˆ–è€…ä¸ºç©ºï¼Œæˆ–è€…æ˜¯ç”¨æˆ·è°ƒç”¨çš„æ˜¯Writableæ–¹æ³•ï¼Œä¸”æ­¤æ—¶çš„æ•°æ®åº“æ–‡ä»¶
+        //æ˜¯åªè¯»çš„ã€‚
         SQLiteDatabase db = mDatabase;
         try {
             mIsInitializing = true;
-			
-			//ÓÃ»§µ÷ÓÃµÄÊÇWritable·½·¨£¬ÇÒ´ËÊ±µÄÊı¾İ¿âÎÄ¼şÊÇÖ»¶ÁµÄ¡£
+
+            //ç”¨æˆ·è°ƒç”¨çš„æ˜¯Writableæ–¹æ³•ï¼Œä¸”æ­¤æ—¶çš„æ•°æ®åº“æ–‡ä»¶æ˜¯åªè¯»çš„ã€‚
             if (db != null) {
-				//Èç¹ûÓÃ»§µ÷ÓÃµÄÊÇWritable·½·¨£¬ÇÒ´ËÊ±µÄÊı¾İ¿âÎÄ¼şÊÇÖ»¶ÁµÄ
+                //å¦‚æœç”¨æˆ·è°ƒç”¨çš„æ˜¯Writableæ–¹æ³•ï¼Œä¸”æ­¤æ—¶çš„æ•°æ®åº“æ–‡ä»¶æ˜¯åªè¯»çš„
                 if (writable && db.isReadOnly()) {
-					//ÖØĞÂ´ò¿ªÒ»¸ö¶ÁĞ´µÄÊı¾İ¿âÎÄ¼ş
+                    //é‡æ–°æ‰“å¼€ä¸€ä¸ªè¯»å†™çš„æ•°æ®åº“æ–‡ä»¶
                     db.reopenReadWrite();
                 }
-				//Èç¹ûÊı¾İ¿âÎÄ¼şÕıÔÚ±»µÚÒ»´Î´´½¨£¬»òÕß±»´´½¨Ö®ºóÖ´ĞĞ.close()¹Ø±Õ£¨ÉÏÒ»²½ÒÑ¾­ÖÃnull£©£¬×ÜÖ®
-				//Êı¾İ¿âÎÄ¼şdb=null£¬ÄÇÃ´½øĞĞÏÂÃæµÄ·ÖÎö¡£
-				//1.Èç¹ûhelperÔÚ´´½¨Ê±£¬ÓÃ»§²¢Ã»ÓĞÌá¹©Êı¾İ¿âÃû³Æ£¨¼´½ö½ö´´½¨Ò»¸ö´æ´¢ÓÚÄÚ´æÖĞµÄÊı¾İ¿â
-				//	ÎÄ¼ş£©£¬ÄÇÃ´
+                //å¦‚æœæ•°æ®åº“æ–‡ä»¶æ­£åœ¨è¢«ç¬¬ä¸€æ¬¡åˆ›å»ºï¼Œæˆ–è€…è¢«åˆ›å»ºä¹‹åæ‰§è¡Œ.close()å…³é—­ï¼ˆä¸Šä¸€æ­¥å·²ç»ç½®nullï¼‰ï¼Œæ€»ä¹‹
+                //æ•°æ®åº“æ–‡ä»¶db=nullï¼Œé‚£ä¹ˆè¿›è¡Œä¸‹é¢çš„åˆ†æã€‚
+                //1.å¦‚æœhelperåœ¨åˆ›å»ºæ—¶ï¼Œç”¨æˆ·å¹¶æ²¡æœ‰æä¾›æ•°æ®åº“åç§°ï¼ˆå³ä»…ä»…åˆ›å»ºä¸€ä¸ªå­˜å‚¨äºå†…å­˜ä¸­çš„æ•°æ®åº“
+                //	æ–‡ä»¶ï¼‰ï¼Œé‚£ä¹ˆ
             } else if (mName == null) {
-				//´´½¨Ò»¸ö´æ´¢ÓÚÄÚ´æÖĞµÄÊı¾İ¿âÎÄ¼ş
-				//Èç¹ûÏÖÔÚdb=nullÊÇÉÏÃæÅĞ¶ÏisOpen()ÄÇ²½¸øµÄ£¬ÕâÀï»áÖØĞÂ´´½¨Ò»¸öÈ«ĞÂµÄÊı¾İ¿âÎÄ¼ş£¬
-				//»¹ÊÇÖ¸ÏòÔ­À´µÄÊı¾İ¿â£¿ÕâÀï´´½¨µÄÊÇÄÚ´æÖĞµÄÎÄ¼ş£¬.close()»áÊÍ·Å×ÊÔ´£¬Ô­À´mDatabase
-				//´æ´¢µÄµØÖ·ËùÖ¸ÏòµÄ¶ÔÏóÒÑ¾­ÏûÊ§£¬ËùÒÔÕâÀïÓ¦¸ÃÊÇÖØĞÂ½¨Ò»¸öÎÄ¼ş¡£
+                //åˆ›å»ºä¸€ä¸ªå­˜å‚¨äºå†…å­˜ä¸­çš„æ•°æ®åº“æ–‡ä»¶
+                //å¦‚æœç°åœ¨db=nullæ˜¯ä¸Šé¢åˆ¤æ–­isOpen()é‚£æ­¥ç»™çš„ï¼Œè¿™é‡Œä¼šé‡æ–°åˆ›å»ºä¸€ä¸ªå…¨æ–°çš„æ•°æ®åº“æ–‡ä»¶ï¼Œ
+                //è¿˜æ˜¯æŒ‡å‘åŸæ¥çš„æ•°æ®åº“ï¼Ÿè¿™é‡Œåˆ›å»ºçš„æ˜¯å†…å­˜ä¸­çš„æ–‡ä»¶ï¼Œ.close()ä¼šé‡Šæ”¾èµ„æºï¼ŒåŸæ¥mDatabase
+                //å­˜å‚¨çš„åœ°å€æ‰€æŒ‡å‘çš„å¯¹è±¡å·²ç»æ¶ˆå¤±ï¼Œæ‰€ä»¥è¿™é‡Œåº”è¯¥æ˜¯é‡æ–°å»ºä¸€ä¸ªæ–‡ä»¶ã€‚
                 db = SQLiteDatabase.create(null);
-			//Èç¹ûÓÃ»§Ìá¹©ÁËÊı¾İ¿âÃû³Æ
+                //å¦‚æœç”¨æˆ·æä¾›äº†æ•°æ®åº“åç§°
             } else {
                 try {
-					//DEBUG_STRICT_READONLYÔÚÀàÖĞ±»ÉùÃ÷Îªfinal±äÁ¿£¬ÇÒ±»¸³Öµfalse
-					//ÄÇÒ²¾ÍÊÇËµÏÂÃæµÄifÈÎºÎÇé¿öÏÂ¶¼ÊÇ²»»á³ÉÁ¢µÄ¡£¾ßÌå²Î¼û¸Ã³ÉÔ±
-					//±äÁ¿µÄ×¢½â¡£
-					//±£ÁôÔÚÕâÀïµÄÄ¿µÄ¿ÉÄÜÊÇgoogleÄ¿Ç°»¹Ã»ÓĞ×îÖÕÈ·¶¨ÔõÃ´½â¾öÕâ¸ö³ÉÔ±
-					//±äÁ¿Ôì³ÉµÄÎÊÌâ¡£
+                    //DEBUG_STRICT_READONLYåœ¨ç±»ä¸­è¢«å£°æ˜ä¸ºfinalå˜é‡ï¼Œä¸”è¢«èµ‹å€¼false
+                    //é‚£ä¹Ÿå°±æ˜¯è¯´ä¸‹é¢çš„ifä»»ä½•æƒ…å†µä¸‹éƒ½æ˜¯ä¸ä¼šæˆç«‹çš„ã€‚å…·ä½“å‚è§è¯¥æˆå‘˜
+                    //å˜é‡çš„æ³¨è§£ã€‚
+                    //ä¿ç•™åœ¨è¿™é‡Œçš„ç›®çš„å¯èƒ½æ˜¯googleç›®å‰è¿˜æ²¡æœ‰æœ€ç»ˆç¡®å®šæ€ä¹ˆè§£å†³è¿™ä¸ªæˆå‘˜
+                    //å˜é‡é€ æˆçš„é—®é¢˜ã€‚
                     if (DEBUG_STRICT_READONLY && !writable) {
                         final String path = mContext.getDatabasePath(mName).getPath();
                         db = SQLiteDatabase.openDatabase(path, mFactory,
                                 SQLiteDatabase.OPEN_READONLY, mErrorHandler);
 
-						//²»¹ÜÊÇWritable»¹ÊÇReadable£¬¶¼ÊÇÏÈ´´½¨¶ÁĞ´µÄÊı¾İ¿âÎÄ¼ş£¬Èç¹û
-						//´æ´¢¿Õ¼äÒÑÂú£¬´´½¨²»³É¹¦£¬»á²úÉúÒì³£¡£ÔÚÒì³£ÖĞ´´½¨Ö»¶ÁÀàĞÍµÄ
-						//Êı¾İ¿âÎÄ¼ş
+                        //ä¸ç®¡æ˜¯Writableè¿˜æ˜¯Readableï¼Œéƒ½æ˜¯å…ˆåˆ›å»ºè¯»å†™çš„æ•°æ®åº“æ–‡ä»¶ï¼Œå¦‚æœ
+                        //å­˜å‚¨ç©ºé—´å·²æ»¡ï¼Œåˆ›å»ºä¸æˆåŠŸï¼Œä¼šäº§ç”Ÿå¼‚å¸¸ã€‚åœ¨å¼‚å¸¸ä¸­åˆ›å»ºåªè¯»ç±»å‹çš„
+                        //æ•°æ®åº“æ–‡ä»¶
                     } else {
                         db = mContext.openOrCreateDatabase(mName, mEnableWriteAheadLogging ?
-                                Context.MODE_ENABLE_WRITE_AHEAD_LOGGING : 0,
+                                        Context.MODE_ENABLE_WRITE_AHEAD_LOGGING : 0,
                                 mFactory, mErrorHandler);
                     }
                 } catch (SQLiteException ex) {
-                   
-					if (writable) {
+
+                    if (writable) {
                         throw ex;
                     }
                     Log.e(TAG, "Couldn't open " + mName
@@ -373,7 +357,7 @@ public abstract class SQLiteOpenHelper {
      *
      * @param db The database.
      */
-	getReadableDatabaseºÍgetWritableDatabaseÊ±µ÷ÓÃ
+    // getReadableDatabaseå’ŒgetWritableDatabaseæ—¶è°ƒç”¨
     public void onConfigure(SQLiteDatabase db) {}
 
     /**
@@ -382,7 +366,7 @@ public abstract class SQLiteOpenHelper {
      *
      * @param db The database.
      */
-	getReadableDatabaseºÍgetWritableDatabaseÊ±µ÷ÓÃ
+    // getReadableDatabaseå’ŒgetWritableDatabaseæ—¶è°ƒç”¨
     public abstract void onCreate(SQLiteDatabase db);
 
     /**
@@ -405,7 +389,7 @@ public abstract class SQLiteOpenHelper {
      * @param oldVersion The old database version.
      * @param newVersion The new database version.
      */
-	getReadableDatabaseºÍgetWritableDatabaseÊ±µ÷ÓÃ
+    // getReadableDatabaseå’ŒgetWritableDatabaseæ—¶è°ƒç”¨
     public abstract void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion);
 
     /**
@@ -424,7 +408,7 @@ public abstract class SQLiteOpenHelper {
      * @param oldVersion The old database version.
      * @param newVersion The new database version.
      */
-	getReadableDatabaseºÍgetWritableDatabaseÊ±µ÷ÓÃ
+    // getReadableDatabaseå’ŒgetWritableDatabaseæ—¶è°ƒç”¨
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         throw new SQLiteException("Can't downgrade database from version " +
                 oldVersion + " to " + newVersion);
