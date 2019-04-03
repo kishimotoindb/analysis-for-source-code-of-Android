@@ -2188,7 +2188,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
 		//输入事件连续性判断
         if (mInputEventConsistencyVerifier != null) {
             mInputEventConsistencyVerifier.onTouchEvent(ev, 1);
-        }
+
 	
         // If the event targets the accessibility focused view and this is it, start
         // normal event dispatch. Maybe a descendant is what will handle the click.

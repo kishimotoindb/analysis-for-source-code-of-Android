@@ -4221,7 +4221,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 return;
             }
 
-            final int firstPos = mFirstPosition;
+            final int first Pos = mFirstPosition;
             final int lastPos = firstPos + childCount - 1;
 
             int viewTravelCount;

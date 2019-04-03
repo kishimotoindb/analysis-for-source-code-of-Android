@@ -6,6 +6,9 @@
 
 package java.util.concurrent;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.Condition;
@@ -314,7 +317,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      *   SHUTDOWN: Don't accept new tasks, but process queued tasks
      *   STOP:     Don't accept new tasks, don't process queued tasks,
      *             and interrupt in-progress tasks
-     *   TIDYING:  All tasks have terminated, workerCount is zero,
+     *   TIDYING（整理期）:  All tasks have terminated, workerCount is zero,
      *             the thread transitioning to state TIDYING
      *             will run the terminated() hook method
      *   TERMINATED: terminated() has completed
@@ -327,7 +330,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      *    On invocation of shutdown(), perhaps implicitly in finalize()
      * (RUNNING or SHUTDOWN) -> STOP
      *    On invocation of shutdownNow()
-     * SHUTDOWN -> TIDYING
+     * SHUTDOWN -> TIDYING（整理）
      *    When both queue and pool are empty
      * STOP -> TIDYING
      *    When pool is empty
@@ -431,6 +434,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
     /**
      * Set containing all worker threads in pool. Accessed only when
      * holding mainLock.
+     * 最多是core或者max pool size
      */
     private final HashSet<Worker> workers = new HashSet<Worker>();
 
@@ -540,8 +544,8 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
         new RuntimePermission("modifyThread");
 
     /**
-     * Class Worker mainly maintains interrupt control state for
-     * threads running tasks, along with other minor bookkeeping.
+     * Class Worker mainly maintains interrupt（中断） control state for
+     * threads running tasks, along with other minor bookkeeping（簿籍）.
      * This class opportunistically extends AbstractQueuedSynchronizer
      * to simplify acquiring and releasing a lock surrounding each
      * task execution.  This protects against interrupts that are
@@ -853,13 +857,15 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * than corePoolSize threads (in which case we always start one),
      * or when the queue is full (in which case we must bypass queue).
      * Initially idle threads are usually created via
-     * prestartCoreThread or to replace other dying workers.
+     * prestart CoreThread or to replace other dying workers.
      *
      * @param core if true use corePoolSize as bound, else
      * maximumPoolSize. (A boolean indicator is used here rather than a
      * value to ensure reads of fresh values after checking other pool
      * state).
      * @return true if successful
+     *
+     * Worker是对thread的一种封装，addWorker相当于向线程池中增加线程，与runnable的插入移出缓冲队列无关。
      */
     private boolean addWorker(Runnable firstTask, boolean core) {
         retry:
@@ -868,6 +874,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
             int rs = runStateOf(c);
 
             // Check if queue empty only if necessary.
+            // 如果线程池已经shutdown了，那么就不addWorker了。
             if (rs >= SHUTDOWN &&
                 ! (rs == SHUTDOWN &&
                    firstTask == null &&
@@ -876,7 +883,9 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
 
             for (;;) {
                 int wc = workerCountOf(c);
+                // workCount大于容量2^29-1，或者大于线程池的大小，不允许addWorker
                 if (wc >= CAPACITY ||
+                    // 相当于worker的数量要么是core，要么是max
                     wc >= (core ? corePoolSize : maximumPoolSize))
                     return false;
                 if (compareAndIncrementWorkerCount(c))
@@ -917,6 +926,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
                     mainLock.unlock();
                 }
                 if (workerAdded) {
+                    // addWorker后马上开启线程
                     t.start();
                     workerStarted = true;
                 }
@@ -1021,6 +1031,14 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
 
             int wc = workerCountOf(c);
 
+            // worker之所以自身没有标志位表明其是在到达corePoolSize之前创建的，还是之后，原因就在这里。如果是
+            // 直接在创建worker的时候标记，那么在销毁大于corePoolSize的worker时，就只能销毁某几个特定的worker。
+            // 假如corePoolSize=2,max=4，我们先创建2个worker(a and b)，然后让其开始执行任务，此时再创建两个
+            // worker(c and d)，也让其开始执行任务，现在相当于4个worker都处于工作状态。接着，a和b执行完任务处于
+            // 空闲状态，按道理线程池中应该只保留coreSize个worker，那么现在池子里有四个，应该清除两个处于空闲
+            // 状态的worker，但是由于a和b被标记为core，所以不能清除这两个worker，必须等待c和d空闲了对他们两个
+            // 执行清除操作。这样的话，就会造成a和b的浪费，并且不能及时恢复到coreSize。所以不应该对worker进行
+            // 标记，这样处理起来更灵活。
             // Are workers subject to culling?
             boolean timed = allowCoreThreadTimeOut || wc > corePoolSize;
 
@@ -1032,6 +1050,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
             }
 
             try {
+                // 线程池worker的keepAlive，是通过队列获取元素的超时时间实现的。
                 Runnable r = timed ?
                     workQueue.poll(keepAliveTime, TimeUnit.NANOSECONDS) :
                     workQueue.take();
@@ -1323,19 +1342,30 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
          * and so reject the task.
          */
         int c = ctl.get();
+        // 当前worker的数量是否小于corePoolSize
         if (workerCountOf(c) < corePoolSize) {
+            // add worker到线程池，并且启动worker中线程的执行，返回true。
+            // 两种情况下会返回false，一种是worker的数量已经达到了corePoolSize，另一种是worker没有add成功.
+            // 只要线程池的worker数量没有达到corePoolSize，那么不论线程池中已加入的worker是否空闲，都会新
+            // 创建一个worker，然后add到池子中。
+            //
+            // 线程池不是一开始创建的时候就有worker的，也是根据需要一个一个添加到池子中。
             if (addWorker(command, true))
                 return;
             c = ctl.get();
         }
+        // offer和add的差别：如果队列已经填满，offer返回false，而add抛异常
         if (isRunning(c) && workQueue.offer(command)) {
             int recheck = ctl.get();
-            if (! isRunning(recheck) && remove(command))
+            if (!isRunning(recheck) && remove(command))
                 reject(command);
             else if (workerCountOf(recheck) == 0)
+                // 如果执行command的时候有worker，但是插入到队列以后发现实际已经没有worker了，那么增加一个
+                // worker
                 addWorker(null, false);
-        }
-        else if (!addWorker(command, false))
+        } else if (!addWorker(command, false))
+            // 只有队列填满的时候，才会增加线程池worker的数量到maxPoolSize。也就是说线程池正常大小就是
+            // corePoolSize，
             reject(command);
     }
 

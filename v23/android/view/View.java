@@ -10000,46 +10000,11 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      */
     // FILTER_TOUCHES_WHEN_OBSCURED: Indicates that the view should filter touches when its window is obscured
     // FLAG_WINDOW_IS_OBSCURED: This flag indicates that the window that received this motion event is partly
-    or wholly
-    obscured by
-    another visible
-    window above
-    it.This flag
-    is set
-    to true
-    even if
-    the event
-    did not
-    directly pass
-    through the
-    obscured area.
-    A security
-    sensitive application
-    can check this
-    flag to
-    identify situations
-    in which
-    a malicious
-    application may
-    have covered
-    up part
-    of its
-    content for
-    the purpose
-    of misleading
-    the user
-    or hijacking
-    touches.An appropriate
-    response might
-    be
-    to drop
-    the suspect
-    touches or
-    to take
-    additional precautions
-    to confirm
-    the user's
-    actual intent.
+    // or wholly obscured by another visible window above it.This flag is set to true even if the event
+    // did not directly pass through the obscured area. A security sensitive application can check this
+    // flag to identify situations in which a malicious application may have covered up part of its
+    // content for the purpose of misleading the user or hijacking touches.An appropriate response might
+    // be to drop the suspect touches or to take additional precautions to confirm the user's actual intent.
 
     //如果有恶意软件将其window浮动在当前window上准备进行恶意操作，执行过滤
     public boolean onFilterTouchEventForSecurity(MotionEvent event) {
