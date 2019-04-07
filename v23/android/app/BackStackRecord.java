@@ -667,6 +667,7 @@ final class BackStackRecord extends FragmentTransaction implements
         return commitInternal(true);
     }
 
+    // commit就是将当前的操作增加到FragmentManager的执行队列里，然后等待在某个时刻被执行
     int commitInternal(boolean allowStateLoss) {
         if (mCommitted) {
             throw new IllegalStateException("commit already called");
@@ -684,10 +685,13 @@ final class BackStackRecord extends FragmentTransaction implements
         } else {
             mIndex = -1;
         }
+        // 虽然这里是插入队列，并且post到handler的队列中，但是并不是说一定要等下一个主线程事件才能处理。
+        // Activity在onStart()的时候会直接调用FragmentManager.execPendingActions()
         mManager.enqueueAction(this, allowStateLoss);
         return mIndex;
     }
 
+    // FragmentManager从队列中拿出record然后执行
     public void run() {
         if (FragmentManagerImpl.DEBUG) {
             Log.v(TAG, "Run: " + this);
@@ -702,6 +706,7 @@ final class BackStackRecord extends FragmentTransaction implements
         bumpBackStackNesting(1);
 
         SparseArray<Fragment> firstOutFragments = new SparseArray<Fragment>();
+        // key是fragment的containerId，因为containerId的大小是系统编译时确定的，所以这个数组可以认为是无序的？
         SparseArray<Fragment> lastInFragments = new SparseArray<Fragment>();
         calculateFragments(firstOutFragments, lastInFragments);
         beginTransition(firstOutFragments, lastInFragments, false);

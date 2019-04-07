@@ -113,7 +113,7 @@ public class ViewPager extends ViewGroup {
     private int mExpectedAdapterCount;
 
     /*
-     * ViewPager的每一页（page）对应一个描述当前页g（page）的View。
+     * ViewPager的每一页（page）对应一个描述当前页（page）的View。
      * 因为object是Object类型的，所以其实ViewPager的每一页对应的内容可以由任意类型的对象提供。
      * 按道理，viewPager只需要object提供的包含内容的View，然后viewPager来进行显示。至于这个
      * View由谁或者如何提供，不关心。
@@ -140,7 +140,7 @@ public class ViewPager extends ViewGroup {
         }
     };
 
-    //按页面的位置正序保存，并且仅保存开启的页面。所以item的在mItems里的索引与item页面实际的展示位置
+    //按页面的位置正序保存，并且仅保存开启的页面。所以item在mItems里的索引与item页面实际的展示位置
     //不同
     private final ArrayList<ItemInfo> mItems = new ArrayList<ItemInfo>();
     private final ItemInfo mTempItem = new ItemInfo();
@@ -887,6 +887,7 @@ public class ViewPager extends ViewGroup {
         ViewCompat.postInvalidateOnAnimation(this);
     }
 
+    // position是item在屏幕上的显示位置，即adapter中item的position。index是item在mItems中的位置
     ItemInfo addNewItem(int position, int index) {
         ItemInfo ii = new ItemInfo();
         ii.position = position;
@@ -985,7 +986,7 @@ public class ViewPager extends ViewGroup {
             focusDirection = mCurItem < newCurrentItem ? View.FOCUS_RIGHT : View.FOCUS_LEFT;
             oldCurInfo = infoForPosition(mCurItem);
 
-        //到这里，mCurItem已经被赋值为newCurrentItem
+            //到这里，mCurItem已经被赋值为newCurrentItem
             mCurItem = newCurrentItem;
         }
 
@@ -1007,6 +1008,7 @@ public class ViewPager extends ViewGroup {
         // Also, don't populate until we are attached to a window.  This is to
         // avoid trying to populate before we have restored our view hierarchy
         // state and conflicting with what is restored.
+        //
         // 对于View来说，创建View的时候（setContentView，构建ViewTree），会进行restore state，
         // 所以在Activity等组件中写代码改变控件状态，已经是restore之后了。
         // 可以通过View是否有WindowToken来判断View是不是已经attached to a window
@@ -1156,8 +1158,13 @@ public class ViewPager extends ViewGroup {
             }
         }
 
+        // 只有populate的时候会执行当前方法
+        // 这个方法会调用Fragment.setUserVisibleHint()方法，设置Fragment是否可见。如果是第一次创建Fragment，
+        // 那么此时Fragment还没有执行任何生命周期方法。
         mAdapter.setPrimaryItem(this, mCurItem, curItem != null ? curItem.object : null);
 
+        // 这里触发了FragmentTransaction.commitAllowLoseState()和FragmentTransaction.execPendingActions()，
+        // 这两个方法将View增加到了ViewPager中
         mAdapter.finishUpdate(this);
 
         // Check width measurement of current pages and drawing sort order.
@@ -1461,6 +1468,7 @@ public class ViewPager extends ViewGroup {
         // our view.  We can't really know what it is since we will be
         // adding and removing different arbitrary views and do not
         // want the layout to change as this happens.
+        //
         // 因为ViewPager的各个页面的尺寸可以不尽相同，所以如果ViewPager的大小由
         // page决定，那么有可能ViewPager在滑动时，大小需要时刻变动。所以ViewPager
         // 自身的大小，由自己和其父容器共同决定，完全不考虑子View对其的影响。

@@ -985,6 +985,8 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
                                         setHWLayerAnimListenerIfAlpha(f.mView, anim);
                                         anim.start();
                                     }
+                                    // onCreateView()之后，onViewCreated()之前，fragment的View就已经
+                                    // add到container里了
                                     container.addView(f.mView);
                                 }
                                 if (f.mHidden) f.mView.setVisibility(View.GONE);

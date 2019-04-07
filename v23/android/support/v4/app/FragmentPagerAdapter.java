@@ -96,9 +96,11 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
         } else {
             fragment = getItem(position);
             if (DEBUG) Log.v(TAG, "Adding item #" + itemId + ": f=" + fragment);
+            // 注意，add但是并没有commit
             mCurTransaction.add(container.getId(), fragment,
                     makeFragmentName(container.getId(), itemId));
         }
+        // Fragment的UserVisibleHint默认是true
         if (fragment != mCurrentPrimaryItem) {
             fragment.setMenuVisibility(false);
             fragment.setUserVisibleHint(false);
@@ -138,6 +140,8 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
         if (mCurTransaction != null) {
             mCurTransaction.commitAllowingStateLoss();
             mCurTransaction = null;
+            // 这里会将Fragment增加到Activity中，ViewPager本质上就是一个container，只不过正常的container
+            // 没有额外的作用，只是个容器。而ViewPager可以控制fragment的转换。
             mFragmentManager.executePendingTransactions();
         }
     }
