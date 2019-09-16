@@ -134,9 +134,10 @@ final class SharedPreferencesImpl implements SharedPreferences {
         mLoaded = true;
         if (map != null) {
             mMap = map;
-            mStatTimestamp = stat.st_mtime;
-            mStatSize = stat.st_size;
+            mStatTimestamp = stat.st_mtime; // 最后一次修改时间
+            mStatSize = stat.st_size;       // 文件大小，byte
         } else {
+            // 文件不存在或者文件不可读，直接初始化一个空的map
             mMap = new HashMap<String, Object>();
         }
         notifyAll();
@@ -347,6 +348,7 @@ final class SharedPreferencesImpl implements SharedPreferences {
 
         public Editor remove(String key) {
             synchronized (this) {
+                // 移除一个key是将它的值设置为EditorImpl对象，为什么不设置为null？
                 mModified.put(key, this);
                 return this;
             }
@@ -362,7 +364,7 @@ final class SharedPreferencesImpl implements SharedPreferences {
         }
 
         /*
-         * 即使是apply，因为写入内存的操作是在当前线程完成的，所以apply调用之后，马上就就可以在当前
+         * 即使是apply，因为写入内存的操作是在当前线程完成的，所以apply调用之后，马上就可以在当前
          * 线程做getX()操作。
          *
          * 每一次commit或apply，都会将整个mMap重新写入到磁盘一遍，所以尽量一次性修改多个值，减少磁盘
@@ -370,6 +372,9 @@ final class SharedPreferencesImpl implements SharedPreferences {
          *
          * 虽然apply是在子线程中写入磁盘，但是还是有可能在Activity.onPause()的时候阻塞住主线程，所
          * 以不要进行大量的apply操作。
+         *
+         * 从这里来看，sp并不支持高并发，这里提交内存和写入磁盘的操作并不是原子的，所以有可能出现A先写入
+         * 内存，然后停止，接着B写入内存写入磁盘，最后A写入磁盘，那这种情况下磁盘中的数据岂不是错的？
          */
         public void apply() {
             // 不论是apply还是commit，写入内存的操作都是同步的。
@@ -422,7 +427,7 @@ final class SharedPreferencesImpl implements SharedPreferences {
                 // a memory commit comes in when we're already
                 // writing to disk.
                 //
-                // 每次commitToMemory都会便随一次writeToDisk的操作，所以每次commitToMemory都会将
+                // 每次commitToMemory都会伴随一次writeToDisk的操作，所以每次commitToMemory都会将
                 // mDiskWritesInFlight+1，然后在writeToDisk结束之后减1。当mDiskWritesInFlight > 0
                 // 时，因为writeToDisk时使用的数据源是当前的mMap，所以本次的commitToMemory不能改变
                 // 当前mMap的值，不然会影响到写入操作，所以这里将当前的mMap克隆一份并重新赋值为自己，
@@ -459,6 +464,9 @@ final class SharedPreferencesImpl implements SharedPreferences {
                         // "this" is the magic value for a removal mutation. In addition,
                         // setting a value to "null" for a given key is specified to be
                         // equivalent to calling remove on that key.
+                        //
+                        // remove()执行的操作是mModified.put(key,EditorImpl)，所以v==this或v==null代表
+                        // 移除操作。
                         if (v == this || v == null) {
                             if (!mMap.containsKey(k)) {
                                 continue;
