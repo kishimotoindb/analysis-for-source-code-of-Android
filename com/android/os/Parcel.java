@@ -191,6 +191,10 @@ public final class Parcel {
     /**
      * Flag indicating if {@link #mNativePtr} was allocated by this object,
      * indicating that we're responsible for its lifecycle.
+     *
+     * 每个Java层的Parcel对象都会持有一个Native层Parcel对象的引用，这个引用可能是在创建当前java层parcel对象
+     * 时创建的，也可能是在创建java层parcel对象时通过构造参数直接传递进来的。如果是跟随java层parcel对象创建而
+     * 创建的native层parcel对象，那么这个java层的parcel对象有义务维护native对象的生命周期。
      */
     private boolean mOwnsNativeParcelObject;
 
@@ -2534,6 +2538,7 @@ public final class Parcel {
     }
 
     private void init(long nativePtr) {
+        // 这里如果传入的是非零值，说明native的parcel对象已经创建，不需要维护其生命周期。
         if (nativePtr != 0) {
             mNativePtr = nativePtr;
             mOwnsNativeParcelObject = false;
