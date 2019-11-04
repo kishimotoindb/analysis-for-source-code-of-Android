@@ -127,7 +127,7 @@ import java.lang.ref.ReferenceQueue;
  * @see         java.util.HashMap
  * @see         java.lang.ref.WeakReference
  */
-public class WeakHashMap<K,V>
+public class  WeakHashMap<K,V>
     extends AbstractMap<K,V>
     implements Map<K,V> {
 

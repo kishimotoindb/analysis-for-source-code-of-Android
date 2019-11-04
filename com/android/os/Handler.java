@@ -73,6 +73,11 @@ public class Handler {
     
     /**
      * Handle system messages here.
+     * 一个消息可以通过三种方式进行处理：
+     * 1.msg自己的callback
+     * 2.handler的callback
+     * 3.handler的handleMessage方法
+     * 另外，2执行完，如果返回false，还可以继续用3执行
      */
     public void dispatchMessage(Message msg) {
         if (msg.callback != null) {

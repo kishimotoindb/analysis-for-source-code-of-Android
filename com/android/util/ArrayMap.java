@@ -465,7 +465,7 @@ public final class ArrayMap<K, V> implements Map<K, V> {
         }
 
         index = ~index;
-        // 扩容的逻辑
+        // 扩容的逻辑，Array是当数组填满的时候进行才进行扩容，没有loadFactor
         if (mSize >= mHashes.length) {
             final int n = mSize >= (BASE_SIZE*2) ? (mSize+(mSize>>1))
                     : (mSize >= BASE_SIZE ? (BASE_SIZE*2) : BASE_SIZE);

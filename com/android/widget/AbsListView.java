@@ -6499,6 +6499,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         /**
          * Makes sure that the size of mScrapViews does not exceed the size of mActiveViews.
          * (This can happen if an adapter does not recycle its views).
+         * 每种类型的View最多可以缓存activeViews的个数
          */
         private void pruneScrapViews() {
             final int maxViews = mActiveViews.length;
