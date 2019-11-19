@@ -574,6 +574,9 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
      * @return the position within the adapter's data set of the view, or {@link #INVALID_POSITION}
      *         if the view does not correspond to a list item (or it is not currently visible).
      */
+    /*
+     * 首先向上垂直查找，然后横向查找
+     */
     public int getPositionForView(View view) {
         View listItem = view;
         try {
@@ -673,7 +676,6 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
      *
      * @return True if the view is in filter mode, false otherwise.
      */
-    //通过重写这个方法，可以在需要的时候，即使adapter的数据为空，也不展示emptyView
     boolean isInFilterMode() {
         return false;
     }
@@ -976,6 +978,8 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
     }
 
     void handleDataChanged() {
+        // 在onChanged()中已经将mItemCount更新为adapter中的最新值，所以执行到这里的时候，mItemCount与
+        // adapter中的值已同步
         final int count = mItemCount;
         boolean found = false;
 

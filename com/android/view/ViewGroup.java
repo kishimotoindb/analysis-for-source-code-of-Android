@@ -1993,7 +1993,7 @@ public abstract class ViewGroup extends android.view.View implements ViewParent,
 
     /** @hide */
     @Override
-    protected boolean hasHoveredChild() {
+    protected boolean laouthasHoveredChild() {
         return mFirstHoverTarget != null;
     }
 
@@ -2745,6 +2745,8 @@ public abstract class ViewGroup extends android.view.View implements ViewParent,
     }
 
     private void cancelTouchTarget(View view) {
+        // predecessor：前任
+        }
         TouchTarget predecessor = null;
         TouchTarget target = mFirstTouchTarget;
         while (target != null) {
@@ -4750,6 +4752,8 @@ public abstract class ViewGroup extends android.view.View implements ViewParent,
 
         dispatchViewAdded(child);
 
+        // 如果子View设置了duplicateParentState，那么会在自己的groupFlags中标记一个通知标志，所以这个
+        // 并不是子View监听Parent的状态，而是Parent主动通知child我状态变化了。
         if ((child.mViewFlags & DUPLICATE_PARENT_STATE) == DUPLICATE_PARENT_STATE) {
             mGroupFlags |= FLAG_NOTIFY_CHILDREN_ON_DRAWABLE_STATE_CHANGE;
         }

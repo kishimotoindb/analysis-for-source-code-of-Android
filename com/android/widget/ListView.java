@@ -64,7 +64,7 @@ import java.util.ArrayList;
  * 3.在每次调用onLayout()方法时，首先将所有子View移除，然后再重新添加需要展示的view。
  *   onLayout()中调用了detachAllViewsFromParent()方法。这个方法会将所有ListView当中的子View全部清除
  *   掉，从而保证第二次Layout过程不会产生一份重复的数据。那有的朋友可能会问了，这样把已经加载好的View
- *   又清除掉，待会还要再重新加载一遍，这不是严重影响效率吗？不用担心，还记得我们刚刚调用了RecycleBin
+ *   先清除掉，待会还要再重新加载一遍，这不是严重影响效率吗？不用担心，还记得我们刚刚调用了RecycleBin
  *   的fillActiveViews()方法来缓存子View吗，待会儿将会直接使用这些缓存好的View来进行加载，而并不会
  *   重新执行一遍inflate过程，因此效率方面并不会有什么明显的影响。
  */
@@ -1489,6 +1489,7 @@ public class ListView extends AbsListView {
                 return;
             }
 
+            // 计算出子View可以进行布局的空间范围
             int childrenTop = mListPadding.top;
             int childrenBottom = mBottom - mTop - mListPadding.bottom;
 
@@ -1542,6 +1543,7 @@ public class ListView extends AbsListView {
 
             boolean dataChanged = mDataChanged;
             if (dataChanged) {
+                // 目前来看感觉没什么大用
                 handleDataChanged();
             }
 
@@ -1597,6 +1599,7 @@ public class ListView extends AbsListView {
 
             // Don't put header or footer views into the Recycler. Those are
             // already cached in mHeaderViews;
+            // 这里不论将View放到哪个缓冲池中，都没有从listView中detach这些view
             if (dataChanged) {
                 for (int i = 0; i < childCount; i++) {
                     recycleBin.addScrapView(getChildAt(i), firstPosition+i);
@@ -1659,6 +1662,7 @@ public class ListView extends AbsListView {
                 break;
             default:
                 if (childCount == 0) {
+                    // childCount是0，表示执行当前布局之前，屏幕上没有item
                     if (!mStackFromBottom) {
                         final int position = lookForSelectablePosition(0, true);
                         setSelectedPositionInt(position);
@@ -1783,6 +1787,7 @@ public class ListView extends AbsListView {
      */
     private View findAccessibilityFocusedChild(View focusedView) {
         ViewParent viewParent = focusedView.getParent();
+        // 向上查找到ListView下一层级的View
         while ((viewParent instanceof View) && (viewParent != this)) {
             focusedView = (View) viewParent;
             viewParent = viewParent.getParent();
@@ -1832,8 +1837,6 @@ public class ListView extends AbsListView {
     private View makeAndAddView(int position, int y, boolean flow, int childrenLeft,
             boolean selected) {
         View child;
-
-
         if (!mDataChanged) {
             // Try to use an existing view for this position
             child = mRecycler.getActiveView(position);
@@ -1841,7 +1844,6 @@ public class ListView extends AbsListView {
                 // Found it -- we're using an existing child
                 // This just needs to be positioned
                 setupChild(child, position, y, flow, childrenLeft, selected, true);
-
                 return child;
             }
         }
@@ -1887,6 +1889,8 @@ public class ListView extends AbsListView {
         }
         p.viewType = mAdapter.getItemViewType(position);
 
+        // forceAdd表示这个View只是用来测量ListView尺寸才被创建的，测量结束后就被放到了缓存池中，没有真正
+        // 展示到屏幕上过，这种View在真正使用的时候需要attachToWindow，而不只是attachToParent
         if ((recycled && !p.forceAdd) || (p.recycledHeaderFooter &&
                 p.viewType == AdapterView.ITEM_VIEW_TYPE_HEADER_OR_FOOTER)) {
             attachViewToParent(child, flowDown ? -1 : 0, p);

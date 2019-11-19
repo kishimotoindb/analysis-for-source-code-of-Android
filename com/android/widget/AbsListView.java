@@ -3315,8 +3315,16 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 mActivePointerId = ev.getPointerId(0);
                 final int x = (int) ev.getX();
                 final int y = (int) ev.getY();
+                /*
+                 * pointerToPosition如果返回有效的位置，说明用户点在了item上；如果无效，可能是列表没有被
+                 * 填满，点在了空白区域，也可能是点在了列表项之间的分界区域等。
+                 * 这里拿到的motionPosition一定是当前UI可见的item的position，因为是通过getChildren()
+                 * 拿到的View，即View还处于attach的状态下。
+                 */
                 int motionPosition = pointToPosition(x, y);
+                // 在notifyDataSetChanged与下一次Layout发生之间，如果有触摸事件到来，那么并不处理tap行为。
                 if (!mDataChanged) {
+                    //
                     if ((mTouchMode != TOUCH_MODE_FLING) && (motionPosition >= 0)
                             && (getAdapter().isEnabled(motionPosition))) {
                         // User clicked on an actual view (and was not stopping a fling).
@@ -3369,6 +3377,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             }
             final int y = (int) ev.getY(pointerIndex);
 
+            // 滑动过程中，如果data发生了改变，才会重新layoutChildren
             if (mDataChanged) {
                 // Re-sync everything if data has been changed
                 // since the scroll operation can query the adapter.
@@ -6101,6 +6110,13 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
          * they've been attached before. Setting this flag will force the reused
          * view to be attached to the window rather than just attached to the
          * parent.
+         *
+         * 如果ListView的高度设置为wrap_content，在计算ListView高度的时候，需要先把List中的item临时
+         * attach到ListView上，然后计算ListView的高度，在高度计算结束之后，这些item会被detach，放到
+         * RecylerBin中。之后真的要展示这些item的时候，因为他们在RecyclerBin中，所以listview可能认为
+         * 他们已经attach到window过了，但实际并没有，这时怎么区分RecyclerBin中的这些view和正常detach
+         * 到Bin中的view呢？
+         * 使用当前这个标识，forceAdd
          */
         @ViewDebug.ExportedProperty(category = "list")
         boolean forceAdd;
@@ -6585,6 +6601,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         }
     }
 
+    // 从mScrapViews取View的逻辑。从相同类型的scrap中获取，优先取detach时的位置与当前要求的
+    // 位置相同的view，实在没有，就返回scrapViews中的最后一个。
     static View retrieveFromScrap(ArrayList<View> scrapViews, int position) {
         int size = scrapViews.size();
         if (size > 0) {
@@ -6592,6 +6610,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             // 意义不大，虽然这里是获取的位置相同的View，但是adapter里并不知道，所以还是要对View做数据和UI的更新操作
             // 可能就是setVisibility()这种在set的时候会判断新状态与旧状态是否相同的方法有点作用，因为新旧状态
             // 一致，就不会再set一次。
+            //
+            // 因为这里有遍历的操作，所以scrapViews的大小也不宜太大
             for (int i=0; i<size; i++) {
                 View view = scrapViews.get(i);
                 if (((AbsListView.LayoutParams)view.getLayoutParams())
