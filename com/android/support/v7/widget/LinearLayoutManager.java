@@ -724,6 +724,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         }
         final View focused = getFocusedChild();
         if (focused != null && anchorInfo.isViewValidAsAnchor(focused, state)) {
+            // 就是这个view的top + view.decoration.top + view.marginTop
             anchorInfo.assignFromViewAndKeepVisibleRect(focused);
             return true;
         }
@@ -2133,6 +2134,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         }
 
         public void assignFromViewAndKeepVisibleRect(View child) {
+            // 正常情况下RecyclerView的高度是不会发生变化的，所以这里返回的一直是零。但是如果
+            // 本次layout的时候，RecyclerView的高度变小了，那么返回的就是个负数。
             final int spaceChange = mOrientationHelper.getTotalSpaceChange();
             if (spaceChange >= 0) {
                 assignFromView(child);

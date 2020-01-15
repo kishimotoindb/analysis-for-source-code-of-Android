@@ -620,6 +620,9 @@ class AdapterHelper implements OpReorderer.Callback {
 
         Object payload;
 
+        // 对于正常操作，itemCount表示本次操作涉及的item的数量。比如insertItem，positionStart表示插入的
+        // item的位置，itemCount=1，表示只有一个item需要操作。RecyclerView.Adapter.notifyItemInserted(int)
+        //
         // holds the target position if this is a MOVE
         int itemCount;
 

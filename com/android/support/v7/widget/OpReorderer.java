@@ -64,6 +64,7 @@ class OpReorderer {
         boolean revertedMove = false;
         final boolean moveIsBackwards;
 
+        // 从列表上方移动到列表下方
         if (moveOp.positionStart < moveOp.itemCount) {
             moveIsBackwards = false;
             if (removeOp.positionStart == moveOp.positionStart

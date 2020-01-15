@@ -2693,6 +2693,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             // Processing these items have no value since data set changed unexpectedly.
             // Instead, we just reset it.
             mAdapterHelper.reset();
+            // 并不是对所有子View和缓存的view调用invalidate()，而是将ViewHolder的设置为updated和invalid
             markKnownViewsInvalid();
             mLayout.onItemsChanged(this);
         }

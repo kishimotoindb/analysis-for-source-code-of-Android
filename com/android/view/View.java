@@ -19941,12 +19941,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * bit mask as defined by {@link #MEASURED_SIZE_MASK} and
      * {@link #MEASURED_STATE_TOO_SMALL}.
      */
-    最终确定控件的测量宽高，这时候已经不使用MeasureSpec了，只要size.
-            父容器在获取子元素的measuredWidth时，使用的是父容器不带装饰的边界，所以下面当父容器有修饰时，要相应的减小子元素的可用大小规格，因为父容器需要向里占用一定的位置
-
+    /*
+     * 最终确定控件的测量宽高，这时候已经不使用MeasureSpec了，只要size.
+     * 父容器在获取子元素的measuredWidth时，使用的是父容器不带装饰的边界，所以下面当父容器有修饰时，
+     * 要相应的减小子元素的可用大小规格，因为父容器需要向里占用一定的位置
+     */
     protected final void setMeasuredDimension(int measuredWidth, int measuredHeight) {
-        判断当前View是否是ViewGroup，一般来说也就是判断是不是布局，ListView等也可以算作布局的一种这个Optical Bounds指的是没有修饰的部分，
-        控件本体的位置
+        // 判断当前View是否是ViewGroup，一般来说也就是判断是不是布局，ListView等也可以算作布局的一种
+        // 这个Optical Bounds指的是没有修饰的部分，控件本体的位置
         boolean optical = isLayoutModeOptical(this);    //LAYOUT_MODE_OPTICAL_BOUNDS=1
 
         // This constant is a {@link #setLayoutMode(int) layoutMode}.

@@ -39,6 +39,8 @@ class ChildHelper {
 
     private static final String TAG = "ChildrenHelper";
 
+    // 这个Callback就是为了避免Helper中保存RecyclerView实例，Helper直接通过这个
+    // callback回调RecyclerView的相应方法。
     final Callback mCallback;
 
     final Bucket mBucket;
@@ -93,6 +95,13 @@ class ChildHelper {
      *               ChildHelper offsets this index to actual ViewGroup index.
      * @param hidden If set to true, this item will be invisible from regular methods.
      */
+    /*
+     * 这里的index是相对的，即这个view在所有可见的child中应该排在什么位置。因为child中还有
+     * 不可见的view，即mChildren[]中既有可见的child，也有不可见的child，所以这个view在放入
+     * mChildren[]中时，recyclerview需要对index做转换，保证这个view被放在mChildren[]中的
+     * 正确位置上。
+     * 注意，新add的这个view可以是可见，也可以是不可见。
+     */
     void addView(View child, int index, boolean hidden) {
         final int offset;
         if (index < 0) {
@@ -110,6 +119,17 @@ class ChildHelper {
         }
     }
 
+    /*
+     * index表示的是当前view在所有可见的child中的排序位置，但是因为RecyclerView的mChildren[]
+     * 中既保存了可见的child，又保存了不可见的child，所以这个index未必是当前view在mChildren[]
+     * 中的实际index。getOffset()方法就是用来对index进行转换，得到当前view在mChildren[]中的
+     * 实际位置。
+     * 另外有个细节，下面这段代码中有这么一段，就是保证新加入的view尽可能的放在hidden view
+     * 的后面。
+     * while (mBucket.get(offset)) { // ensure this offset is not hidden
+     *      offset ++;
+     * }
+     */
     private int getOffset(int index) {
         if (index < 0) {
             return -1; //anything below 0 won't work as diff will be undefined.
@@ -117,6 +137,7 @@ class ChildHelper {
         final int limit = mCallback.getChildCount();
         int offset = index;
         while (offset < limit) {
+            // before是指当前offset->0
             final int removedBefore = mBucket.countOnesBefore(offset);
             final int diff = index - (offset - removedBefore);
             if (diff == 0) {
@@ -155,6 +176,9 @@ class ChildHelper {
      *
      * @param index Index of the child from the regular perspective (excluding hidden views).
      *              ChildHelper offsets this index to actual ViewGroup index.
+     */
+    /*
+     * 把需要remove的view从所有地方移除：mBucket、mChildren[]
      */
     void removeViewAt(int index) {
         final int offset = getOffset(index);
@@ -372,6 +396,13 @@ class ChildHelper {
 
     /**
      * Bitset implementation that provides methods to offset indices.
+     *
+     * RecyclerView的mChildren[]数组中既有可见的view，也有不可见的view，Bucket通过
+     * 最多128个二级制位，记录mChildren[]中所有不可见view的位置（即不可见view在mChildren[]
+     * 中的index）
+     *
+     * 1）child view在mData的第几位，与RecyclerView的mChildren数组中的index相同。
+     * 2）Bucket后面最多再跟一个Bucket，所以也就是默认RecyclerView最多有128个child。
      */
     static class Bucket {
 
@@ -383,6 +414,7 @@ class ChildHelper {
 
         Bucket next;
 
+        // 就是用128位表示当前RecyclerView
         void set(int index) {
             if (index >= BITS_PER_WORD) {
                 ensureNext();
@@ -425,6 +457,8 @@ class ChildHelper {
             }
         }
 
+        // 相当于在一个列表的某个位置插入一个新的元素，位于新元素前面的元素，位置不需要改变，
+        // 位于新元素当前插入位置及其后面的元素，都需要向前移动一位。
         void insert(int index, boolean value) {
             if (index >= BITS_PER_WORD) {
                 ensureNext();
@@ -470,6 +504,7 @@ class ChildHelper {
             }
         }
 
+        // 当前child view前面(索引值小于当前child)，有多少个view
         int countOnesBefore(int index) {
             if (next == null) {
                 if (index >= BITS_PER_WORD) {
