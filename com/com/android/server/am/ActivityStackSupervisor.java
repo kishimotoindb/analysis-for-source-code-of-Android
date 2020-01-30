@@ -173,7 +173,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
 
     private final static String VIRTUAL_DISPLAY_BASE_NAME = "ActivityViewVirtualDisplay";
 
-private static final String LOCK_TAS~!!!!!!!!!!!!!`it uses a permission which is not granted.
+    // private static final String LOCK_TAS;//it uses a permission which is not granted.
     private static final ArrayMap<String, String> ACTION_TO_RUNTIME_PERMISSION =
             new ArrayMap<>();
     static {
@@ -1683,7 +1683,7 @@ private static final String LOCK_TAS~!!!!!!!!!!!!!`it uses a permission which is
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /*
-         * 2. 待着第一步创建的ActivityRecord去开启Activity
+         * 2.带着第一步创建的ActivityRecord去开启Activity
          */
         err = startActivityUncheckedLocked(r, sourceRecord, voiceSession, voiceInteractor,
                 startFlags, true, options, inTask);

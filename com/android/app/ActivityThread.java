@@ -5437,7 +5437,7 @@ public final class ActivityThread {
     }
 
     private void installContentProviders(
-            Context context, List<ProviderInfo> providers) {
+            Context context, List<ProviderInfo> providers/*AMS从PMS获取的provider信息*/) {
         final ArrayList<IActivityManager.ContentProviderHolder> results =
             new ArrayList<IActivityManager.ContentProviderHolder>();
 
@@ -5566,6 +5566,9 @@ public final class ActivityThread {
         }
     }
 
+    // 所有索取者使用的都是同一个ContentProviderProxy对象，进程会通过ProviderRefCount对象记录
+    // ContentProviderProxy的引用计数。
+    // 一个进程中对于同一个provider，proxy只创建一个。
     public final IContentProvider acquireExistingProvider(
             Context c, String auth, int userId, boolean stable) {
         synchronized (mProviderMap) {
@@ -5576,6 +5579,8 @@ public final class ActivityThread {
             }
 
             IContentProvider provider = pr.mProvider;
+            // ContentProviderNative.asBinder()返回的是ContentProviderNative对象
+            // ContentProviderProxy.asBinder()返回的是mRemote对象
             IBinder jBinder = provider.asBinder();
             if (!jBinder.isBinderAlive()) {
                 // The hosting process of the provider has died; we can't
@@ -5816,7 +5821,7 @@ public final class ActivityThread {
             IActivityManager.ContentProviderHolder holder, ProviderInfo info,
             boolean noisy, boolean noReleaseNeeded, boolean stable) {
         ContentProvider localProvider = null;
-        IContentProvider provider;
+        IContentProvider provider;  // ContentProviderNative，binder本地对象
         if (holder == null || holder.provider == null) {
             if (DEBUG_PROVIDER || noisy) {
                 Slog.d(TAG, "Loading provider " + info.authority + ": "
@@ -5890,7 +5895,7 @@ public final class ActivityThread {
                     }
                     provider = pr.mProvider;
                 } else {
-                    holder = new IActivityManager.ContentProviderHolder(info);
+                    holder = new IActivityManager.ContentProvhaiderHolder(info);
                     holder.provider = provider;
                     holder.noReleaseNeeded = true;
                     pr = installProviderAuthoritiesLocked(provider, localProvider, holder);

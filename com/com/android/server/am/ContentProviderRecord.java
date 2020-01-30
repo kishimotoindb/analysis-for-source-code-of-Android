@@ -84,10 +84,11 @@ final class ContentProviderRecord {
     }
 
     public boolean canRunHere(ProcessRecord app) {
-        return (info.multiprocess || info.processName.equals(app.processName))
+        return (info.multiprocess || info.processName.equals(app.processName)/*caller进程与provider是一个进程*/)
                 && uid == app.info.uid;
     }
 
+    // 记录当前provider被多少进程引用
     public void addExternalProcessHandleLocked(IBinder token) {
         if (token == null) {
             externalProcessNoHandleCount++;

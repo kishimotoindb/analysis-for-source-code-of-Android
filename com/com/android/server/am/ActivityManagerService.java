@@ -5968,6 +5968,10 @@ public final class ActivityManagerService extends ActivityManagerNative
         // Find the application record that is being attached...  either via
         // the pid if we are running in multiple processes, or just pull the
         // next app record if we are emulating process with anonymous threads.
+        /*
+         * ProcessRecord的初始化并不是一下完成的，在startProcess的时候，只是初始化了基本的信息。
+         * 所以在这里的确可以从集合中拿到ProcessRecord对象，但是并没有初始化Provider相关的内容。
+         */
         ProcessRecord app;
         if (pid != MY_PID && pid >= 0) {
             synchronized (mPidsSelfLocked) {
@@ -6035,6 +6039,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         mHandler.removeMessages(PROC_START_TIMEOUT_MSG, app);
 
         boolean normalMode = mProcessesReady || isAllowedWhileBooting(app.info);
+
+        // 将进程的provider都放到processRecord中。
         List<ProviderInfo> providers = normalMode ? generateApplicationProvidersLocked(app) : null;
 
         if (providers != null && checkAppInLaunchingProvidersLocked(app)) {
@@ -9351,6 +9357,11 @@ public final class ActivityManagerService extends ActivityManagerNative
         return false;
     }
 
+    /*
+     * 记录provider的引用计数
+     * 1.在ContentProviderRecord中记录有哪些进程调用了自己
+     * 2.在ProcessRecord中记录当前进程调用了哪些provider
+     */
     ContentProviderConnection incProviderCountLocked(ProcessRecord r,
             final ContentProviderRecord cpr, IBinder externalProcessToken, boolean stable) {
         if (r != null) {
@@ -9478,6 +9489,9 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
                 checkTime(startTime, "getContentProviderImpl: after checkContentProviderPermission");
 
+                // caller和provider是同一个进程。按道理来说，一个进程启动的时候，就已经publish了自身的所有
+                // provider，所以进程在使用自己的provider的时候，一般都不需要调用AMS，直接在自己进程的
+                // ActivityThread就可以找到对应的provider实例。至于为什么会执行到这个if里，暂时还不清楚。
                 if (r != null && cpr.canRunHere(r)) {
                     // This provider has been published or is in the process
                     // of being published...  but it is also allowed to run
@@ -9897,23 +9911,31 @@ public final class ActivityManagerService extends ActivityManagerNative
 
                     int NL = mLaunchingProviders.size();
                     int j;
+                    boolean wasInLaunchingProviders = false;
                     for (j=0; j<NL; j++) {
                         if (mLaunchingProviders.get(j) == dst) {
                             mLaunchingProviders.remove(j);
+                            wasInLaunchingProviders = true;
                             j--;
                             NL--;
                         }
                     }
 
-
-                    //成功pubish则移除该消息
+                    //成功publish则移除该消息
                     if (wasInLaunchingProviders) {
                         mHandler.removeMessages(CONTENT_PROVIDER_PUBLISH_TIMEOUT_MSG, r);
                     }
 
                     synchronized (dst) {
+                        // 将ContentProvider的proxy对象保存在ams中
                         dst.provider = src.provider;
                         dst.proc = r;
+                        /*
+                         * 如果调用某个provider的时候，provider还没有publish（有可能provider所在的进程
+                         * 都还没有启动），那么调用者就需要等待provider进行publish，此时调用者会进行睡眠，
+                         * 直到provider完成publish。进行睡眠调用的是ContentProviderRecord.wait()，所以
+                         * 这里publish结束，需要通知所有睡眠者。
+                         */
                         dst.notifyAll();
                     }
                     updateOomAdjLocked(r);
