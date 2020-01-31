@@ -2701,12 +2701,17 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         // pre-layout step)
         // If layout supports predictive animations, pre-process to decide if we want to run them
         if (mItemAnimator != null && mLayout.supportsPredictiveItemAnimations()) {
+            // 将所有操作插入到mPostponedList中
+            // 将mPendingUpdates中的所有op，一次性都作用到ViewHolder上
             mAdapterHelper.preProcess();
         } else {
+            // 消耗掉mPostponedList中的op
+            // 将mPendingUpdates中的所有op，一次性都作用到ViewHolder上
             mAdapterHelper.consumeUpdatesInOnePass();
         }
         boolean animationTypeSupported = (mItemsAddedOrRemoved && !mItemsChanged) ||
                 (mItemsAddedOrRemoved || (mItemsChanged && supportsChangeAnimations()));
+        // 如果DataSetChanged之后还需要执行simple动画，那么item必须有 stable id
         mState.mRunSimpleAnimations = mFirstLayoutComplete && mItemAnimator != null &&
                 (mDataSetHasChangedAfterLayout || animationTypeSupported ||
                         mLayout.mRequestedSimpleAnimations) &&
@@ -2751,6 +2756,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         eatRequestLayout();
         onEnterLayoutOrScroll();
 
+        // 在每次真正layout之前，所有update的operation都需要处理好，以便在接下来的layout过程中被正确使用。
         processAdapterUpdatesAndSetAnimationFlags();
 
         mState.mOldChangedHolders = mState.mRunSimpleAnimations && mItemsChanged
@@ -2759,6 +2765,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         ArrayMap<View, Rect> appearingViewInitialBounds = null;
         mState.mInPreLayout = mState.mRunPredictiveAnimations;
         mState.mItemCount = mAdapter.getItemCount();
+        // 找到当前mChildren中可见的view里最大和最小的position
         findMinMaxChildLayoutPositions(mMinMaxLayoutPositions);
 
         if (mState.mRunSimpleAnimations) {
@@ -2826,6 +2833,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             clearOldPositions();
             mAdapterHelper.consumePostponedUpdates();
         } else {
+            // 清掉所有子View的viewholder保存的position
             clearOldPositions();
             // in case pre layout did run but we decided not to run predictive animations.
             mAdapterHelper.consumeUpdatesInOnePass();
@@ -3339,7 +3347,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         requestLayout();
     }
 
+    // 把holder中保存的mPosition更新
     void offsetPositionRecordsForInsert(int positionStart, int itemCount) {
+        // RecyclerView所有子View的数量
         final int childCount = mChildHelper.getUnfilteredChildCount();
         for (int i = 0; i < childCount; i++) {
             final ViewHolder holder = getChildViewHolderInt(mChildHelper.getUnfilteredChildAt(i));

@@ -116,6 +116,7 @@ class AdapterHelper implements OpReorderer.Callback {
     void consumePostponedUpdates() {
         final int count = mPostponedList.size();
         for (int i = 0; i < count; i++) {
+            // 这里只是生命周期回调
             mCallback.onDispatchSecondPass(mPostponedList.get(i));
         }
         recycleUpdateOpsAndClearList(mPostponedList);
@@ -530,6 +531,7 @@ class AdapterHelper implements OpReorderer.Callback {
 
     /**
      * Skips pre-processing and applies all updates in one pass.
+     * 将ViewHolder直接调整为最终的状态
      */
     void consumeUpdatesInOnePass() {
         // we still consume postponed updates (if there is) in case there was a pre-process call
@@ -540,6 +542,7 @@ class AdapterHelper implements OpReorderer.Callback {
             UpdateOp op = mPendingUpdates.get(i);
             switch (op.cmd) {
                 case UpdateOp.ADD:
+                    // onDispatchSecondPass只是一个生命周期回调
                     mCallback.onDispatchSecondPass(op);
                     mCallback.offsetPositionsForAdd(op.positionStart, op.itemCount);
                     break;

@@ -380,6 +380,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
 
     /**
      * {@inheritDoc}
+     * 就是在mChildren中找到一个itemView，并且这个itemView对应adapter中的position与传入的position相同
      */
     @Override
     public View findViewByPosition(int position) {
@@ -689,8 +690,10 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         mLayoutState.mScrapList = null;
     }
 
+    // 这个方法一定会计算出一个anchor
     private void updateAnchorInfoForLayout(RecyclerView.Recycler recycler, RecyclerView.State state,
                                            AnchorInfo anchorInfo) {
+        // 调用ScrollToPosition等方法设置了mPenddingScrollPosition的时候，会通过这个方法计算anchor
         if (updateAnchorFromPendingData(state, anchorInfo)) {
             if (DEBUG) {
                 Log.d(TAG, "updated anchor info from pending information");
@@ -791,34 +794,62 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             return true;
         }
 
+        // 1. 如果调用的scrollToPosition(position,offset)方法，那么mPendingScrollPositionOffset就
+        // 不是invalid。
+        //
+        // 2. 从这里也可以看出，recyclerView为什么在调用scrollToPosition的时候，并不一定保证相应的item
+        // 总是被滑动到RecyclerView的顶部。
+        // 答：因为anchor计算流程里，并不总是将anchor设置为recyclerView的顶部。
+        //
+        // 3. 对于2，也有一种方法可以保证一定把目标position放到RecyclerView的顶部，即调用LayoutManager
+        // 的scrollToPosition(position,offset)。调用这个方法执行到这里的时候，会因为
+        // mPendingScrollPositionOffset是有效值，从而执行最下面的逻辑，即将anchor设置为paddingTop或
+        // paddingBottom。但是这个方法因为跳过了RecyclerView，直接调用LayoutManager，所以可能影响
+        // RecyclerView的某些状态。RecyclerView本身没有对应的方法可以调到LayoutManager的这个方法。
         if (mPendingScrollPositionOffset == INVALID_OFFSET) {
             View child = findViewByPosition(mPendingScrollPosition);
+            // 如果pendingPosition对应的view已经显示在屏幕上，那么根据这个view计算anchor
             if (child != null) {
+                // child view 包括margin、decor的总高度
                 final int childSize = mOrientationHelper.getDecoratedMeasurement(child);
-                if (childSize > mOrientationHelper.getTotalSpace()) {
+                // 1. 如果这个item的高度大于recyclerView的高度，那么他就不适合作为坐标，这个时候
+                // 直接使用recyclerview的paddingTop或paddingBottom作为坐标
+                if (childSize > mOrientationHelper.getTotalSpace()/*RecyclerView的高度*/) {
                     // item does not fit. fix depending on layout direction
                     anchorInfo.assignCoordinateFromPadding();
                     return true;
                 }
+                // start指的是top
                 final int startGap = mOrientationHelper.getDecoratedStart(child)
                         - mOrientationHelper.getStartAfterPadding();
+                // 2. 如果这个item的top在recyclerView外，说明这个item上面，没有其他item，所以anchor
+                // 就可以选择为recyclerView的paddingTop
                 if (startGap < 0) {
                     anchorInfo.mCoordinate = mOrientationHelper.getStartAfterPadding();
                     anchorInfo.mLayoutFromEnd = false;
                     return true;
                 }
+                // end指的是bottom
                 final int endGap = mOrientationHelper.getEndAfterPadding() -
                         mOrientationHelper.getDecoratedEnd(child);
+                // 3. 如果这个item的bottom在recyclerView的paddingBottom下面，说明没有item会被布置在
+                // 这个item的后面，所以可以选择endAfterPadding作为anchor，然后从底部向上依次布局
                 if (endGap < 0) {
                     anchorInfo.mCoordinate = mOrientationHelper.getEndAfterPadding();
                     anchorInfo.mLayoutFromEnd = true;
                     return true;
                 }
+                // 4. 如果这个item的上下边界都在recyclerView的里面，那么以这个item的上下边沿作为anchor
                 anchorInfo.mCoordinate = anchorInfo.mLayoutFromEnd
                         ? (mOrientationHelper.getDecoratedEnd(child) + mOrientationHelper
                                 .getTotalSpaceChange())
                         : mOrientationHelper.getDecoratedStart(child);
             } else { // item is not visible.
+                // 如果pendingPosition对应的view还没有加载，那么分两种情况：
+                // 1) pendingPosition在当前列表的下面：anchor设置为endAfterPadding，即将item滑动到
+                // RecyclerView的底部，并且完全露出。
+                // 2) pendingPosition在当前列表上面：anchor设置为paddingTop，即将item滑动到RecyclerView
+                // 的顶部，并且完全露出。
                 if (getChildCount() > 0) {
                     // get position of any child, does not matter
                     int pos = getPosition(getChildAt(0));
@@ -2165,6 +2196,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
                 final int childStart = mOrientationHelper.getDecoratedStart(child);
                 final int startMargin = childStart - mOrientationHelper.getStartAfterPadding();
                 mCoordinate = childStart;
+                // 这个if里的逻辑没看懂，感觉如果有差别，应该和spaceChanged有关系
                 if (startMargin > 0) { // we have room to fix end as well
                     final int estimatedEnd = childStart +
                             mOrientationHelper.getDecoratedMeasurement(child);

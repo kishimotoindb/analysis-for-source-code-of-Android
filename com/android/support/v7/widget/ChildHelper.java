@@ -41,6 +41,8 @@ class ChildHelper {
 
     // 这个Callback就是为了避免Helper中保存RecyclerView实例，Helper直接通过这个
     // callback回调RecyclerView的相应方法。
+    // Callback对应的是ViewGroup中相应方法的默认实现。比如callback.getChildAt()，其实就
+    // 是ViewGroup.getChildAt()
     final Callback mCallback;
 
     final Bucket mBucket;

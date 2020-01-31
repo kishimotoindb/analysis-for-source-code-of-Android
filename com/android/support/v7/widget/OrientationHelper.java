@@ -64,6 +64,10 @@ public abstract class OrientationHelper {
      * @return The difference between the current total space and previous layout's total space.
      * @see #onLayoutComplete()
      */
+    // 感觉出现totalSpace变化的情况，目前来看可能的情景应该包括如下：
+    // 1. 键盘弹出。键盘弹出的时候，RecyclerView的高度会发生变化。
+    // 2. 列表滑到顶部有topPadding，列表开始滑动后padding消失。这种暂时不清楚是否算到spaceChange，因为
+    //    padding可能是单独计算的，并没有算到spaceChange里。
     public int getTotalSpaceChange() {
         return INVALID_SIZE == mLastTotalSpace ? 0 : getTotalSpace() - mLastTotalSpace;
     }
