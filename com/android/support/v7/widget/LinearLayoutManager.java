@@ -486,7 +486,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             Log.d(TAG, "Anchor info:" + mAnchorInfo);
         }
 
-        // LLM may decide to layout items for "extra" pixels to account for scrolling target,
+        // LLM(LinearLayoutManager) may decide to layout items for "extra" pixels to account for scrolling target,
         // caching or predictive animations.
         int extraForStart;
         int extraForEnd;
@@ -530,7 +530,10 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         int startOffset;
         int endOffset;
         onAnchorReady(recycler, state, mAnchorInfo);
+
+        // 这里有可能将view remove掉，也有可能将view tmpDetach。
         detachAndScrapAttachedViews(recycler);
+
         mLayoutState.mIsPreLayout = state.isPreLayout();
         if (mAnchorInfo.mLayoutFromEnd) {
             // fill towards start
@@ -1361,8 +1364,11 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         }
         int remainingSpace = layoutState.mAvailable + layoutState.mExtra;
         LayoutChunkResult layoutChunkResult = new LayoutChunkResult();
+        // 空间足够，并且还有未布置的item
         while (remainingSpace > 0 && layoutState.hasMore(state)) {
             layoutChunkResult.resetInternal();
+            // layoutChunk的chunk，指的是一个itemView及其Decoration。所以layoutChunk实际是布局
+            // 单个itemView的操作。然后fill()方法里循环执行layoutChunk()，进而完成整个列表的布局操作。
             layoutChunk(recycler, state, layoutState, layoutChunkResult);
             if (layoutChunkResult.mFinished) {
                 break;
@@ -1398,8 +1404,10 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         return start - layoutState.mAvailable;
     }
 
+    // layoutChunk相当于ListView的makeAndAddView()
     void layoutChunk(RecyclerView.Recycler recycler, RecyclerView.State state,
             LayoutState layoutState, LayoutChunkResult result) {
+        // 1.新的View在next()完成了onCreateViewHolder()和onBindViewHolder()
         View view = layoutState.next(recycler);
         if (view == null) {
             if (DEBUG && layoutState.mScrapList == null) {
@@ -1410,6 +1418,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             result.mFinished = true;
             return;
         }
+        // 2.将View增加到RecyclerView中
         LayoutParams params = (LayoutParams) view.getLayoutParams();
         if (layoutState.mScrapList == null) {
             if (mShouldReverseLayout == (layoutState.mLayoutDirection
@@ -1426,6 +1435,17 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
                 addDisappearingView(view, 0);
             }
         }
+        // 3.测量子View的大小
+        // 这里不同于ListView的一点，ListView在setupChild的流程里，会控制是否调用child.measure()方法，
+        // 即ListView自己会控制是否需要子View进行测量（复用的view不一定需要测量）。而RecyclerView则不会，
+        // 直接调用measureChildWithMargins()，所以说对于RecyclerView，不管是不是复用的View，都会执行
+        // 这个方法。
+        //
+        // 但是执行这个方法就一定会真的对子View进行测量么？
+        // 答案是未必，需不需要测量就要看View本身measure()方法的实现逻辑了。View原本的实现逻辑里，只有
+        // requestLayout()和传入的measureSpec发生变化的情况下，才会真的执行View.onMeasure()。所以
+        // 对于RecyclerView来说，新创建的View，因为addView的时候调用了requestLayout()，所以一定会进
+        // 行测量。
         measureChildWithMargins(view, 0, 0);
         result.mConsumed = mOrientationHelper.getDecoratedMeasurement(view);
         int left, top, right, bottom;
@@ -1988,9 +2008,11 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
          * @return The next element that we should layout.
          */
         View next(RecyclerView.Recycler recycler) {
+            // 目前来看，mScrapList只有在layoutPredictiveAnimation的时候有值，正常来说应该为null
             if (mScrapList != null) {
                 return nextViewFromScrapList();
             }
+            // RecyclerView将整个所有关于View的管理都交给了Recycler。
             final View view = recycler.getViewForPosition(mCurrentPosition);
             mCurrentPosition += mItemDirection;
             return view;

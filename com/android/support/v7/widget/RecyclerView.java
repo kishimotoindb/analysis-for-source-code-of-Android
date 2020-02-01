@@ -4560,6 +4560,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     }
                 }
                 if (holder == null) {
+                    // view holder 是根据 view type 进行创建的，和position没有关系
                     holder = mAdapter.createViewHolder(RecyclerView.this, type);
                     if (DEBUG) {
                         Log.d(TAG, "getViewForPosition created new ViewHolder");
@@ -5315,6 +5316,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (hasStableIds()) {
                 holder.mItemId = getItemId(position);
             }
+            // 标记为BOUND，然后复位Update、invalid、adapter_position_unknown标志位。
             holder.setFlags(ViewHolder.FLAG_BOUND,
                     ViewHolder.FLAG_BOUND | ViewHolder.FLAG_UPDATE | ViewHolder.FLAG_INVALID
                             | ViewHolder.FLAG_ADAPTER_POSITION_UNKNOWN);
@@ -6323,6 +6325,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     mRecyclerView.mLayout.moveView(currentIndex, index);
                 }
             } else {
+                // 新创建的view就是正常走ViewGroup的addView逻辑（当然，这里的index如果有需要，ChildHelper
+                // 会对它进行转换）
                 mChildHelper.addView(child, index, false);
                 lp.mInsetsDirty = true;
                 if (mSmoothScroller != null && mSmoothScroller.isRunning()) {
@@ -7618,6 +7622,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
          * @see #ignoreView(View)
          */
         public void removeAndRecycleAllViews(Recycler recycler) {
+            // 这里的i是所有可见view的index
             for (int i = getChildCount() - 1; i >= 0; i--) {
                 final View view = getChildAt(i);
                 if (!getChildViewHolderInt(view).shouldIgnore()) {
@@ -8197,9 +8202,18 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
      */
     public static abstract class ViewHolder {
         public final View itemView;
+
+        // 这个position，是bindViewHolder的时候，传入的position，即bind的时候ViewHolder对应adapter中
+        // 数据的index。但是因为RecyclerView有局部更新数据的逻辑（notifyItemChanged())，所以在notify对应
+        // 的改变真的提现到UI上之前的这个短暂的时间段内，mPosition不一定对应的是当前adapter中数据的index，
+        // 需要进行转换之后才能拿到当前真实的index，即通过ViewHolder.getAdapterPosition()方法进行转换。
         int mPosition = NO_POSITION;
+
         int mOldPosition = NO_POSITION;
+
+        // 只有在adapter是hasStableIds的情况下，mItemId才会被赋有效值
         long mItemId = NO_ID;
+
         int mItemViewType = INVALID_TYPE;
         int mPreLayoutPosition = NO_POSITION;
 
@@ -8284,6 +8298,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
 
         private static final List<Object> FULLUPDATE_PAYLOADS = Collections.EMPTY_LIST;
 
+        // 一次性的，在紧挨着下一次调用onBindViewHolder的时候就会被清空。
         List<Object> mPayloads = null;
         List<Object> mUnmodifiedPayloads = null;
 
@@ -8302,6 +8317,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
          * Is set when VH is bound from the adapter and cleaned right before it is sent to
          * {@link RecycledViewPool}.
          */
+        // 为什么要有这个变量：
+        // 因为ViewHolder可能由多个RecyclerView共用，通过这个变量可以知道当前ViewHolder是否被使用
+        // 了，即这这个变量不为空——正在使用，为空——没有被使用。另外如果被使用，通过这个变量可以知道当
+        // 前是哪个RecyclerView在使用这个ViewHolder
         RecyclerView mOwnerRecyclerView;
 
         public ViewHolder(View itemView) {
@@ -8508,6 +8527,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             return (mFlags & FLAG_ADAPTER_POSITION_UNKNOWN) != 0 || isInvalid();
         }
 
+        // 首先使用mask清空原有相应标志位的值，然后再将flags赋值到mFlags上
         void setFlags(int flags, int mask) {
             mFlags = (mFlags & ~mask) | (flags & mask);
         }
