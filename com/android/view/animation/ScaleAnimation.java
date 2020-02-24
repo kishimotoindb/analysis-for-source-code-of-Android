@@ -283,6 +283,10 @@ public class ScaleAnimation extends Animation {
         mFromY = resolveScale(mFromY, mFromYType, mFromYData, height, parentHeight);
         mToY = resolveScale(mToY, mToYType, mToYData, height, parentHeight);
 
+        // 计算缩放动画的基准轴
+        // Absolute：直接使用自己的width
+        // Relative to Self: mPivotXValue * width
+        // Relative to Parent: mPivotXValue * parentWidth
         mPivotX = resolveSize(mPivotXType, mPivotXValue, width, parentWidth);
         mPivotY = resolveSize(mPivotYType, mPivotYValue, height, parentHeight);
     }

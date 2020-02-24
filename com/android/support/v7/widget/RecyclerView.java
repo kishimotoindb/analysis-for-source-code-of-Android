@@ -9960,6 +9960,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
          * @return true if a later call to {@link #runPendingAnimations()} is requested,
          * false otherwise.
          */
+        /*
+         * 单个item的change动画
+         */
         abstract public boolean animateChange(ViewHolder oldHolder,
                 ViewHolder newHolder, int fromLeft, int fromTop, int toLeft, int toTop);
 

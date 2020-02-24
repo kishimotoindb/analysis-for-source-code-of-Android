@@ -16717,15 +16717,25 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * Utility function, called by draw(canvas, parent, drawingTime) to handle the less common
      * case of an active Animation being run on the view.
      */
+    /*
+     * 这个方法主要做了下面几件事：
+     * 1.计算动画当前帧对应的transformation（主要是里面的matrix对象）
+     * 2.计算动画影响的区域
+     * 3.根据动画影响的区域invalidate parent
+     */
     private boolean applyLegacyAnimation(ViewGroup parent, long drawingTime,
                                          Animation a, boolean scalingRequired) {
         Transformation invalidationTransform;
         final int flags = parent.mGroupFlags;
         final boolean initialized = a.isInitialized();
+        // 首先初始化Animation中的动画参数
         if (!initialized) {
             a.initialize(mRight - mLeft, mBottom - mTop, parent.getWidth(), parent.getHeight());
             a.initializeInvalidateRegion(0, 0, mRight - mLeft, mBottom - mTop);
+            // 提供一个主线程的handler给Animation
             if (mAttachInfo != null) a.setListenerHandler(mAttachInfo.mHandler);
+            // 感觉并不是View的动画真的开始了。比如延时开始的动画，即使没有开始，也会执行到这里，所以
+            // 这个start更像是表示View开始处理动画了，而不是动画开始了。
             onAnimationStart();
         }
 
@@ -16741,8 +16751,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             invalidationTransform = t;
         }
 
+        // Animation.getTransformation()，只要动画没有结束（即使动画还没有开始），返回的more一定是true。
         if (more) {
             if (!a.willChangeBounds()) {
+                // FLAG_OPTIMIZE_INVALIDATE与layout animation有关，所以View的动画应该不会设置。
                 if ((flags & (ViewGroup.FLAG_OPTIMIZE_INVALIDATE | ViewGroup.FLAG_ANIMATION_DONE)) ==
                         ViewGroup.FLAG_OPTIMIZE_INVALIDATE) {
                     parent.mGroupFlags |= ViewGroup.FLAG_INVALIDATE_REQUIRED;
@@ -16756,7 +16768,15 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
                 if (parent.mInvalidateRegion == null) {
                     parent.mInvalidateRegion = new RectF();
                 }
+                // 感觉parent的这个mInvalidateRegion只是一个单次绘制流程中提供给单个view的一个临时变量，
+                // 因为在 a.getInvalidateRegion()中，会把下面的值set到这个region中，相当于这个region
+                // 所表示的区域在每个view执行到这里的时候都会被重置为新的值。
                 final RectF region = parent.mInvalidateRegion;
+                // 这里set的region并不是当前View在parent中的位置，为什么？
+                // 通过上面生成的matrix处理region对象，计算最新的位置，并将最新的位置保存到Animation的
+                // mRegion变量中。然后通过region对象将前一帧动画和当前帧动画涉及的区域返回，用于下面的
+                // parent invalidate的过程
+
                 a.getInvalidateRegion(0, 0, mRight - mLeft, mBottom - mTop, region,
                         invalidationTransform);
 
@@ -16766,10 +16786,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
                 final int left = mLeft + (int) region.left;
                 final int top = mTop + (int) region.top;
+                // 含义是什么？
                 parent.invalidate(left, top, left + (int) (region.width() + .5f),
                         top + (int) (region.height() + .5f));
             }
         }
+        // Animation.getTransformation()，只要动画没有结束（即使动画还没有开始），返回的more一定是true。
         return more;
     }
 
@@ -16816,12 +16838,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     }
 
     /**
+     * 这个方法才是Parent触发子view绘制的入口
+     *
      * This method is called by ViewGroup.drawChild() to have each child view draw itself.
      * <p>
      * This is where the View specializes rendering behavior based on layer type,
      * and hardware acceleration.
      */
-    boolean draw(Canvas canvas, ViewGroup parent, long drawingTime) {
+    boolean draw(Canvas canvas, ViewGroup parent, long drawingTime/*traversal调用最顶层的draw的开始时间*/) {
         final boolean hardwareAcceleratedCanvas = canvas.isHardwareAccelerated();
         /* If an attached view draws to a HW canvas, it may use its RenderNode + DisplayList.
          *

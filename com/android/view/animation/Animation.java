@@ -833,7 +833,15 @@ public abstract class Animation implements Cloneable {
      *        caller and will be filled in by the animation.
      * @return True if the animation is still running
      */
+    /*
+     * 一旦Animation对象被设置给View，那么即使没有到达动画的开始时间，getTransformation()方法也会在
+     * 每次draw流程中被调用。动画真的开始与否，是由normalizedTime控制的。
+     *
+     * 这里的outTransformation并不是parent自己的，而是parent专门提供给child使用的transformation。
+     */
     public boolean getTransformation(long currentTime, Transformation outTransformation) {
+        // 这个startTime并不是动画开始出现效果的开始时间，而是给View设置动画后的第一帧发生的时间
+        // 动画repeat的时候，单次动画结束会重置mStartTime为"-1"，相当于每次都是一次新的动画过程。
         if (mStartTime == -1) {
             mStartTime = currentTime;
         }
@@ -842,6 +850,8 @@ public abstract class Animation implements Cloneable {
         final long duration = mDuration;
         float normalizedTime;
         if (duration != 0) {
+            // 动画执行进度的百分比：0% ~ 100% ；如果是负数，说明动画还没有开始；如果大于1，说明
+            // 已经结束
             normalizedTime = ((float) (currentTime - (mStartTime + startOffset))) /
                     (float) duration;
         } else {
@@ -849,13 +859,15 @@ public abstract class Animation implements Cloneable {
             normalizedTime = currentTime < mStartTime ? 0.0f : 1.0f;
         }
 
-        final boolean expired = normalizedTime >= 1.0f;
-        mMore = !expired;
+        final boolean expired = normalizedTime >= 1.0f; // 大于1.0f，表明已经结束
+        mMore = !expired;   // 动画没有结束才需要执行后续的操作
 
+        // fillEnable如果设置为false，那么View会停留在动画结束时的状态
         if (!mFillEnabled) normalizedTime = Math.max(Math.min(normalizedTime, 1.0f), 0.0f);
 
         if ((normalizedTime >= 0.0f || mFillBefore) && (normalizedTime <= 1.0f || mFillAfter)) {
             if (!mStarted) {
+                // 这里才是动画真的开始了
                 fireAnimationStart();
                 mStarted = true;
                 if (USE_CLOSEGUARD) {
@@ -869,7 +881,9 @@ public abstract class Animation implements Cloneable {
                 normalizedTime = 1.0f - normalizedTime;
             }
 
+            // 根据动画执行的进度百分比，计算差值。策略模式
             final float interpolatedTime = mInterpolator.getInterpolation(normalizedTime);
+            // 具体的动画实现类根据进度和自己的动画逻辑，修改outTransformation
             applyTransformation(interpolatedTime, outTransformation);
         }
 
@@ -885,6 +899,7 @@ public abstract class Animation implements Cloneable {
                     mRepeated++;
                 }
 
+                // 正常动画重复是一遍一遍的重复从0到1的动画(0->1,0->1)，Reverse是(0->1-,1->0,0->1)
                 if (mRepeatMode == REVERSE) {
                     mCycleFlip = !mCycleFlip;
                 }
@@ -1000,10 +1015,11 @@ public abstract class Animation implements Cloneable {
     }
 
     /**
-     * @param left
-     * @param top
-     * @param right
-     * @param bottom
+     * @param left              执行动画的View的left坐标，坐标原点是View本身的左上角，所以传入的是0
+     * @param top               执行动画的View的top坐标
+     * @param right             执行动画的View的right坐标，即view的宽度
+     * @param bottom            执行动画的View的bottom坐标，即view的高度
+     *                          上面这四个参数更像是传入的View的宽高
      * @param invalidate
      * @param transformation
      * 
@@ -1016,10 +1032,19 @@ public abstract class Animation implements Cloneable {
         final RectF previousRegion = mPreviousRegion;
 
         invalidate.set(left, top, right, bottom);
+        // 使用transformation对invalidation进行转换，然后将转换后的结果再存入invalidation
         transformation.getMatrix().mapRect(invalidate);
         // Enlarge the invalidate region to account for rounding errors
+        // 把invalidation的边界向外扩展1px
         invalidate.inset(-1.0f, -1.0f);
         tempRegion.set(invalidate);
+        // union是取并集的意思，如果previousRegion在invalidation内部，那么什么都不做。
+        // 如果previousRegion有在invalidation外边的部分，那么会都被合并到invalidation中。
+        // 注意，这里是对invalidation做并集操作，previousRegion不会被重新赋值。
+        //
+        // 这里可以用translate动画进行说明：
+        // 对于这种动画的每一帧，previousRegion肯定保存的是前一帧的位置，所以parent需要invalidate
+        // 前一帧和当前帧所涉及的所有区域。
         invalidate.union(previousRegion);
 
         previousRegion.set(tempRegion);
@@ -1027,6 +1052,10 @@ public abstract class Animation implements Cloneable {
         final Transformation tempTransformation = mTransformation;
         final Transformation previousTransformation = mPreviousTransformation;
 
+        // 这里的transformation是经过applyTransformation处理过后的结果，所以这里等于将处理后的
+        // transformation保存到Animation中。getTransformation和applyTransformation只是处理
+        // 了外部传进来的transformation对象，但并没有将这个对象保存在animation中。
+        // 这里就是将处理好的transformation保存到mTransformation变量上。
         tempTransformation.set(transformation);
         transformation.set(previousTransformation);
         previousTransformation.set(tempTransformation);

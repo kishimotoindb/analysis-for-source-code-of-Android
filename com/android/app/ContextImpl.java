@@ -1193,7 +1193,6 @@ class ContextImpl extends Context {
         }
     }
 
-	//ȷ������Service��intent����Ч��,5.0�Ժ�ֻ������ʽ����
     private void validateServiceIntent(Intent service) {
         if (service.getComponent() == null && service.getPackage() == null) {
             if (getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.LOLLIPOP) {

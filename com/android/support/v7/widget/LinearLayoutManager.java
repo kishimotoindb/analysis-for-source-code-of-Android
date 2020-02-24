@@ -1446,6 +1446,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         // requestLayout()和传入的measureSpec发生变化的情况下，才会真的执行View.onMeasure()。所以
         // 对于RecyclerView来说，新创建的View，因为addView的时候调用了requestLayout()，所以一定会进
         // 行测量。
+        //
+        // 测量的时候不限制宽高
         measureChildWithMargins(view, 0, 0);
         result.mConsumed = mOrientationHelper.getDecoratedMeasurement(view);
         int left, top, right, bottom;

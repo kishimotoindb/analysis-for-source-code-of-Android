@@ -264,6 +264,8 @@ public class RectF implements Parcelable {
      * @param dx The amount to add(subtract) from the rectangle's left(right)
      * @param dy The amount to add(subtract) from the rectangle's top(bottom)
      */
+    // inset表示内嵌，从下面的实现也能看出如果dx、dy传入的是正值，那么就是将原有区域缩小，即从原有
+    // 区域内部截取出一个区域。
     public void inset(float dx, float dy) {
         left    += dx;
         top     += dy;

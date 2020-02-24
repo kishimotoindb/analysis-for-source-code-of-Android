@@ -128,6 +128,9 @@ public abstract class ViewGroup extends android.view.View implements ViewParent,
 
     /**
      * Used to track the current invalidation region.
+     * 这个region用来做什么？
+     * 1. 事件分发使用？如果标记为invalidate，事件就不会分发到这个区域？
+     * 2. 重绘使用？如果invalidate，重绘所有区域与region有重叠View？
      */
     RectF mInvalidateRegion;
 
@@ -3718,7 +3721,7 @@ public abstract class ViewGroup extends android.view.View implements ViewParent,
         final View[] children = mChildren;
         int flags = mGroupFlags;
 
-        //动画相关
+        // layout动画相关，不是view的帧动画。帧动画在view.draw(Canvas,ViewGroup,long)方法中处理
         if ((flags & FLAG_RUN_ANIMATION) != 0 && canAnimate()) {
             final boolean buildCache = !isHardwareAccelerated();
             for (int i = 0; i < childrenCount; i++) {
@@ -3771,7 +3774,7 @@ public abstract class ViewGroup extends android.view.View implements ViewParent,
         final boolean customOrder = preorderedList == null
                 && isChildrenDrawingOrderEnabled();
 
-        //画他家的娃儿
+        // 画他家的娃儿
         for (int i = 0; i < childrenCount; i++) {
             while (transientIndex >= 0 && mTransientIndices.get(transientIndex) == i) {
                 final View transientChild = mTransientViews.get(transientIndex);
