@@ -35,16 +35,24 @@ import java.util.List;
 public class DefaultItemAnimator extends RecyclerView.ItemAnimator {
     private static final boolean DEBUG = false;
 
+    // 需要触发但是还没有触发动画的holder放到pending集合中
     private ArrayList<ViewHolder> mPendingRemovals = new ArrayList<ViewHolder>();
     private ArrayList<ViewHolder> mPendingAdditions = new ArrayList<ViewHolder>();
     private ArrayList<MoveInfo> mPendingMoves = new ArrayList<MoveInfo>();
     private ArrayList<ChangeInfo> mPendingChanges = new ArrayList<ChangeInfo>();
 
+    // 1.动画的执行时间顺序是 remove->move/change->add
+    // 2.move/change是同时执行的，但是需要等到remove动画结束才能开始。
+    // 3.add动画需要等到remove/move/change动画都执行完后，才可以执行。
+    // 4.runPendingAnimations()方法是一口气处理完所有当前的mPendingXX集合，但是因为move/change/add可能
+    // 会delay一定时间才开始，所有在pending集合被清空到动画真正开始执行中间的这段时间内，需要执行动画的holder
+    // 会被保存在下面的列表中。
     private ArrayList<ArrayList<ViewHolder>> mAdditionsList =
             new ArrayList<ArrayList<ViewHolder>>();
     private ArrayList<ArrayList<MoveInfo>> mMovesList = new ArrayList<ArrayList<MoveInfo>>();
     private ArrayList<ArrayList<ChangeInfo>> mChangesList = new ArrayList<ArrayList<ChangeInfo>>();
 
+    // 动画从开始到结束这段时间，holder会被保存在下面的集合中
     private ArrayList<ViewHolder> mAddAnimations = new ArrayList<ViewHolder>();
     private ArrayList<ViewHolder> mMoveAnimations = new ArrayList<ViewHolder>();
     private ArrayList<ViewHolder> mRemoveAnimations = new ArrayList<ViewHolder>();
@@ -126,6 +134,8 @@ public class DefaultItemAnimator extends RecyclerView.ItemAnimator {
                 }
             };
             if (removalsPending) {
+                // 如果在move动画执行之前，有remove动画需要执行，那么需要等到remove动画结束再执行move
+                // 动画。
                 View view = moves.get(0).holder.itemView;
                 ViewCompat.postOnAnimationDelayed(view, mover, getRemoveDuration());
             } else {
@@ -183,8 +193,10 @@ public class DefaultItemAnimator extends RecyclerView.ItemAnimator {
         }
     }
 
+    // 触发新的动画，如果之前已经处于动画中，那么需要复位之前的动画
     @Override
     public boolean animateRemove(final ViewHolder holder) {
+        // 如果在执行动画，复位正在执行的动画
         resetAnimation(holder);
         mPendingRemovals.add(holder);
         return true;
@@ -203,6 +215,7 @@ public class DefaultItemAnimator extends RecyclerView.ItemAnimator {
 
             @Override
             public void onAnimationEnd(View view) {
+                // 动画结束，恢复holder的状态
                 animation.setListener(null);
                 ViewCompat.setAlpha(view, 1);
                 dispatchRemoveFinished(holder);
@@ -214,6 +227,7 @@ public class DefaultItemAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public boolean animateAdd(final ViewHolder holder) {
+        // 需要先把这个holder所有相关的动画复位，为下面配置新的动画提供一个干净的初始条件
         resetAnimation(holder);
         ViewCompat.setAlpha(holder.itemView, 0);
         mPendingAdditions.add(holder);
@@ -419,6 +433,7 @@ public class DefaultItemAnimator extends RecyclerView.ItemAnimator {
         return true;
     }
 
+    // 停止这个holder所有相关的动画，为新的动画提供干净的初始状态
     @Override
     public void endAnimation(ViewHolder item) {
         final View view = item.itemView;
