@@ -24,6 +24,9 @@ import static android.support.v7.widget.AdapterHelper.UpdateOp.MOVE;
 import static android.support.v7.widget.AdapterHelper.UpdateOp.REMOVE;
 import static android.support.v7.widget.AdapterHelper.UpdateOp.UPDATE;
 
+// 这里只是对AdapterHelper的mPendingUpdates中的所有UpdateOp进行重排序等操作，从而得到一个去除冗余操作的
+// mPendingUpdates列表。过程中会更新UpdateOp中的变量，但是这里完全没有涉及到ViewHolder，所以也不存在对
+// Holder的修改。
 class OpReorderer {
 
     final Callback mCallback;
@@ -215,6 +218,9 @@ class OpReorderer {
         }
     }
 
+    // 动画允许的执行顺序必须是所有的move在列表的最后连续排列，即 add,remove,move,move。不允许出现
+    // move后面还有add、remove等情况。
+    // 这个方法从后向前遍历，找到第一个后面存在add等操作的move。
     private int getLastMoveOutOfOrder(List<UpdateOp> list) {
         boolean foundNonMove = false;
         for (int i = list.size() - 1; i >= 0; i--) {

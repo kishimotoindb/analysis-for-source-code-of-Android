@@ -29,7 +29,7 @@ import static android.support.v7.widget.RecyclerView.*;
  * Helper class that can enqueue and process adapter update operations.
  * <p>
  * To support animations, RecyclerView presents an older version the Adapter to best represent
- * previous state of the layout. Sometimes, this is not trivial when items are removed that were
+ * previous state of the layout. Sometimes, this is not trivial when items(定语后置:that were not laid out) are removed that were
  * not laid out, in which case, RecyclerView has no way of providing that item's view for
  * animations.
  * <p>
@@ -88,8 +88,11 @@ class AdapterHelper implements OpReorderer.Callback {
     }
 
     void preProcess() {
+        // 这里只是对所有的pendingUpdates进行重新排序，并不会对ViewHolder进行操作。实际修改holder状态的
+        // 是下面的applyAdd()这些方法
         mOpReorderer.reorderOps(mPendingUpdates);
         final int count = mPendingUpdates.size();
+        // 对排好序的pendingUpdates依次进行处理，同时将op更新到postponeList
         for (int i = 0; i < count; i++) {
             UpdateOp op = mPendingUpdates.get(i);
             switch (op.cmd) {
@@ -110,6 +113,9 @@ class AdapterHelper implements OpReorderer.Callback {
                 mOnItemProcessedCallback.run();
             }
         }
+        // mPendingUpdates保存了RecyclerView两次layout之间，所有待处理的item更新。在每次RecyclerView调用
+        // onLayout真正执行布局之前，都会先把mPendingUpdates中的op处理完，并保存到mPostponedList中，最后
+        // 将自己清空。
         mPendingUpdates.clear();
     }
 
@@ -426,15 +432,18 @@ class AdapterHelper implements OpReorderer.Callback {
         return false;
     }
 
+    // add的操作就是将op放入到mPostponedList中，然后更新viewHolder中的mPosition的值为adapter中的最新值。
     private void applyAdd(UpdateOp op) {
         postponeAndUpdateViewHolders(op);
     }
 
+    // 更新的是holder中的变量mPosition的值
     private void postponeAndUpdateViewHolders(UpdateOp op) {
         if (DEBUG) {
             Log.d(TAG, "postponing " + op);
         }
         mPostponedList.add(op);
+        // 下面的方法就是根据具体的op类型和参数，将holder中的mPosition更新到最新的位置。
         switch (op.cmd) {
             case UpdateOp.ADD:
                 mCallback.offsetPositionsForAdd(op.positionStart, op.itemCount);

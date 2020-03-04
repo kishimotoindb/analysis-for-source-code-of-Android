@@ -369,6 +369,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
 
     // For use in item animations
     boolean mItemsAddedOrRemoved = false;
+    // notifyItemChanged
     boolean mItemsChanged = false;
     private ItemAnimator.ItemAnimatorListener mItemAnimatorListener =
             new ItemAnimatorRestoreListener();
@@ -642,7 +643,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     return null;
                 }
                 // ensure it is not hidden because for adapter helper, the only thing matter is that
-                // LM thinks view is a child.
+                // LM(LayoutManager) thinks view is a child.
                 if (mChildHelper.isHidden(vh.itemView)) {
                     if (DEBUG) {
                         Log.d(TAG, "assuming view holder cannot be find because it is hidden");
@@ -2689,6 +2690,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
      * This method may process only the pre-layout state of updates or all of them.
      */
     private void processAdapterUpdatesAndSetAnimationFlags() {
+        // notifyDataSetChanged后，mDataSetHasChangedAfterLayout=true
         if (mDataSetHasChangedAfterLayout) {
             // Processing these items have no value since data set changed unexpectedly.
             // Instead, we just reset it.
@@ -2763,6 +2765,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                 && supportsChangeAnimations() ? new ArrayMap<Long, ViewHolder>() : null;
         mItemsAddedOrRemoved = mItemsChanged = false;
         ArrayMap<View, Rect> appearingViewInitialBounds = null;
+        // move动画应该就算是predictive动画，所以如果有move动画，那么就需要进行preLayout操作
         mState.mInPreLayout = mState.mRunPredictiveAnimations;
         mState.mItemCount = mAdapter.getItemCount();
         // 找到当前mChildren中可见的view里最大和最小的position
@@ -2775,6 +2778,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             int count = mChildHelper.getChildCount();
             for (int i = 0; i < count; ++i) {
                 final ViewHolder holder = getChildViewHolderInt(mChildHelper.getChildAt(i));
+                // holder是在什么时机被设置为无效的？
                 if (holder.shouldIgnore() || (holder.isInvalid() && !mAdapter.hasStableIds())) {
                     continue;
                 }
@@ -3313,6 +3317,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         mRecycler.clearOldPositions();
     }
 
+    /*
+     * 1.把位于删除范围后面的item的mPosition，减去删除的item的数量
+     * 2.把被删除的item的mPosition设置为op.positionStart-1，并且将ViewHolder设置为flag_removed
+     */
     void offsetPositionRecordsForMove(int from, int to) {
         final int childCount = mChildHelper.getUnfilteredChildCount();
         final int start, end, inBetweenOffset;
@@ -3338,6 +3346,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (holder.mPosition == from) {
                 holder.offsetPosition(to - from, false);
             } else {
+                // 如果from<to，item移动之后，位于from+1到to位置上的item，其位置都应该减1
+                // 如果from>to，item移动后，位于from+1到to位置上的item，其位置都应该加1
                 holder.offsetPosition(inBetweenOffset, false);
             }
 
@@ -3350,6 +3360,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
     // 把holder中保存的mPosition更新
     void offsetPositionRecordsForInsert(int positionStart, int itemCount) {
         // RecyclerView所有子View的数量
+        // 1. 处理RecyclerView还attach的holder
         final int childCount = mChildHelper.getUnfilteredChildCount();
         for (int i = 0; i < childCount; i++) {
             final ViewHolder holder = getChildViewHolderInt(mChildHelper.getUnfilteredChildAt(i));
@@ -3358,10 +3369,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     Log.d(TAG, "offsetPositionRecordsForInsert attached child " + i + " holder " +
                             holder + " now at position " + (holder.mPosition + itemCount));
                 }
+                // 在真正进行layoutChildren之前，holder中的mPosition已经更新为adapter中的最新位置。
                 holder.offsetPosition(itemCount, false);
                 mState.mStructureChanged = true;
             }
         }
+        // 2.更新mCacheViews列表中缓存的holder
         mRecycler.offsetPositionRecordsForInsert(positionStart, itemCount);
         requestLayout();
     }
@@ -3386,6 +3399,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                         Log.d(TAG, "offsetPositionRecordsForRemove attached child " + i +
                                 " holder " + holder + " now REMOVED");
                     }
+                    // 需要移除的item，其position全部被设置为positionStart-1
                     holder.flagRemovedAndOffsetPosition(positionStart - 1, -itemCount,
                             applyToPreLayout);
                     mState.mStructureChanged = true;
@@ -3477,6 +3491,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
     /**
      * Mark all known views as invalid. Used in response to a, "the whole world might have changed"
      * data change event.
+     *
+     * 把所有holder都设置为invalid。感觉应该只有notifyDataSetChanged的时候才需要这样。
      */
     void markKnownViewsInvalid() {
         final int childCount = mChildHelper.getUnfilteredChildCount();
@@ -4139,6 +4155,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             assertNotInLayoutOrScroll(null);
+            // 执行到这里的时候，adapter中的数据肯定已经insert到了最终的位置，此时adapter中的数据排序
+            // 已经是最终的结构了。
+            // 这里将数据的变化保存到pendingUpdate中。
             if (mAdapterHelper.onItemRangeInserted(positionStart, itemCount)) {
                 triggerUpdateProcessor();
             }
@@ -4161,6 +4180,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         }
 
         void triggerUpdateProcessor() {
+            // mPostUpdatesOnAnimation: sdk大于16就是true
+            // mHasFixedSize: 需要RecyclerView的使用者自己主动设置，所以默认是false
             if (mPostUpdatesOnAnimation && mHasFixedSize && mIsAttached) {
                 ViewCompat.postOnAnimation(RecyclerView.this, mUpdateChildViewsRunnable);
             } else {
@@ -8205,7 +8226,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
 
         // 这个position，是bindViewHolder的时候，传入的position，即bind的时候ViewHolder对应adapter中
         // 数据的index。但是因为RecyclerView有局部更新数据的逻辑（notifyItemChanged())，所以在notify对应
-        // 的改变真的提现到UI上之前的这个短暂的时间段内，mPosition不一定对应的是当前adapter中数据的index，
+        // 的改变真的体现到UI上之前的这个短暂的时间段内，mPosition不一定对应的是当前adapter中数据的index，
         // 需要进行转换之后才能拿到当前真实的index，即通过ViewHolder.getAdapterPosition()方法进行转换。
         int mPosition = NO_POSITION;
 
@@ -8343,6 +8364,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (mPreLayoutPosition == NO_POSITION) {
                 mPreLayoutPosition = mPosition;
             }
+            // 对mCacheViews中的holder进行offsetPosition的时候，传入的true。对已经attach到RecyclerView
+            // 的holder，传入的是false。难道说只有离屏的holder才可以prelayout？
             if (applyToPreLayout) {
                 mPreLayoutPosition += offset;
             }
@@ -9435,6 +9458,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
          */
         private int mDeletedInvisibleItemCountSincePreviousLayout = 0;
 
+        // notifyDataSetChanged的时候，会将该值设置为true。notifyItemInsert等操作都会将这个值设置为true。
+        // 所以说只要adapter里保存的数据结构（而非item的内容？）发生了改变，这个值应该就会被设置为true。
         private boolean mStructureChanged = false;
 
         private boolean mInPreLayout = false;
