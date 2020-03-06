@@ -44,6 +44,9 @@ class OpReorderer {
         }
     }
 
+    /*
+     * 1.一个item在remove之后不会再出现move的情形，除非remove之后又add了
+     */
     private void swapMoveOp(List<UpdateOp> list, int badMove, int next) {
         final UpdateOp moveOp = list.get(badMove);
         final UpdateOp nextOp = list.get(next);
