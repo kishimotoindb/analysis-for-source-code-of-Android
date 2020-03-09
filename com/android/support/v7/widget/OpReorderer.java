@@ -39,6 +39,7 @@ class OpReorderer {
         // since move operations breaks continuity, their effects on ADD/RM are hard to handle.
         // we push them to the end of the list so that they can be handled easily.
         int badMove;
+        // 假如list中是 move add1 add2，首先调换的是move和add1，与相邻的op对调
         while ((badMove = getLastMoveOutOfOrder(ops)) != -1) {
             swapMoveOp(ops, badMove, badMove + 1);
         }
@@ -46,6 +47,8 @@ class OpReorderer {
 
     /*
      * 1.一个item在remove之后不会再出现move的情形，除非remove之后又add了
+     * 2.注意，move是要调整到add、remove、update之后的，也就是说在三者之后执行，所以所有swap的逻辑都基于
+     *   这个前提。
      */
     private void swapMoveOp(List<UpdateOp> list, int badMove, int next) {
         final UpdateOp moveOp = list.get(badMove);
@@ -167,12 +170,19 @@ class OpReorderer {
             UpdateOp addOp) {
         int offset = 0;
         // going in reverse, first revert the effect of add
+        // moveOp.itemCount是positionEnd
+        // 交换前，这个add是基于move操作执行完成后的数据索引确定的positionStart。如果move的目标位置在
+        // add.positionStart之前，那么交换后，相当于add先执行，positionStart自然需要减一，因为此时
+        // move的item还没有占据位置。
         if (moveOp.itemCount < addOp.positionStart) {
             offset--;
         }
+        // 同样的道理，如果交换前，move的positionStart小于add.positionStart，交换后，add.positionStart
+        // 是在move没有进行的前提下确定的，所以需要比move先执行时加一。
         if (moveOp.positionStart < addOp.positionStart) {
             offset++;
         }
+        // 根据add操作的位置，更新move操作的位置
         if (addOp.positionStart <= moveOp.positionStart) {
             moveOp.positionStart += addOp.itemCount;
         }
@@ -180,6 +190,7 @@ class OpReorderer {
             moveOp.itemCount += addOp.itemCount;
         }
         addOp.positionStart += offset;
+        // 调换两个op的位置
         list.set(move, addOp);
         list.set(add, moveOp);
     }
