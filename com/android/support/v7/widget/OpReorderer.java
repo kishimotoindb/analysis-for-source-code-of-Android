@@ -19,14 +19,25 @@ package android.support.v7.widget;
 import java.util.List;
 
 import android.support.v7.widget.AdapterHelper.UpdateOp;
+
 import static android.support.v7.widget.AdapterHelper.UpdateOp.ADD;
 import static android.support.v7.widget.AdapterHelper.UpdateOp.MOVE;
 import static android.support.v7.widget.AdapterHelper.UpdateOp.REMOVE;
 import static android.support.v7.widget.AdapterHelper.UpdateOp.UPDATE;
 
-// 这里只是对AdapterHelper的mPendingUpdates中的所有UpdateOp进行重排序等操作，从而得到一个去除冗余操作的
-// mPendingUpdates列表。过程中会更新UpdateOp中的变量，但是这里完全没有涉及到ViewHolder，所以也不存在对
-// Holder的修改。
+/*
+ * 这里只是对AdapterHelper的mPendingUpdates中的所有UpdateOp进行重排序，将所有move都移动到mPendingUpdates
+ * 的队尾。在重排序的过程中，需要调整原本各个操作的positionStart和itemCount。OpReorderer主要做的就是前面
+ * 两件事。
+ *
+ * 这个过程只会调整mPendingUpdates列表中元素的顺序和UpdateOp中变量的值，完全不会涉及到ViewHolder，所以也不
+ * 存在对Holder的修改。
+ *
+ * 想要理解这个类的操作，主要需要基于以下前提：
+ * 1. mPendingUpdates在做调整之前，里面的所有op，其positionStart和itemCount对应的数据位置和值，都是基于它
+ * 前面的op执行结束后生成的全新的数据顺序确定的。（所以交换两个op的顺序才会需要调整positionStart和itemCount）
+ */
+
 class OpReorderer {
 
     final Callback mCallback;
@@ -67,17 +78,21 @@ class OpReorderer {
     }
 
     void swapMoveRemove(List<UpdateOp> list, int movePos, UpdateOp moveOp,
-            int removePos, UpdateOp removeOp) {
+                        int removePos, UpdateOp removeOp) {
         UpdateOp extraRm = null;
         // check if move is nulled out by remove
+        // move操作对应的item，是否在remove执行之后，又回到了move前的起始位置。
         boolean revertedMove = false;
+
+        // move的方向，是从小的positon移动到大的position（正向），还是从大的position移动到小的position（反向）
         final boolean moveIsBackwards;
 
-        // 从列表上方移动到列表下方
         if (moveOp.positionStart < moveOp.itemCount) {
+            // 从列表高处移动到列表低处
             moveIsBackwards = false;
             if (removeOp.positionStart == moveOp.positionStart
                     && removeOp.itemCount == moveOp.itemCount - moveOp.positionStart) {
+                // move移动之后，对应的item实际上又被紧挨着的remove操作移除了。所以其实这个move没有意义。
                 revertedMove = true;
             }
         } else {
@@ -90,10 +105,14 @@ class OpReorderer {
 
         // going in reverse, first revert the effect of add
         if (moveOp.itemCount < removeOp.positionStart) {
+            // 如果move的目标位置在remove的start之前，对调之后，remove的start需要减一，因为move没有执行，
+            // remove对应的item实际前移了一个位置。
             removeOp.positionStart--;
         } else if (moveOp.itemCount < removeOp.positionStart + removeOp.itemCount) {
             // move is removed.
-            removeOp.itemCount --;
+            // 如果move的item移动到目标位置之后，又被remove掉了，那么直接将move操作更新为remove操作，
+            // 并且不需要接着再进行其它处理了，直接返回。
+            removeOp.itemCount--;
             moveOp.cmd = REMOVE;
             moveOp.itemCount = 1;
             if (removeOp.itemCount == 0) {
@@ -106,8 +125,12 @@ class OpReorderer {
 
         // now affect of add is consumed. now apply effect of first remove
         if (moveOp.positionStart <= removeOp.positionStart) {
+            // move的起始位置小于remove的起始位置，对调之后，remove先发生，remove执行的时候move对应的item
+            // 还在，所以remove的起始位置相当于后移了一个位置。
             removeOp.positionStart++;
         } else if (moveOp.positionStart < removeOp.positionStart + removeOp.itemCount) {
+            // 如果move的item在remove的范围内，那么对调之后，相当于remove的几个item被劈成了两段，需要单独做
+            // 移除操作。所以这里将remove分成了两段。
             final int remaining = removeOp.positionStart + removeOp.itemCount
                     - moveOp.positionStart;
             extraRm = mCallback.obtainUpdateOp(REMOVE, moveOp.positionStart + 1, remaining, null);
@@ -115,6 +138,8 @@ class OpReorderer {
         }
 
         // if effects of move is reverted by remove, we are done.
+        // 如果remove操作后，move操作相当于没有执行，那么交换顺序后，就没有必要再执行move。因为move和remove
+        // 交换顺序后，move相当于从positionA移动到positionA。
         if (revertedMove) {
             list.set(movePos, removeOp);
             list.remove(removePos);
@@ -123,6 +148,7 @@ class OpReorderer {
         }
 
         // now find out the new locations for move actions
+        // 调换之后，先执行remove，那么move的start和end都需要前移
         if (moveIsBackwards) {
             if (extraRm != null) {
                 if (moveOp.positionStart > extraRm.positionStart) {
@@ -132,6 +158,7 @@ class OpReorderer {
                     moveOp.itemCount -= extraRm.itemCount;
                 }
             }
+
             if (moveOp.positionStart > removeOp.positionStart) {
                 moveOp.positionStart -= removeOp.itemCount;
             }
@@ -161,13 +188,14 @@ class OpReorderer {
         } else {
             list.remove(removePos);
         }
+        // 后半段的remove先执行
         if (extraRm != null) {
             list.add(movePos, extraRm);
         }
     }
 
     private void swapMoveAdd(List<UpdateOp> list, int move, UpdateOp moveOp, int add,
-            UpdateOp addOp) {
+                             UpdateOp addOp) {
         int offset = 0;
         // going in reverse, first revert the effect of add
         // moveOp.itemCount是positionEnd
@@ -196,37 +224,53 @@ class OpReorderer {
     }
 
     void swapMoveUpdate(List<UpdateOp> list, int move, UpdateOp moveOp, int update,
-            UpdateOp updateOp) {
+                        UpdateOp updateOp) {
         UpdateOp extraUp1 = null;
         UpdateOp extraUp2 = null;
         // going in reverse, first revert the effect of add
         if (moveOp.itemCount < updateOp.positionStart) {
+            // 如果move的目标位置低于update的positionStart，那么调换执行顺序后，update的起始位置需要
+            // 减1，填补move的空缺。
             updateOp.positionStart--;
         } else if (moveOp.itemCount < updateOp.positionStart + updateOp.itemCount) {
             // moved item is updated. add an update for it
+            // 如果move的目标位置正好在update的范围内，那么按照正常的顺序，这个move的item在执行完move后，
+            // 需要update。现在交换move和update，相当于move的item还没有移动到update的范围内，其他的item
+            // 就已经update结束了，所以需要为这个move补充一个update操作。
             updateOp.itemCount--;
             extraUp1 = mCallback.obtainUpdateOp(UPDATE, moveOp.positionStart, 1, updateOp.payload);
         }
         // now affect of add is consumed. now apply effect of first remove
         if (moveOp.positionStart <= updateOp.positionStart) {
+            // 如果move的起始位置在update前面，那么move和update对调之后，update发生时move的item还在原来的
+            // 位置，相当于update的起始item的index比原本后移了一个位置。
             updateOp.positionStart++;
         } else if (moveOp.positionStart < updateOp.positionStart + updateOp.itemCount) {
+            // move本来发生在update之前，所以update是连续的一段范围。现在先执行update，move还没有发生，
+            // 相当于move把原本的update拆成了两段update，即updateOp和extraUp2
             final int remaining = updateOp.positionStart + updateOp.itemCount
                     - moveOp.positionStart;
             extraUp2 = mCallback.obtainUpdateOp(UPDATE, moveOp.positionStart + 1, remaining,
                     updateOp.payload);
             updateOp.itemCount -= remaining;
         }
+        // 这里的对调位置，一定是相邻的位置发生交换，不会出现跨越某个item
+        // 将move后移，放到update的位置
         list.set(update, moveOp);
         if (updateOp.itemCount > 0) {
             list.set(move, updateOp);
         } else {
+            // 如果move和update操作的是同一个item，那么调整顺序后，原本的update就不存在了，只剩新增加
+            // 的extraUp1，那么把原本的update移除
             list.remove(move);
             mCallback.recycleUpdateOp(updateOp);
         }
+
+        // 原本update中move对应的item的单独的update，放到原本update之前执行。
         if (extraUp1 != null) {
             list.add(move, extraUp1);
         }
+        // 被move拆成两段的update，position数值大的部分先执行。
         if (extraUp2 != null) {
             list.add(move, extraUp2);
         }
