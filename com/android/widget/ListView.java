@@ -1773,6 +1773,7 @@ public class ListView extends AbsListView {
                 checkSelectionChanged();
             }
 
+            // 每次layout会调用onScrollListener的onScroll？
             invokeOnItemScrollListener();
         } finally {
             if (!blockLayoutRequests) {

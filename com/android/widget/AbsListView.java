@@ -710,6 +710,21 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
          * @param visibleItemCount the number of visible cells
          * @param totalItemCount the number of items in the list adaptor
          */
+        /*
+         * onScroll回调逻辑说明：
+         * 正常情况下，ListView滑动会回调onScroll。另外还有两种情况下也会发生回调。
+         *
+         * 1. ListView每次layout的时候都会被回调onScroll，而非仅在滚动的时候。下面是相同回调在RecyclerView中的
+         * 注释，
+         *
+         *   This callback will also be called if visible item range changes after a layout
+         *   calculation. In that case, dx and dy will be 0.
+         *
+         * ListView应该是一样的逻辑，只不过因为ListView只能整体刷新，所以不区分是否可见的item范围发生变化，
+         * 每次layout都回调onScroll；而RecyclerView则只会在可见的item范围发生变化时触发额外的回调。
+         *
+         * 2. 在setOnScrollListener的时候，也会额外回调onScroll。
+         */
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                 int totalItemCount);
     }
@@ -1313,6 +1328,21 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
     /**
      * Notify our scroll listener (if there is one) of a change in scroll state
+     */
+    /*
+     * onScroll回调逻辑说明：
+     * 正常情况下，ListView滑动会回调onScroll。另外还有两种情况下也会发生回调。
+     *
+     * 1. ListView每次layout的时候都会被回调onScroll，而非仅在滚动的时候。下面是相同回调在RecyclerView中的
+     * 注释，
+     *
+     *   This callback will also be called if visible item range changes after a layout
+     *   calculation. In that case, dx and dy will be 0.
+     *
+     * ListView应该是一样的逻辑，只不过因为ListView只能整体刷新，所以不区分是否可见的item范围发生变化，
+     * 每次layout都回调onScroll；而RecyclerView则只会在可见的item范围发生变化时触发额外的回调。
+     *
+     * 2. 在setOnScrollListener的时候，也会额外回调onScroll。
      */
     void invokeOnItemScrollListener() {
         if (mFastScroller != null) {
