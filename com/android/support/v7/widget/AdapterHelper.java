@@ -437,11 +437,12 @@ class AdapterHelper implements OpReorderer.Callback {
         postponeAndUpdateViewHolders(op);
     }
 
-    // 更新的是holder中的变量mPosition的值
+    // 更新的是holder中的变量mPosition的值。修改的是受当前操作影响的holder的值，而不是操作本身的holder
     private void postponeAndUpdateViewHolders(UpdateOp op) {
         if (DEBUG) {
             Log.d(TAG, "postponing " + op);
         }
+        // 从mPendingUpdates中删除到加入mPostponedList，这中间只是对ops做了重排序，去掉了无效、重复的操作。
         mPostponedList.add(op);
         // 下面的方法就是根据具体的op类型和参数，将holder中的mPosition更新到最新的位置。
         switch (op.cmd) {
@@ -513,6 +514,9 @@ class AdapterHelper implements OpReorderer.Callback {
      */
     boolean onItemRangeInserted(int positionStart, int itemCount) {
         mPendingUpdates.add(obtainUpdateOp(UpdateOp.ADD, positionStart, itemCount, null));
+        // size等于1的时候，说明是之前没有改变，那么就需要返回true，告诉外部调用requestLayout()。
+        // 如果size不等于1，说明已经有改变通知到RecyclerView，即调用过requestlayout()，不需要
+        // 再次调用
         return mPendingUpdates.size() == 1;
     }
 
@@ -744,6 +748,9 @@ class AdapterHelper implements OpReorderer.Callback {
 
     /**
      * Contract between AdapterHelper and RecyclerView.
+     *
+     * insert：调整的是受insert影响的item的mPosition
+     * move：调整了受影响的item，也调整了自己的mPosition
      */
     static interface Callback {
 
