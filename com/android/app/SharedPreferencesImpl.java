@@ -502,7 +502,7 @@ final class SharedPreferencesImpl implements SharedPreferences {
             SharedPreferencesImpl.this.enqueueDiskWrite(
                 mcr, null /* sync write on this thread okay */);
             try {
-                // 如果是在singleThreadPool中执行写入操作，通过await()暂停主线程，知道写入操作完成。
+                // 如果是在singleThreadPool中执行写入操作，通过await()暂停主线程，直到写入操作完成。
                 // commit的同步性就是通过这里完成的。
                 // 所以可以说只要是在主线程commit，一定会发生阻塞。
                 mcr.writtenToDiskLatch.await();
