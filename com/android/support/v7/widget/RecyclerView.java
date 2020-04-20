@@ -2714,6 +2714,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         }
         // mItemsAddedOrRemoved、mItemsChanged都是在preprocess过程中设置的，notifyDataSetChanged
         // 的情况下，preprocess会因为mPendingUpdates为空，从而什么都不做，所以这里两个变量都会是false。
+        /*
+         * mItemsAddedOrRemoved: 有add,remove,move都会是true
+         * mItemsChanged: 有change会是true
+         */
         boolean animationTypeSupported = (mItemsAddedOrRemoved && !mItemsChanged) ||
                 (mItemsAddedOrRemoved || (mItemsChanged && supportsChangeAnimations()));
         // 如果DataSetChanged之后还需要执行simple动画，那么item必须有 stable id
@@ -2779,14 +2783,22 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             // Step 0: Find out where all non-removed items are, pre-layout
             mState.mPreLayoutHolderMap.clear();
             mState.mPostLayoutHolderMap.clear();
+            // 这里返回的是not hidden的child的个数
             int count = mChildHelper.getChildCount();
             for (int i = 0; i < count; ++i) {
                 final ViewHolder holder = getChildViewHolderInt(mChildHelper.getChildAt(i));
-                // holder是在什么时机被设置为无效的？
+                /*
+                 * holder是在什么时机被设置为无效的？
+                 * 1.notifyDataSetChanged
+                 * 2.set a new adapter
+                 */
                 if (holder.shouldIgnore() || (holder.isInvalid() && !mAdapter.hasStableIds())) {
                     continue;
                 }
                 final View view = holder.itemView;
+                /*
+                 * preLayout过程是针对所有在layout之前已经在屏幕中的view（not hidden）
+                 */
                 mState.mPreLayoutHolderMap.put(holder, new ItemHolderInfo(holder,
                         view.getLeft(), view.getTop(), view.getRight(), view.getBottom()));
             }
@@ -2798,6 +2810,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             // which come into existence as part of the real layout.
 
             // Save old positions so that LayoutManager can run its mapping logic.
+            /*
+             * 保存到mOldPosition中的是mPosition，但是执行到这里的时候，mPosition已经是根据动画调整到了
+             * 动画结束后的最终位置。为什么还叫old？
+             */
             saveOldPositions();
             // processAdapterUpdatesAndSetAnimationFlags already run pre-layout animations.
             if (mState.mOldChangedHolders != null) {
@@ -2806,17 +2822,26 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     final ViewHolder holder = getChildViewHolderInt(mChildHelper.getChildAt(i));
                     if (holder.isChanged() && !holder.isRemoved() && !holder.shouldIgnore()) {
                         long key = getChangedHolderKey(holder);
+                        /*
+                         * change的item，holder会被放到mOldChangedHolders中，并从preLayoutHolderMap
+                         * 中移除
+                         */
                         mState.mOldChangedHolders.put(key, holder);
                         mState.mPreLayoutHolderMap.remove(holder);
                     }
                 }
             }
 
+            // notifyDataSetChanged的时候，会将该值设置为true。notifyItemInsert等操作都会将这个值设置为true。
+            // 所以说只要adapter里保存的数据结构（而非item的内容？）发生了改变，这个值应该就会被设置为true。
             final boolean didStructureChange = mState.mStructureChanged;
             mState.mStructureChanged = false;
             // temporarily disable flag because we are asking for previous layout
+
+            // **** preLayout start ***
             mLayout.onLayoutChildren(mRecycler, mState);
             mState.mStructureChanged = didStructureChange;
+            // **** preLayout end ***
 
             appearingViewInitialBounds = new ArrayMap<View, Rect>();
             for (int i = 0; i < mChildHelper.getChildCount(); ++i) {
@@ -2832,6 +2857,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                         break;
                     }
                 }
+
+                /*
+                 * 如果在mPreLayoutHolderMap中没有找到这个child，说明这个child在preLayout之前不能
+                 * 通过ChildHelper.getChildAt()获取到，即可能是hiddenView，也可能就不是child。
+                 * 所以为了做appearance动画，需要把initialBounds保存下来。
+                 */
                 if (!found) {
                     appearingViewInitialBounds.put(child, new Rect(child.getLeft(), child.getTop(),
                             child.getRight(), child.getBottom()));
@@ -2839,9 +2870,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             }
             // we don't process disappearing list because they may re-appear in post layout pass.
             clearOldPositions();
+            // LinearLayoutManager什么都没做；GridLayoutManager和StaggeredGridLayoutManager是有处理的，
+            // 后面再看。
             mAdapterHelper.consumePostponedUpdates();
         } else {
-            // 清掉所有子View的viewholder保存的position
+            // 清掉所有子View的viewholder保存的old和prelayout的position
             clearOldPositions();
             // in case pre layout did run but we decided not to run predictive animations.
             mAdapterHelper.consumeUpdatesInOnePass();

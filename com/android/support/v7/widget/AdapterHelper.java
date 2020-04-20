@@ -142,6 +142,9 @@ class AdapterHelper implements OpReorderer.Callback {
         for (int position = op.positionStart; position < tmpEnd; position++) {
             boolean typeChanged = false;
             ViewHolder vh = mCallback.findViewHolder(position);
+            /*
+             * 1.remove操作对应的ViewHolder还能出现不存在并且不是新添加的情况？什么情景会是这种情况？
+             */
             if (vh != null || canFindInPreLayout(position)) {
                 // If a ViewHolder exists or this is a newly added item, we can defer this update
                 // to post layout stage.
@@ -412,18 +415,29 @@ class AdapterHelper implements OpReorderer.Callback {
     }
 
     /*
-     * 1.preLayout只针对add和move？这里只对add和move做了判断。应该可以确定prelayout只对remove做操作。
+     * 疑问：
      * 2.每次执行layout，只有被放到mPostponeList中的op会执行preLayout? 应该是，但是不是list中的所有op都
      *   进行preLayout，因为remove也会被放到mPostponeList中，但是canFindInPreLayout()方法中没有对remove
      *   进行处理
      * 3.applyRemove传过来的position只是当前remove操作时的position，这里被用来当做最终的位置，为什么？
+     *
+     * 结论：
+     * 参数position：mPostponeList中所有操作都执行结束之后的位置
+     * 判断逻辑：mPostponeList列表中的add或者move操作所涉及的初始位置，在经过一系列移动之后，最终与传入的
+     *          position是否相同。如果相同，说明这个position上的item在前一个动画执行周期里，进行过add或者
+     *          move动画。而add和move操作是会进行preLayout流程的，所以认为传入的position是可以在preLayout
+     *          中找到的。
+     *
+     * 1.只有add和move两种类型的Op有prelayout过程。
+     * 2.这个方法基本等同于判断动画执行结束后的某个position对应的item是否在上一个动画周期中是否执行了add或者
+     *   move操作（注意是操作，不是动画，因为add和move只是UpdateOp，不一定对应到appearance等动画类型）
+     *
      */
     private boolean canFindInPreLayout(int position) {
         final int count = mPostponedList.size();
         for (int i = 0; i < count; i++) {
             UpdateOp op = mPostponedList.get(i);
             if (op.cmd == UpdateOp.MOVE) {
-                // op.itemCount是move的结束位置
                 if (findPositionOffset(op.itemCount, i + 1) == position) {
                     return true;
                 }
@@ -480,18 +494,6 @@ class AdapterHelper implements OpReorderer.Callback {
         return findPositionOffset(position, 0);
     }
 
-    /*
-     * mPostponeList中的操作是按照列表的顺序依次执行的，所以其中某个操作执行结束后，item对应的pos，只是完成
-     * 当前操作后的临时位置，其最终位置需要等到所有操作都执行结束后才能确定。这个方法就是用来计算某个Op中item
-     * 的pos在mPostponeList中的所有Op都结束后其最终的位置。
-     *
-     * 传入的position是某个时间节点（某个op执行结束）item的position。
-     *
-     * 比如：
-     * mPostponeList中有两个move操作，第一个move(start=0,end=1)，第二个move(start=1,end=3)。现在在动画
-     * 执行开始前，需要计算index=0的item在动画执行结束后的最终位置，就可以使用当前方法，传入参数 position=0,
-     * firstPostponedItem=0。于是position的变化过程：0->1->3，进而得到item最终的位置。
-     */
     int findPositionOffset(int position, int firstPostponedItem) {
         int count = mPostponedList.size();
         for (int i = firstPostponedItem; i < count; ++i) {

@@ -36,8 +36,9 @@ import static android.support.v7.widget.AdapterHelper.UpdateOp.UPDATE;
  * 想要理解这个类的操作，主要需要基于以下前提：
  * 1. mPendingUpdates在做调整之前，里面的所有op，其positionStart和itemCount对应的数据位置和值，都是基于它
  * 前面的op执行结束后生成的全新的数据顺序确定的。（所以交换两个op的顺序才会需要调整positionStart和itemCount）
+ *
+ * add、remove、update之间的顺序并没有被修改，只是将所有move移动到了列表的尾端
  */
-
 class OpReorderer {
 
     final Callback mCallback;
