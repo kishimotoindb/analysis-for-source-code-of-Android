@@ -380,7 +380,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
 
     /**
      * {@inheritDoc}
-     * 就是在mChildren中找到一个itemView，并且这个itemView对应adapter中的position与传入的position相同
+     * 找到这个position的数据对应的ItemView
      */
     @Override
     public View findViewByPosition(int position) {
@@ -490,6 +490,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         // caching or predictive animations.
         int extraForStart;
         int extraForEnd;
+        // 有目标scroll位置，多提供一屏的高度？
         final int extra = getExtraLayoutSpace(state);
         // If the previous scroll delta was less than zero, the extra space should be laid out
         // at the start. Otherwise, it should be at the end.
@@ -502,6 +503,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         }
         extraForStart += mOrientationHelper.getStartAfterPadding();
         extraForEnd += mOrientationHelper.getEndPadding();
+        // 这里只有调用scrollToPositionWithOffset(int,int)才会被执行到
         if (state.isPreLayout() && mPendingScrollPosition != NO_POSITION &&
                 mPendingScrollPositionOffset != INVALID_OFFSET) {
             // if the child is visible and we are going to move it around, we should layout
@@ -704,6 +706,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             return;
         }
 
+        // 正常从第二次layout开始，都应该走这个方法确定anchor
         if (updateAnchorFromChildren(recycler, state, anchorInfo)) {
             if (DEBUG) {
                 Log.d(TAG, "updated anchor info from existing children");
@@ -713,6 +716,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (DEBUG) {
             Log.d(TAG, "deciding anchor info for fresh state");
         }
+        // 如果在RecyclerView使用过程中，切换了mStackFromEnd的值，那么就会选择第一个或者最后一个item作为
+        // anchor
         anchorInfo.assignCoordinateFromPadding();
         anchorInfo.mPosition = mStackFromEnd ? state.getItemCount() - 1 : 0;
     }

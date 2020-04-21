@@ -5350,6 +5350,11 @@ public abstract class ViewGroup extends android.view.View implements ViewParent,
      * @see #attachViewToParent(View, int, android.view.ViewGroup.LayoutParams)
      * @see #removeDetachedView(View, boolean)
      */
+    /*
+     * detach的含义是有两个：
+     * 1.将child的parent设置为null
+     * 2.将child从mChildren[]数组中移除
+     */
     protected void detachViewFromParent(int index) {
         removeFromArray(index);
     }
