@@ -481,6 +481,11 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         mAnchorInfo.reset();
         mAnchorInfo.mLayoutFromEnd = mShouldReverseLayout ^ mStackFromEnd;
         // calculate anchor position and coordinate
+        /*
+         * anchor的计算有四种方式
+         * 1.如果调用了scrollToPosition，或者mPendingSaveState，根据暂存的值配置anchor
+         * 2.根据当前focus的View配置anchor
+         */
         updateAnchorInfoForLayout(recycler, state, mAnchorInfo);
         if (DEBUG) {
             Log.d(TAG, "Anchor info:" + mAnchorInfo);
