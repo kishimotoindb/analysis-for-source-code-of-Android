@@ -413,6 +413,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @return The extra space that should be laid out (in pixels).
      */
     protected int getExtraLayoutSpace(RecyclerView.State state) {
+        // startSmoothScroll的时候会设置targetScrollPosition
         if (state.hasTargetScrollPosition()) {
             return mOrientationHelper.getTotalSpace();
         } else {
@@ -483,7 +484,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         // calculate anchor position and coordinate
         /*
          * anchor的计算有四种方式
-         * 1.如果调用了scrollToPosition，或者mPendingSaveState，根据暂存的值配置anchor
+         * 1.如果调用了scrollToPosition，或者存在mPendingSaveState，根据暂存的值配置anchor
          * 2.根据当前focus的View配置anchor
          */
         updateAnchorInfoForLayout(recycler, state, mAnchorInfo);
@@ -495,7 +496,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         // caching or predictive animations.
         int extraForStart;
         int extraForEnd;
-        // 有目标scroll位置，多提供一屏的高度？
+        // startSmoothScroll的时候会设置targetScrollPosition，所以smoothScroll的时候，为了滑动顺滑，
+        // 额外加载一整屏的item
         final int extra = getExtraLayoutSpace(state);
         // If the previous scroll delta was less than zero, the extra space should be laid out
         // at the start. Otherwise, it should be at the end.
