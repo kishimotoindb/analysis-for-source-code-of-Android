@@ -156,6 +156,12 @@ class ChildHelper {
     * 下面是android自己的实现，他的实现是基于这样一个事实：view在visible children中的index，一定小于
     * 等于其在mChildren中的index。因为mChildren中可能插入了hidden view。
     * 所以下面的实现考虑了这一点，对转换算法做了优化，尽量减少遍历的次数。
+    *
+    * 这里进行优化需要用到很多中间过程的信息，所以之所以最终能用下面的算法，也是因为在每个中间过程，都将
+    * 相应的信息保存到了mData，从而在最终使用的时候，利用中间信息降低了算法的时间复杂度。
+    *
+    * 所有从小范围到大范围的转换，按道理都可以利用中间信息避免从头到尾的遍历。并且每次循环都可以为后面的循环
+    * 提供更多的中间信息。
     */
     private int getOffset(int index) {
         if (index < 0) {
