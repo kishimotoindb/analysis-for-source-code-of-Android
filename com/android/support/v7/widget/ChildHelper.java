@@ -122,6 +122,8 @@ class ChildHelper {
     }
 
     /*
+     * 这个方法负责把child在visibleChildren中的索引位置转换为在RecyclerView的mChildren中的实际索引位置。
+     *
      * index表示的是当前view在所有可见的child中的排序位置，但是因为RecyclerView的mChildren[]
      * 中既保存了可见的child，又保存了不可见的child，所以这个index未必是当前view在mChildren[]
      * 中的实际index。getOffset()方法就是用来对index进行转换，得到当前view在mChildren[]中的
@@ -132,22 +134,83 @@ class ChildHelper {
      *      offset ++;
      * }
      */
+
+    /*
+     * 这个是我自己实现的转换代码。缺点，总是需要从头遍历。
+     *
+     *   private int getOffsetSelfImpl(int index) {
+            final int limit = mCallback.getChildCount();
+            final int requiredVisiblePos = index;
+            int currentVisiblePos = -1;
+            for (int i = 0; i < limit ; i++) {
+                if (!mBucket.get(i)) {
+                    currentVisiblePos++;
+                }
+                if (currentVisiblePos == requiredVisiblePos) {
+                    return i;
+                }
+            }
+            return -1;
+    *    }
+    *
+    * 下面是android自己的实现，他的实现是基于这样一个事实：view在visible children中的index，一定小于
+    * 等于其在mChildren中的index。因为mChildren中可能插入了hidden view。
+    * 所以下面的实现考虑了这一点，对转换算法做了优化，尽量减少遍历的次数。
+    */
     private int getOffset(int index) {
         if (index < 0) {
             return -1; //anything below 0 won't work as diff will be undefined.
         }
+        // RecyclerView的mChildren中保存的所有view
         final int limit = mCallback.getChildCount();
         int offset = index;
+        // index转换是一定需要遍历的，但是比起上面我自己实现的代码，这里的遍历是跳步进行的，所以会显著减少
+        // 遍历的总耗时。
+        /*
+         * mChildren[]索引:           0 1 2 3 4 5 6 7
+         * mChildren[]数组:           1 0 0 1 0 0 1 1 （1表示visible，0表示hidden）
+         * visible child index：      0     1     2 3
+         * 对visible index=3的child进行转换：
+         * 下面是每轮循环的参数变化情况：
+         * 1) offset=index=3 -> removedBefore=2 -> diff=3-(3-2)=2
+         * 2) offset=offset+diff=3+2=5, index=3 -> removedBefore=3 -> diff=3-(5-3)=1
+         * 3) offset=offset+diff=5+1=6, index=3 -> removedBefore=4 -> diff=3-(6-4)=1
+         * 4) offset=offset+diff=6+1, index=3 -> removedBefore=4 -> diff=3-(7-4)=0
+         * 总共循环了4轮
+         *
+         * 如果要是使用上面自己的实现，就要循环8轮。所以android的实现还是更优的选择。RecyclerView为什么
+         * 要对这个遍历做简单的算法设计？
+         * 相对于我们的业务流程，对view的遍历可能最多在一个业务流程中进行一两次。但是对于RecyclerView来说，
+         * 各个地方都需要调用getOffset(int)方法对view的index进行转换，那么在一个layout过程中间就可能进行
+         * 至少数十次或者几十次这种遍历，所以肯定不能接受从头遍历到尾的方式。这么来看，多刷刷leetcode还是
+         * 挺有用的，实际开发中还是有用武之地的。
+         */
         while (offset < limit) {
-            // before是指当前offset->0
+            // before是指当前offset->0，不包括offset本身
             final int removedBefore = mBucket.countOnesBefore(offset);
+            // 通过这一步，实现了跳步遍历。offset - removedBefore的结果实际上是一个慢慢逼近index的过程，
+            // 直到两者相等为止。
             final int diff = index - (offset - removedBefore);
             if (diff == 0) {
+                /* diff=0，说明mChildren中，index之前都没有hidden view，所以当前view在visible children
+                 * 和 mChildren中的index可能是一致的。
+                 *
+                 * 比如转换b的index
+                 * visible children[]: a b c d
+                 * mChildren[]: a b c d
+                 * 这种情况下b的index就是一致的
+                 *
+                 * 但是也有特殊情况，比如转换b的index时，在b的index（1）的位置上，正好是一个hidden view
+                 * visible children[]: a b c d
+                 * mChildren[]: a e b c d
+                 * 此时diff也等于0，但是因为正好再index=1的位置是hidden view，所以需要找到最终的位置。
+                 */
                 while (mBucket.get(offset)) { // ensure this offset is not hidden
                     offset ++;
                 }
                 return offset;
             } else {
+
                 offset += diff;
             }
         }
@@ -416,7 +479,7 @@ class ChildHelper {
 
         Bucket next;
 
-        // 就是用128位表示当前RecyclerView
+        // 就是用128位表示当前RecyclerView的mChildren数组中的各个索引位置
         void set(int index) {
             if (index >= BITS_PER_WORD) {
                 ensureNext();
@@ -459,8 +522,13 @@ class ChildHelper {
             }
         }
 
-        // 相当于在一个列表的某个位置插入一个新的元素，位于新元素前面的元素，位置不需要改变，
-        // 位于新元素当前插入位置及其后面的元素，都需要向前移动一位。
+        /*
+         * 这个方法是在addView的时候使用的，所有会有前后移动原有数据的操作。即，addView的时候，隐藏的view的
+         * 位置会发生移动，所有需要同时更新bucket中保存的位置信息。
+         *
+         * 相当于在一个列表的某个位置插入一个新的元素，位于新元素前面的元素，位置不需要改变，
+         * 位于新元素当前插入位置及其后面的元素，都需要向前移动一位。
+         */
         void insert(int index, boolean value) {
             if (index >= BITS_PER_WORD) {
                 ensureNext();
@@ -506,7 +574,13 @@ class ChildHelper {
             }
         }
 
-        // 当前child view前面(索引值小于当前child)，有多少个view
+        /*
+         * 计算mData中，位于index之前的位置上，有多少hidden的view。index是相对于mData来说的，不关心
+         * 外部传入时是怎么定义的。比如外部传入的index，其含义是当前view在所有可见child中的位置，但是
+         * 在调用到这个方法里面后，参数index的含义就是对应mData的索引位置。
+         *
+         * before不包括index本身。即 index=2，只考虑0和1是不是hidden view
+         */
         int countOnesBefore(int index) {
             if (next == null) {
                 if (index >= BITS_PER_WORD) {
