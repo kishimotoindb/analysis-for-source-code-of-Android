@@ -4805,6 +4805,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (forceRecycle || holder.isRecyclable()) {
                 if (!holder.hasAnyOfTheFlags(ViewHolder.FLAG_INVALID | ViewHolder.FLAG_REMOVED |
                         ViewHolder.FLAG_CHANGED | ViewHolder.FLAG_UPDATE)) {
+                    // flag_changed和flat_update都是notifyItemChanged对应的状态，
+                    // 这两个标志位是同时被设置的，只不过changed表示在update的基础上
+                    // 需要做动画。
+
                     // Retire oldest cached view
                     final int cachedViewSize = mCachedViews.size();
                     if (cachedViewSize == mViewCacheMax && cachedViewSize > 0) {
@@ -4833,6 +4837,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
 
         void addViewHolderToRecycledViewPool(ViewHolder holder) {
             ViewCompat.setAccessibilityDelegate(holder.itemView, null);
+            // 这个方法只在holder被放入recycledViewPool时被调用了。但是里面三个
+            // 回调，是否与dispatchViewRecycled一致，参看这个方法的注释。
             dispatchViewRecycled(holder);
             holder.mOwnerRecyclerView = null;
             getRecycledViewPool().putRecycledView(holder);
@@ -5043,9 +5049,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         }
 
         void dispatchViewRecycled(ViewHolder holder) {
+            // listener只有在view被回收到pool中时才会被回调
             if (mRecyclerListener != null) {
                 mRecyclerListener.onViewRecycled(holder);
             }
+            // adapter也只是view被回收到pool中时才回调
             if (mAdapter != null) {
                 mAdapter.onViewRecycled(holder);
             }
