@@ -1189,21 +1189,52 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         return mSmoothScrollbarEnabled;
     }
 
+    /*
+     * RV.scrollBy(0,500)的场景下：
+     * layoutDirection: Layout_end
+     * requiredSpace: 500
+     * canUseExistingSpace: true
+     * state: 正常的state，从RV.scrollBy到这里之间，没有被修改过
+     *
+     * 没有调用smoothScrollToPosition，所有getExtraLayoutSpace返回0
+     * LayoutState：
+     * extra=0
+     * layoutDirection=Layout_end
+     * child=列表最底部的item对应的view（此时还没有fill），所以还是滚动前列表最底部的item
+     *
+     * 关于参数：
+     * canUseExistingSpace：貌似是说滑动的时候，有一段距离已经填充了view，并且这个view是有效的，所以
+     * 在配置LayoutState的mAvailable的时候，需要减掉这段距离，这段距离是不需要填充view的。
+     */
     private void updateLayoutState(int layoutDirection, int requiredSpace,
             boolean canUseExistingSpace, RecyclerView.State state) {
         mLayoutState.mExtra = getExtraLayoutSpace(state);
         mLayoutState.mLayoutDirection = layoutDirection;
         int fastScrollSpace;
         if (layoutDirection == LayoutState.LAYOUT_END) {
+            // 这里直接返回的就是RV.getPaddingBottom，没有考虑clipToPadding是否为false
+            // 所以说默认padding会被算入layout的extra？
             mLayoutState.mExtra += mOrientationHelper.getEndPadding();
             // get the first child in the direction we are going
             final View child = getChildClosestToEnd();
             // the direction in which we are traversing children
-            mLayoutState.mItemDirection = mShouldReverseLayout ? LayoutState.ITEM_DIRECTION_HEAD
-                    : LayoutState.ITEM_DIRECTION_TAIL;
+            // 从取值来看，tail应该是指 head->tail，head是指 tail->head
+            mLayoutState.mItemDirection = mShouldReverseLayout ? LayoutState.ITEM_DIRECTION_HEAD/*-1*/
+                    : LayoutState.ITEM_DIRECTION_TAIL/*1*/;
+            // mCurrentPosition表示当前将要进行布局的item的position
             mLayoutState.mCurrentPosition = getPosition(child) + mLayoutState.mItemDirection;
+            // mOffset表示当前mCurrentPosition对应的item，需要从什么位置开始布置
             mLayoutState.mOffset = mOrientationHelper.getDecoratedEnd(child);
             // calculate how much we can scroll without adding new children (independent of layout)
+            /*
+             * 这个child的底部一定是在RV的下边缘的下面或者与RV下边缘平齐。
+             * 感觉这里是有bug的，如果clipToPadding=false，那么padding的区域是需要填充的，而这里简单的认为
+             * item从decoratedEnd滑到到endAfterPadding不需要添加新的item到RV。
+             *
+             * 比如child滑动到其下边缘与endAfterPadding平齐，那么child的下边缘与RV的底部之间，就有
+             * padding大小的空白区域。如果padding足够大，那么其实前一句的滑动在不添加新的item的情况下
+             * 是不成立，child根本滑不到endAfterPadding。
+             */
             fastScrollSpace = mOrientationHelper.getDecoratedEnd(child)
                     - mOrientationHelper.getEndAfterPadding();
 
@@ -1222,8 +1253,18 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
          * 比如y=3000px，那么layout需要填满3000px的item？
          * mAvailable的定义是这么说的，但是感觉不应该是这样，或者哪里对这个available的上限有个限制。我记得
          * 是有的，如果滑动的距离大于一屏的高度，好像就会卡在一屏的高度。
+         *
+         * 大概意思就是说，你想滑动多远，我就给你填满多大空间的item。
          */
         mLayoutState.mAvailable = requiredSpace;
+        /*
+         * 貌似是说滑动的时候，有一段距离已经填充了view，并且这个view是有效的，所以
+         * 在配置LayoutState的mAvailable的时候，需要减掉这段距离，这段距离是不需要填充view的。
+         *
+         * 有的情况下fastScrollSpace就是无效的，比如全部available的空间都是与之前不同的position的item，
+         * 那么fastScrollSpace对应的已经填充的item其实就是无效的，这部分空间仍然需要重新填充item，不能
+         * 直接使用。
+         */
         if (canUseExistingSpace) {
             mLayoutState.mAvailable -= fastScrollSpace;
         }
@@ -1234,8 +1275,13 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (getChildCount() == 0 || dy == 0) {
             return 0;
         }
+        // 手动触发scroll的时候，使用回收机制
         mLayoutState.mRecycle = true;
         ensureLayoutState();
+        /*
+         * dy>0，说明列表从底部滑向顶部，即上滑，所以需要填充的位置是list end。所以layoutDirection叫
+         * Layout_end，因为需要填充的是list_end?
+         */
         final int layoutDirection = dy > 0 ? LayoutState.LAYOUT_END : LayoutState.LAYOUT_START;
         final int absDy = Math.abs(dy);
         updateLayoutState(layoutDirection, absDy, true, state);
