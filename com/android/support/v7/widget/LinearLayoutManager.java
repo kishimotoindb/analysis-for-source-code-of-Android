@@ -744,6 +744,11 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (getChildCount() == 0) {
             return false;
         }
+        /*
+         * 从focusedChild获取anchor，如果RecyclerView的高度比前一次layout时变大了或者没变，那么
+         * anchor中的mPosition就会是No_position（因为assignFromView的逻辑里，没有对mPosition赋值）
+         *
+         */
         final View focused = getFocusedChild();
         if (focused != null && anchorInfo.isViewValidAsAnchor(focused, state)) {
             // 就是这个view的top + view.decoration.top + view.marginTop
@@ -781,6 +786,9 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     /**
      * If there is a pending scroll position or saved states, updates the anchor info from that
      * data and returns true
+     */
+    /*
+     * 不论是通过下面哪个具体的场景计算anchor的coordinate，anchor的mPosition都是mPendingScrollPosition
      */
     private boolean updateAnchorFromPendingData(RecyclerView.State state, AnchorInfo anchorInfo) {
         if (state.isPreLayout() || mPendingScrollPosition == NO_POSITION) {
@@ -1082,6 +1090,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (mOrientation == HORIZONTAL) {
             return 0;
         }
+        // dy就是调用RecyclerView.scrollBy(x,y)中的y
         return scrollBy(dy, recycler, state);
     }
 
@@ -1208,6 +1217,12 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             fastScrollSpace = -mOrientationHelper.getDecoratedStart(child)
                     + mOrientationHelper.getStartAfterPadding();
         }
+        /*
+         * 调用RV.scrollBy(x,y)，如果传入一个很大的y，当次的layout需要把这个y的高度作为需要填满的空间？
+         * 比如y=3000px，那么layout需要填满3000px的item？
+         * mAvailable的定义是这么说的，但是感觉不应该是这样，或者哪里对这个available的上限有个限制。我记得
+         * 是有的，如果滑动的距离大于一屏的高度，好像就会卡在一屏的高度。
+         */
         mLayoutState.mAvailable = requiredSpace;
         if (canUseExistingSpace) {
             mLayoutState.mAvailable -= fastScrollSpace;
@@ -1225,6 +1240,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         final int absDy = Math.abs(dy);
         updateLayoutState(layoutDirection, absDy, true, state);
         final int freeScroll = mLayoutState.mScrollingOffset;
+        // 调用RV.scrollBy(x,y)，居然在这里直接调用了fill方法填充item，而不是post一个requestLayout
         final int consumed = freeScroll + fill(recycler, mLayoutState, state, false);
         if (consumed < 0) {
             if (DEBUG) {
@@ -2219,14 +2235,24 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
                     && lp.getViewLayoutPosition() < state.getItemCount();
         }
 
+        /*
+         * 这个方法只用来计算 focused view 作为anchor的情况，所有整个计算逻辑都是以保证focused view
+         * 一直可见为目的。
+         */
         public void assignFromViewAndKeepVisibleRect(View child) {
             // 正常情况下RecyclerView的高度是不会发生变化的，所以这里返回的一直是零。但是如果
             // 本次layout的时候，RecyclerView的高度变小了，那么返回的就是个负数。
             final int spaceChange = mOrientationHelper.getTotalSpaceChange();
+            // 比上一次layout的时候，RecyclerView可以布局的空间变大了或者没变，这种情况下直接根据view的
+            // 坐标设置 anchor的coordinate，child的position会赋值给anchor的mPosition
             if (spaceChange >= 0) {
                 assignFromView(child);
                 return;
             }
+
+            /*
+             * 执行到这里，说明RecyclerView的高度比前一次layout的时候变小了
+             */
             mPosition = getPosition(child);
             if (mLayoutFromEnd) {
                 final int prevLayoutEnd = mOrientationHelper.getEndAfterPadding() - spaceChange;
@@ -2251,14 +2277,24 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
                 final int childStart = mOrientationHelper.getDecoratedStart(child);
                 final int startMargin = childStart - mOrientationHelper.getStartAfterPadding();
                 mCoordinate = childStart;
-                // 这个if里的逻辑没看懂，感觉如果有差别，应该和spaceChanged有关系
                 if (startMargin > 0) { // we have room to fix end as well
+                    /*
+                     * layoutChildren计算anchor的时候，item还没有绑定新的数据，所以这里获取到的item的
+                     * 相关尺寸都还是上一次layout的结果
+                     */
                     final int estimatedEnd = childStart +
                             mOrientationHelper.getDecoratedMeasurement(child);
+                    /*
+                     * 当前RecyclerView的高度已经变化了，所以必须通过这种方式才能将计算出前一个layout
+                     * 时RecyclerView的高度
+                     */
                     final int previousLayoutEnd = mOrientationHelper.getEndAfterPadding() -
                             spaceChange;
                     final int previousEndMargin = previousLayoutEnd -
                             mOrientationHelper.getDecoratedEnd(child);
+                    /*
+                     * 当前最新的endAfterPadding（高度变小后的）
+                     */
                     final int endReference = mOrientationHelper.getEndAfterPadding() -
                             Math.min(0, previousEndMargin);
                     final int endMargin = endReference - estimatedEnd;

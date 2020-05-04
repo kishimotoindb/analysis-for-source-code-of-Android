@@ -69,6 +69,18 @@ public abstract class OrientationHelper {
     // 2. 列表滑到顶部有topPadding，列表开始滑动后padding消失。这种暂时不清楚是否算到spaceChange，因为
     //    padding可能是单独计算的，并没有算到spaceChange里。
     public int getTotalSpaceChange() {
+        // totalSpace指的是RecyclerView可以用来布置child的空间，在上一次layout结束的时候，
+        // 会把当时使用的totalSpace记录到mLastTotalSpace。所有totalSpaceChange，指的就是
+        // 上次layout时的布局空间与本次layout的可用布局空间的变化。
+        /*
+         * 在clipToPadding=false的时候，paddingTop或者paddingBottom在列表滚动的时候就不生效了，此时
+         * totalSpace=lm.getHeight-lm.getPaddingTop-lm.getPaddingBottom的结果会不会随着列表的滚动
+         * 发生变化？
+         * 感觉totalSpace应该会发生变化。totalSpace表示可以布置child的空间大小，不考虑padding之后，可
+         * 布局的空间肯定是变大了。
+         * （查了一下RecyclerView的mClipToPadding变量的使用，貌似的确没有参与到layout的过程。目前看到的
+         * 只是影响draw。所以到底是否影响了totalSpace，还需要再确认）
+         */
         return INVALID_SIZE == mLastTotalSpace ? 0 : getTotalSpace() - mLastTotalSpace;
     }
 
