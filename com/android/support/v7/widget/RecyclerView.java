@@ -4423,6 +4423,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             }
             if (!mState.isPreLayout()) {
                 // don't check type if it is pre-layout.
+                // 获取马上要绑定的数据的view type，然后和holder本身包含的view的type对比
                 final int type = mAdapter.getItemViewType(holder.mPosition);
                 if (type != holder.getItemViewType()) {
                     return false;
@@ -4542,15 +4543,28 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             ViewHolder holder = null;
             // 0) If there is a changed scrap, try to find from there
             if (mState.isPreLayout()) {
+                // mChangedScrap
                 holder = getChangedScrapViewForPosition(position);
                 fromScrap = holder != null;
             }
             // 1) Find from scrap by position
             if (holder == null) {
+                /*
+                 * mAttachedScrap、mCachedViews，不匹配 view type。
+                 * 为什么回收的时候mCachedViews算recycle，复用的时候又算是scrap？
+                 *
+                 * 回收到mCachedViews的holder，状态没有被重置。只有put到RecycledViewPool中的holder，
+                 * 状态才会被重置。
+                 */
                 holder = getScrapViewForPosition(position, INVALID_TYPE, dryRun);
                 if (holder != null) {
                     if (!validateViewHolderForOffsetPosition(holder)) {
                         // recycle this scrap
+                        /*
+                         * 从这里来看，只要是前后两次布局不能直接关联完全复用的holder，都会被recycle。
+                         * scrap并不是严格的保证holder在前后两次布局中一定能关联上，如果关联不上，就在
+                         * 复用失效时recycle。recycle是严格的，scrap为了提供成功率，并不严格。
+                         */
                         if (!dryRun) {
                             // we would like to recycle this but need to make sure it is not used by
                             // animation logic etc.
@@ -4561,6 +4575,13 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                             } else if (holder.wasReturnedFromScrap()) {
                                 holder.clearReturnedFromScrapFlag();
                             }
+                            /*
+                             * 因为holder设置了invalid，所以不会被放入mCachedViews，而是直接放入
+                             * RecycledViewPool。
+                             * 另外，getScrapViewForPosition(..)方法会从mCachedViews中复用holder，
+                             * 所以这里也不应该再把holder回收到mCachedViews中。不然不是白折腾了，拿出
+                             * 来又放回去。
+                             */
                             recycleViewHolderInternal(holder);
                         }
                         holder = null;
@@ -4920,6 +4941,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             // find by position
             for (int i = 0; i < changedScrapSize; i++) {
                 final ViewHolder holder = mChangedScrap.get(i);
+                /*
+                 * holder.getLayoutPosition()，
+                 */
                 if (!holder.wasReturnedFromScrap() && holder.getLayoutPosition() == position) {
                     holder.addFlags(ViewHolder.FLAG_RETURNED_FROM_SCRAP);
                     return holder;

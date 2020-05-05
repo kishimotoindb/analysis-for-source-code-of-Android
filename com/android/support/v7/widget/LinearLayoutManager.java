@@ -1284,7 +1284,10 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
          */
         final int layoutDirection = dy > 0 ? LayoutState.LAYOUT_END : LayoutState.LAYOUT_START;
         final int absDy = Math.abs(dy);
+        // 根据滚动参数，更新layoutState，以便为后面"layout"的过程提供数据。LayoutState为所有需要增删
+        // item的场景提供场景相关的数据。所有这里
         updateLayoutState(layoutDirection, absDy, true, state);
+        // freeScroll的意思就是不需要add new view，就可以滚动的距离
         final int freeScroll = mLayoutState.mScrollingOffset;
         // 调用RV.scrollBy(x,y)，居然在这里直接调用了fill方法填充item，而不是post一个requestLayout
         final int consumed = freeScroll + fill(recycler, mLayoutState, state, false);
@@ -1444,6 +1447,15 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @param stopOnFocusable If true, filling stops in the first focusable new child
      * @return Number of pixels that it added. Useful for scoll functions.
      */
+    /*
+     * scrollBy滚动列表的场景调用fill填充页面：
+     * layoutState.mAvailable=scrollBy传入的y 减去 free scroll
+     *
+     * fill方法里还需要考虑scrollingOffset？
+     *
+     *
+     *
+     */
     int fill(RecyclerView.Recycler recycler, LayoutState layoutState,
             RecyclerView.State state, boolean stopOnFocusable) {
         // max offset we should set is mFastScroll + available
@@ -1455,6 +1467,9 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             }
             recycleByLayoutState(recycler, layoutState);
         }
+        /*
+         * scrollBy场景：mAvailable= scrollBy的时候传入的y - freeScroll
+         */
         int remainingSpace = layoutState.mAvailable + layoutState.mExtra;
         LayoutChunkResult layoutChunkResult = new LayoutChunkResult();
         // 空间足够，并且还有未布置的item
@@ -1466,6 +1481,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             if (layoutChunkResult.mFinished) {
                 break;
             }
+            // 下一个item开始放置的起点位置
             layoutState.mOffset += layoutChunkResult.mConsumed * layoutState.mLayoutDirection;
             /**
              * Consume the available space if:
