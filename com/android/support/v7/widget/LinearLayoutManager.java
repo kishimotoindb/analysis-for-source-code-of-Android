@@ -1240,6 +1240,9 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
              * 比如child滑动到其下边缘与endAfterPadding平齐，那么child的下边缘与RV的底部之间，就有
              * padding大小的空白区域。如果padding足够大，那么其实前一句的滑动在不添加新的item的情况下
              * 是不成立，child根本滑不到endAfterPadding。
+             *
+             * fastScrollSpace只是表示可以在不add新的item的情况下能够滚动的距离，不是一定要滚动这么远，
+             * scrollBy(x,y)中的y可能小于fastScrollSpace。下面的mAvaliable才是真正需要滚动的距离
              */
             fastScrollSpace = mOrientationHelper.getDecoratedEnd(child)
                     - mOrientationHelper.getEndAfterPadding();
@@ -1261,6 +1264,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
          * 是有的，如果滑动的距离大于一屏的高度，好像就会卡在一屏的高度。
          *
          * 大概意思就是说，你想滑动多远，我就给你填满多大空间的item。
+         *
          */
         mLayoutState.mAvailable = requiredSpace;
         /*
@@ -1272,11 +1276,18 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
          * 直接使用。
          */
         if (canUseExistingSpace) {
+            // mAvailable可能出现负值的情况，就是需要滚动10px，但是fastScrollSpace=20px，那么available
+            // 就是负的。
             mLayoutState.mAvailable -= fastScrollSpace;
         }
         mLayoutState.mScrollingOffset = fastScrollSpace;
     }
 
+    /*
+     * 手指滑动列表，底层也是使用的这个方法进行的处理。所以对于RV来说，最主要的两个方法可能就是：
+     * 1）onLayoutChildren
+     * 2）scrollBy
+     */
     int scrollBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
         if (getChildCount() == 0 || dy == 0) {
             return 0;
@@ -1296,6 +1307,15 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         // freeScroll的意思就是不需要add new view，就可以滚动的距离
         final int freeScroll = mLayoutState.mScrollingOffset;
         // 调用RV.scrollBy(x,y)，居然在这里直接调用了fill方法填充item，而不是post一个requestLayout
+        /*
+         * fill方法的本质是获取一个holder，然后填充到RV中。如果不需要填充新的holder，fill方法实际等于
+         * 什么都没做。滚动过程对原有holder的offset处理，是通过下面
+         * mOrientationHelper.offsetChildren(-scrolled)实现的。
+         *
+         * 其实这里的语义是有问题的：
+         * 在scrollBy场景中，如果dy=10px,freeScroll=50px，那么consumed计算结果为50px。其实应该是0px
+         * 才对，一个px都没有consume。因为dy<freeScroll，fill()中没有执行任何填充holder的逻辑。
+         */
         final int consumed = freeScroll + fill(recycler, mLayoutState, state, false);
         if (consumed < 0) {
             if (DEBUG) {
@@ -1304,6 +1324,16 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             return 0;
         }
         final int scrolled = absDy > consumed ? layoutDirection * consumed : dy;
+
+        /*
+         * 上面fill方法只是填充新的holder到rv中，但是各个holder的位置还是在滚动前的位置。等填充结束之后，
+         * 再对rv所有的holder做位移。
+         *
+         * 这么做是一种聪明的做法，首先，fill方法不一定有机会操作所有的holder，所以如果在fill方法中处理
+         * holder的位移，势必造成一部分holder位移了，一部分没有，那么执行到这里的时候还需要再次判断。另外，
+         * 如果fill方法掺杂了位移的逻辑，方法本身的职责就不单一了，不利于方法的复用。再有就是这么写，流程
+         * 更清晰
+         */
         mOrientationHelper.offsetChildren(-scrolled);
         if (DEBUG) {
             Log.d(TAG, "scroll req: " + dy + " scrolled: " + scrolled);
@@ -1460,6 +1490,12 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * fill方法里还需要考虑scrollingOffset？
      *
      *
+     * fill(..)和layoutChunk(..)的区别：
+     * 1. fill：给rv填充足够的holder，直到达到UI显示的需求
+     * 2. layoutChunk：填充单个holder的流程
+     *
+     * fill就是layoutChunk的多次循环
+     *
      *
      */
     int fill(RecyclerView.Recycler recycler, LayoutState layoutState,
@@ -1469,6 +1505,12 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (layoutState.mScrollingOffset != LayoutState.SCOLLING_OFFSET_NaN) {
             // TODO ugly bug fix. should not happen
             if (layoutState.mAvailable < 0) {
+                /*
+                 * start有可能是负值，在scrollBy的场景下，mAvailable可能小于mScrollingOffset，所有计算之后
+                 * mAvailable可能小于0.
+                 * 比如需要滚动20px，freeScroll是50px，那么计算得到的available=-30px。实际上本来就只需要
+                 * 滚动20px，不需要使用全部的50px，所以这里把offset重新设置成20px，避免滚动距离超过实际距离。
+                 */
                 layoutState.mScrollingOffset += layoutState.mAvailable;
             }
             recycleByLayoutState(recycler, layoutState);
@@ -1479,6 +1521,9 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         int remainingSpace = layoutState.mAvailable + layoutState.mExtra;
         LayoutChunkResult layoutChunkResult = new LayoutChunkResult();
         // 空间足够，并且还有未布置的item
+        /*
+         * 在滚动距离小于freeScroll的情况下，remainingSpace可能也是小于0的，所以不会进行view的填充。
+         */
         while (remainingSpace > 0 && layoutState.hasMore(state)) {
             layoutChunkResult.resetInternal();
             /*
@@ -1595,6 +1640,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
                 right = layoutState.mOffset + result.mConsumed;
             }
         }
+
+        // 4. 布局
         // We calculate everything with View's bounding box (which includes decor and margins)
         // To calculate correct layout position, we subtract margins.
         layoutDecorated(view, left + params.leftMargin, top + params.topMargin,

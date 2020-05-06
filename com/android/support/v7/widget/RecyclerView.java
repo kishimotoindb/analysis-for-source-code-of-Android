@@ -4558,6 +4558,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                  */
                 holder = getScrapViewForPosition(position, INVALID_TYPE, dryRun);
                 if (holder != null) {
+                    // 验证了view type 和 id
                     if (!validateViewHolderForOffsetPosition(holder)) {
                         // recycle this scrap
                         /*
@@ -4591,6 +4592,19 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                 }
             }
             if (holder == null) {
+                /*
+                 * 如果在调用当前方法之前，adapter数据没有变化，即没有postponedUpdate需要反映到RV中，
+                 * 那么返回的 offset==position。
+                 * 如果数据有变化，那么这些变化还没有反映到RV上。position是在rv没有更新UI的时候计算得
+                 * 到的，所以如果adapter数据变化了，这里需要转换position到最新的位置。
+                 *
+                 * 在调用当前getViewForPosition之前，AdapterHelper一定调用了preProcess，所以数据位置的
+                 * 变动已经已经反映在了AdapterHelper的postponedUpdateList中。
+                 *
+                 * 为什么上面从缓存中获取holder的时候，没有转换？
+                 * 因为position是基于原有没刷新的UI排列计算的，缓存的holder也是根据原有的UI计算的，所有
+                 * 不需要进行转换，转换了反而大概率holder和position对不上了。
+                 */
                 final int offsetPosition = mAdapterHelper.findPositionOffset(position);
                 if (offsetPosition < 0 || offsetPosition >= mAdapter.getItemCount()) {
                     throw new IndexOutOfBoundsException("Inconsistency detected. Invalid item "
