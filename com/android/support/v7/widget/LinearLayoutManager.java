@@ -575,8 +575,10 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             }
         } else {
             // fill towards end
+            // 这里只是更新layoutState的信息
             updateLayoutStateToFillEnd(mAnchorInfo);
             mLayoutState.mExtra = extraForEnd;
+            //
             fill(recycler, mLayoutState, state, false);
             endOffset = mLayoutState.mOffset;
             final int lastElement = mLayoutState.mCurrentPosition;
@@ -966,10 +968,14 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     }
 
     private void updateLayoutStateToFillEnd(AnchorInfo anchorInfo) {
+        /*
+         * 如果是第一次layout或者mStackFromEnd在过程中发生过变化，那么coordinate就是startAfterPadding
+         */
         updateLayoutStateToFillEnd(anchorInfo.mPosition, anchorInfo.mCoordinate);
     }
 
     private void updateLayoutStateToFillEnd(int itemPosition, int offset) {
+        // 计算本次layout可以进行布局的总高度
         mLayoutState.mAvailable = mOrientationHelper.getEndAfterPadding() - offset;
         mLayoutState.mItemDirection = mShouldReverseLayout ? LayoutState.ITEM_DIRECTION_HEAD :
                 LayoutState.ITEM_DIRECTION_TAIL;
@@ -1475,8 +1481,10 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         // 空间足够，并且还有未布置的item
         while (remainingSpace > 0 && layoutState.hasMore(state)) {
             layoutChunkResult.resetInternal();
-            // layoutChunk的chunk，指的是一个itemView及其Decoration。所以layoutChunk实际是布局
-            // 单个itemView的操作。然后fill()方法里循环执行layoutChunk()，进而完成整个列表的布局操作。
+            /*
+             * layoutChunk的chunk，指的是一个itemView及其Decoration。所以layoutChunk实际是布局单个
+             * itemView的操作。然后fill()方法里循环执行layoutChunk()，进而完成整个列表的布局操作
+             */
             layoutChunk(recycler, state, layoutState, layoutChunkResult);
             if (layoutChunkResult.mFinished) {
                 break;

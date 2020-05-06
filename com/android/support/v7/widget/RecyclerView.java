@@ -4795,6 +4795,13 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
          * Public version un-scraps before calling recycle.
          */
         void recycleViewHolderInternal(ViewHolder holder) {
+            /*
+             * scrap在listview中是废弃的意思，废弃的view会被放到缓存中。在RecyclerView中，scrap代表view
+             * 被放到了当前RecyclerView自己的scrap缓存中，供自己后续使用。所以这种view不能被放到
+             * RecyclerPool中，因为recyclerPool可能是多个RecyclerView共用的
+             *
+             * recycle + scrap in recyclerview = scrap in listview
+             */
             if (holder.isScrap() || holder.itemView.getParent() != null) {
                 throw new IllegalArgumentException(
                         "Scrapped or attached views may not be recycled. isScrap:"
@@ -4802,6 +4809,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                                 + (holder.itemView.getParent() != null));
             }
 
+            /*
+             * 同上的道理
+             */
             if (holder.isTmpDetached()) {
                 throw new IllegalArgumentException("Tmp detached view should be removed "
                         + "from RecyclerView before it can be recycled: " + holder);
@@ -5262,7 +5272,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
 
     /**
      * ViewCacheExtension is a helper class to provide an additional layer of view caching that can
-     * ben controlled by the developer.
+     * be controlled by the developer.
      * <p>
      * When {@link Recycler#getViewForPosition(int)} is called, Recycler checks attached scrap and
      * first level cache to find a matching View. If it cannot find a suitable View, Recycler will
@@ -6935,6 +6945,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                 }
                 return;
             }
+            // notifyDataSetChange会将holder设置为invalid，那么基本上当前屏幕上所有的view都放到
+            //
             if (viewHolder.isInvalid() && !viewHolder.isRemoved() && !viewHolder.isChanged() &&
                     !mRecyclerView.mAdapter.hasStableIds()) {
                 removeViewAt(index);
