@@ -2158,6 +2158,10 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
          * When LLM needs to layout particular views, it sets this list in which case, LayoutState
          * will only return views from this list and return null if it cannot find an item.
          */
+        /*
+         * 一个指向recycler中的mAttachedScrap列表的引用，区别就是对mAttachedScrap做了unmodifiable处理，
+         * 并不是LinearLayoutManager单独设置的一级缓存
+         */
         List<RecyclerView.ViewHolder> mScrapList = null;
 
         /**

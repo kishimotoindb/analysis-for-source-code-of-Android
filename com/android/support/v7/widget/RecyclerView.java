@@ -4534,6 +4534,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             return getViewForPosition(position, false);
         }
 
+        /*
+         * 这里传入的position已经是对应当前这次layout的值了，缓存池holder保存的position还是前一次layout
+         * 对应的值。这句话是对的么？从mAdapter.bindViewHolder(holder, offsetPosition)前计算
+         * offsetPosition的代码来看，这里传入的position貌似又可能是前一次layout时的position
+         */
         View getViewForPosition(int position, boolean dryRun) {
             if (position < 0 || position >= mState.getItemCount()) {
                 throw new IndexOutOfBoundsException("Invalid item position " + position
@@ -4542,6 +4547,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             boolean fromScrap = false;
             ViewHolder holder = null;
             // 0) If there is a changed scrap, try to find from there
+            /*
+             * 有change已经有prelayout？
+             */
             if (mState.isPreLayout()) {
                 // mChangedScrap
                 holder = getChangedScrapViewForPosition(position);
@@ -4558,7 +4566,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                  */
                 holder = getScrapViewForPosition(position, INVALID_TYPE, dryRun);
                 if (holder != null) {
-                    // 验证了view type 和 id
+                    // 验证了view type 和 id。
+                    // ？mAttachedScrap和mCachedViews缓存的holder，这个holder的position不一定还能
+                    //   对应上
                     if (!validateViewHolderForOffsetPosition(holder)) {
                         // recycle this scrap
                         /*
@@ -4684,6 +4694,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             final ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
             final LayoutParams rvLayoutParams;
             if (lp == null) {
+                // 默认生成的layoutParam的宽高是wrap_content
                 rvLayoutParams = (LayoutParams) generateDefaultLayoutParams();
                 holder.itemView.setLayoutParams(rvLayoutParams);
             } else if (!checkLayoutParams(lp)) {
@@ -4956,6 +4967,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             mAttachedScrap.clear();
         }
 
+        /*
+         * 从mChangedScrap中找到一个position一致的holder，或者有stableId，那么根据id获取。
+         * 就是对mChangedScrap进行遍历查找
+         */
         ViewHolder getChangedScrapViewForPosition(int position) {
             // If pre-layout, check the changed scrap for an exact match.
             final int changedScrapSize;
@@ -4999,6 +5014,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
          * @param dryRun  Does a dry run, finds the ViewHolder but does not remove
          * @return a ViewHolder that can be re-used for this position.
          */
+        /*
+         * 遍历mAttachedScrap和mCachedViews，然后根据position找到一个可用的holder
+         */
         ViewHolder getScrapViewForPosition(int position, int type, boolean dryRun) {
             final int scrapCount = mAttachedScrap.size();
 
@@ -5020,6 +5038,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
 
             if (!dryRun) {
                 View view = mChildHelper.findHiddenNonRemovedView(position, type);
+                // 这么说mHiddenViews里的view都是在做disappearing动画的
                 if (view != null) {
                     // ending the animation should cause it to get recycled before we reuse it
                     mItemAnimator.endAnimation(getChildViewHolder(view));
@@ -5046,6 +5065,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             return null;
         }
 
+        /*
+         * 遍历mAttachedScrap和mCachedViews，然后根据id找到一个可用的holder。调用这个方法的
+         * 前提是adapter有stableId
+         */
         ViewHolder getScrapViewForId(long id, int type, boolean dryRun) {
             // Look in our attached views first
             final int count = mAttachedScrap.size();

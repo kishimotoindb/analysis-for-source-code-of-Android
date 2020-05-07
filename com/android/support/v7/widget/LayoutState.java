@@ -84,6 +84,9 @@ class LayoutState {
      */
     View next(RecyclerView.Recycler recycler) {
         final View view = recycler.getViewForPosition(mCurrentPosition);
+        // 这里体现了面向对象的编程思想，LayoutState对象负责维护布局状态，所以获取到当前位置的holder
+        // 之后，需要将mCurrentPosition加1，维护了布局状态的一致性。mCurrentPosition如果是在LayoutState
+        // 外部被更新，就变成了面向过程编程。
         mCurrentPosition += mItemDirection;
         return view;
     }
