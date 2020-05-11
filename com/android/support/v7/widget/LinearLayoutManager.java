@@ -1513,6 +1513,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
                  */
                 layoutState.mScrollingOffset += layoutState.mAvailable;
             }
+            // 滑动距离小于freeScroll，上面会对mScrollingOffset进行修正，所以这里不会
+            // 出现提前回收未划出屏幕holder的情况。
             recycleByLayoutState(recycler, layoutState);
         }
         /*

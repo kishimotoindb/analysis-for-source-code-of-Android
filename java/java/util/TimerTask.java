@@ -71,6 +71,9 @@ public abstract class TimerTask implements Runnable {
      * System.currentTimeMillis, assuming this task is scheduled for execution.
      * For repeating tasks, this field is updated prior to each task execution.
      */
+    /*
+     * 时间戳，不是时间间隔
+     */
     long nextExecutionTime;
 
     /**

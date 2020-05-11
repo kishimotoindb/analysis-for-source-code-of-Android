@@ -713,6 +713,9 @@ class TaskQueue {
      * Establishes the heap invariant (described above) in the entire tree,
      * assuming nothing about the order of the elements prior to the call.
      */
+    /*
+     * 从第一个非叶节点开始做下沉操作，重新建立最小堆
+     */
     void heapify() {
         for (int i = size/2; i >= 1; i--)
             fixDown(i);
