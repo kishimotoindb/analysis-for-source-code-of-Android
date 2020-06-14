@@ -209,6 +209,12 @@ class ComparableTimSort {
      * @param start the index of the first element in the range that is
      *        not already known to be sorted ({@code lo <= start <= hi})
      */
+    /*
+     * 比起普通的插入排序做了三个优化：
+     * 1）排序执行的起始位置：通过提前计算从lo开始的连续升序或降序序列，减少插入排序的循环次数
+     * 2）查找当前第k个元素在前k-1个元素中的位置，使用二叉查找
+     * 3）找到位置移动元素的时候，使用system.arraycopy提升移动效率
+     */
     @SuppressWarnings("fallthrough")
     private static void binarySort(Object[] a, int lo, int hi, int start) {
         assert lo <= start && start <= hi;
@@ -220,14 +226,15 @@ class ComparableTimSort {
 
             // Set left (and right) to the index where a[start] (pivot) belongs
             int left = lo;
-            int right = start;
+            int right = start; // right exclusive
             assert left <= right;
             /*
+             * 这里的left和right指的是while循环执行结束后的位置
              * Invariants:
              *   pivot >= all in [lo, left).
              *   pivot <  all in [right, start).
              */
-            while (left < right) {
+            while (left < right) {  // right exclusive
                 int mid = (left + right) >>> 1;
                 if (pivot.compareTo(a[mid]) < 0)
                     right = mid;
@@ -256,9 +263,16 @@ class ComparableTimSort {
     }
 
     /**
+     * 插入排序每次循环结束，当前指针位置之前的元素一定是已经排好序的序列，所以如果数组前k个元素已经是升序
+     * 排列的，那么就不需要对这些元素执行插入排序，直接从k+1位置开始执行排序即可。下面的方法就是在执行插入
+     * 排序之前，从lo开始寻找已排序元素个数k，作为插入排序真正的起始位置。
+     *
      * Returns the length of the run beginning at the specified position in
      * the specified array and reverses the run if it is descending (ensuring
      * that the run will always be ascending when the method returns).
+     *
+     * run的含义: 从lo开始，第一段连续的升序序列或者降序序列。注意，只是指第一段，后面再有不考虑。
+     * 另外，如果是降序，把第一段序列翻转为升序。
      *
      * A run is the longest ascending sequence with:
      *
@@ -277,7 +291,8 @@ class ComparableTimSort {
      * @param hi index after the last element that may be contained in the run.
               It is required that {@code lo < hi}.
      * @return  the length of the run beginning at the specified position in
-     *          the specified array
+     *          the specified array.
+     *          返回的就是第一段序列的元素个数
      */
     @SuppressWarnings("unchecked")
     private static int countRunAndMakeAscending(Object[] a, int lo, int hi) {
@@ -287,6 +302,8 @@ class ComparableTimSort {
             return 1;
 
         // Find end of run, and reverse range if descending
+        // 注意降序这里的条件是小于0，即如果有两个相等的元素，降序序列就到此为止了，从而保证这里的翻转不影
+        // 响插入排序的稳定性。
         if (((Comparable) a[runHi++]).compareTo(a[lo]) < 0) { // Descending
             while (runHi < hi && ((Comparable) a[runHi]).compareTo(a[runHi - 1]) < 0)
                 runHi++;

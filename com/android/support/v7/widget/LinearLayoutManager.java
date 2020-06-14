@@ -2240,6 +2240,12 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
                 if (view == ignore || lp.isItemRemoved()) {
                     continue;
                 }
+
+                /*
+                 * 核心：
+                 * 就是从mScrapList中找到一个在布局方向上mPosition与mCurrentPosition最接近的一个
+                 * holder，然后将mPosition设置为mPosition的值
+                 */
                 final int distance = (lp.getViewLayoutPosition() - mCurrentPosition) *
                         mItemDirection;
                 if (distance < 0) {
