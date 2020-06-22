@@ -9911,8 +9911,8 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * 3.dispatchTouchEvent()方法默认情况下返回值是具有一致性的，即开始是true，后面一直是true。
      * 但是如果重写的onTouch和onTouchEvent方法，其返回值不具有一致性，那么dispatchTouchEvent()方法也就不具有一致性。
      * 4.onTouch和onTouchEvent的区别：
-     * × 	1）onTouch() is used by users of the View to get touch events while onTouchEvent() is used by derived classes of the
-     * ×	 View to get touch events.
+     * 1）onTouch() is used by users of the View to get touch events while onTouchEvent() is used
+     * by derived classes of the View to get touch events.
      * 2）自定义控件的时候应该重写的是onTouchEvent()方法，将onTouch()方法留给控件的使用者，如果使用者需要执行一些与
      * touchEvent有关的操作时，就可以通过设置onTouchListener的方式进行
      * 3）为什么onTouch和onTouchEvent的代码位置是前后放置，而不是将onTouch放到onTouchEvent里？

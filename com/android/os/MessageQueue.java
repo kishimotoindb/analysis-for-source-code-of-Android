@@ -320,6 +320,14 @@ public final class MessageQueue {
                 Binder.flushPendingCommands();
             }
 
+            /*
+             * 这是个native函数，其主要作用是设置一个定时的睡眠，其参数timeoutMillis，不同的值意义不同
+             * timeoutMillis =0 ：无需睡眠，直接返回
+             * timeoutMillis >0 ：睡眠如果超过timeoutMillis，就返回
+             * timeoutMillis =-1：一直睡眠，直到其他线程唤醒它
+             *
+             * 定时为什么需要使用native实现？
+             */
             nativePollOnce(ptr, nextPollTimeoutMillis);
 
             synchronized (this) {
@@ -348,10 +356,12 @@ public final class MessageQueue {
                         }
                         msg.next = null;
                         if (DEBUG) Log.v(TAG, "Returning message: " + msg);
+                        // 从消息队列中取出第一个msg
                         msg.markInUse();
                         return msg;
                     }
                 } else {
+                    // 消息队列中没有消息，那么Looper就需要在native中一直阻塞，直到有人唤醒
                     // No more messages.
                     nextPollTimeoutMillis = -1;
                 }
@@ -371,6 +381,8 @@ public final class MessageQueue {
                 }
                 if (pendingIdleHandlerCount <= 0) {
                     // No idle handlers to run.  Loop and wait some more.
+                    // 队列中没有msg或者msg还没有达到执行时间，并且也没有IdleHandler
+                    // 需要执行，那么进入阻塞状态，并且mBlocked设置为true。
                     mBlocked = true;
                     continue;
                 }
@@ -555,8 +567,16 @@ public final class MessageQueue {
                 // New head, wake up the event queue if blocked.
                 msg.next = p;
                 mMessages = msg;
+                /*
+                 * mBlocked==true的场景
+                 * 1.消息队列中没有消息、最近的消息还没有到达执行时间、并且没有IdleHandler需要执行，
+                 * 此时mBlock才会被设置为true。
+                 * 2.如果没有消息、最近的消息也没有到达运行时间，但是有IdleHandler需要运行，那么IdleHandler
+                 * 执行结束之后，进入到next()中下一次for循环时，再做判断。
+                 */
                 needWake = mBlocked;
             } else {
+                // 队列中已经存在msg，并且待插入的msg的执行时间不是最早的。
                 // Inserted within the middle of the queue.  Usually we don't have to wake
                 // up the event queue unless there is a barrier at the head of the queue
                 // and the message is the earliest asynchronous message in the queue.
@@ -732,10 +752,12 @@ public final class MessageQueue {
     private void removeAllFutureMessagesLocked() {
         final long now = SystemClock.uptimeMillis();
         Message p = mMessages;
+        // p!=null说明有消息队列中有消息
         if (p != null) {
             if (p.when > now) {
                 removeAllMessagesLocked();
             } else {
+                // 把执行时间都早于now的留下，晚于now的删除
                 Message n;
                 for (;;) {
                     n = p.next;

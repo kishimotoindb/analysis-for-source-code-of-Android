@@ -2179,13 +2179,14 @@ public abstract class ViewGroup extends android.view.View implements ViewParent,
 	 * 3.mFirstTouchTarget在每个新的事件序列刚来临的时候均会被清空
 	 * 4.父容器在没有拦截事件之前，onInterceptTouchEvent方法一直会被调用。一旦父容器决定拦截了，那么mFirstTouchTarget
 	 ×   就会被清空，此后onInterceptTouchEvent方法就不会再被调用。
-	 × 5.子View可以要求父容器拦截事件，但是一旦父容器相应要求拦截了事件，之后事件就在也不会传递给子View。
+	 × 5.子View可以要求父容器拦截事件，但是一旦父容器响应要求拦截了事件，之后事件就在也不会传递给子View。
 	 × 6.父容器其实在事件序列的全过程中，均有权随时拦截事件，而且不需要
 	 × 7.newTouchTarget只有在Down事件的时候才会被创建，所以父容器的onInterceptTouchEvent方法绝不应该在Down事件的时候返
 	 ×   回true，如果这时返回true，子View就永远没有机会得到事件了。因为创建newTouchTarget在if(!intercepted){}方法体中。
 	 ×       如果子View需要父容器不拦截事件，必须在父容器决定拦截事件之前发出请求，一旦父容器决定拦截之后，子View的事件分发
 	 ×	 方法均不再被调用。保险起见，在Down事件的时候发出请求。
-	 ×
+	 × 8.如果子View的dispatchTouchEvent在down事件的时候返回了true，那么ViewGroup就会将后续的事件分发给
+     *   这个子View，即使在处理后续事件时子view返回了false，viewGroup依然会将事件分发给这个子View。
      */
     public boolean dispatchTouchEvent(MotionEvent ev) {
 		//输入事件连续性判断
