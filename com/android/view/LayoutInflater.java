@@ -512,7 +512,7 @@ public abstract class LayoutInflater {
                     }
 
                     // Inflate all children under temp against its context.
-                    rInflateChildren(parser, temp, attrs, true);
+                    rInflateChildren(parser, temp, attrs);
 
                     if (DEBUG) {
                         System.out.println("-----> done inflating children");
@@ -793,9 +793,8 @@ public abstract class LayoutInflater {
      * <strong>Note:</strong> Default visibility so the BridgeInflater can
      * call it.
      */
-    final void rInflateChildren(XmlPullParser parser, View parent, AttributeSet attrs,
-            boolean finishInflate) throws XmlPullParserException, IOException {
-        rInflate(parser, parent, parent.getContext(), attrs, finishInflate);
+    final void rInflateChildren(XmlPullParser parser, View parent, AttributeSet attrs) throws XmlPullParserException, IOException {
+        rInflate(parser, parent, parent.getContext(), attrs, true);
     }
 
     /**
@@ -835,7 +834,7 @@ public abstract class LayoutInflater {
                 final View view = createViewFromTag(parent, name, context, attrs);
                 final ViewGroup viewGroup = (ViewGroup) parent;
                 final ViewGroup.LayoutParams params = viewGroup.generateLayoutParams(attrs);
-                rInflateChildren(parser, view, attrs, true);
+                rInflateChildren(parser, view, attrs);
                 viewGroup.addView(view, params);
             }
         }
@@ -968,7 +967,7 @@ public abstract class LayoutInflater {
                         view.setLayoutParams(params);
 
                         // Inflate all children.
-                        rInflateChildren(childParser, view, childAttrs, true);
+                        rInflateChildren(childParser, view, childAttrs);
 
                         if (id != View.NO_ID) {
                             view.setId(id);

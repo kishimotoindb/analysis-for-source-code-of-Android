@@ -194,7 +194,7 @@ public class LayoutInflater_Delegate {
                         view.setLayoutParams(params);
 
                         // Inflate all children.
-                        thisInflater.rInflateChildren(childParser, view, childAttrs, true);
+                        thisInflater.rInflateChildren(childParser, view, childAttrs);
 
                         if (id != View.NO_ID) {
                             view.setId(id);

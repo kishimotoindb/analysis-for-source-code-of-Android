@@ -47,6 +47,16 @@ import java.util.Set;
 /*
  * mHashes[] 和 mArray[] 里的元素在插入时是从索引0开始连续的，所以节省内存。
  * 在插入时按照key的hash值排好序
+ *
+ * 最大的优势就是节省内存，但是查找效率不如HashMap。
+ *
+ * 比HashMap节省内存的原因：
+ * 1. 加入元素不需要额外创建一个Entry对象，而是直接放入mObjects数组
+ * 2. 所有键值对都是连续紧凑的排列在mObjects数组中
+ * 3. 删除元素的时候会将mObjects进行缩小，即将数组的length降低。
+ *
+ * 与HashMap的其他区别：
+ * 1. 扩容的时候直接复制mObjects中的元素到新的数组中，而不需要像HashMap一样进行rehash
  */
 public final class ArrayMap<K, V> implements Map<K, V> {
     private static final boolean DEBUG = false;
@@ -205,6 +215,22 @@ public final class ArrayMap<K, V> implements Map<K, V> {
             }
         }
 
+        /*
+         * 关于ArrayMap的初始化
+         *
+         * ArrayMap在创建的时候，如果不是4和8的容量，可以是用户设置的任意容量。也就是说硬要设置成容量为1，也是
+         * 可以的。
+         *
+         * 因为ArrayMap默认缓存size为4和8的map对象，所以比起创建size为1~3的新map节省的一个元素的内存，直接
+         * 使用缓存更效果更好，并且能够减少gc。而且既然缓存是全局的，放在那里不用，却重新创建一个新的，不论创建
+         * 的新map容量有多小，也是在原有已消耗的内存上增加内存的使用量，所以不管怎么说都是先使用缓存比较靠谱。
+         *
+         * 还有一点是在clear()的时候，如果使用baseSize的map，那么释放的mHashes和mObjects数组可能会被回收，
+         * 而其他size的数据会被释放掉。如果频繁的clear()->put()->clear()->put()，就会频繁的释放小对象，
+         * 从而可能触发gc。而使用basesize的map，有助于减少gc。
+         *
+         * 还有一点可以看put(key,value)方法中对扩容的注释，说明没有确切的容量需求，可以直接使用默认的0个大小。
+         */
         mHashes = new int[size];
         mArray = new Object[size<<1];
     }
@@ -215,6 +241,10 @@ public final class ArrayMap<K, V> implements Map<K, V> {
                 if (mTwiceBaseCacheSize < CACHE_SIZE) {
                     array[0] = mTwiceBaseCache;
                     array[1] = hashes;
+                    // 放置到缓冲池时，只重置了array的元素。没有重置hashes数组，hashes中还保存着旧的hash值
+                    // 使用对象主要是防止内存泄漏，因为缓冲池是静态的。hash值只是个int，没有必要重置，可以在
+                    // 重新使用时再重置，这样相当于延迟不必要的操作，感觉也是懒加载的思想，到真正需要用的时候
+                    // 再做需要的操作。
                     for (int i=(size<<1)-1; i>=2; i--) {
                         array[i] = null;
                     }
@@ -287,11 +317,8 @@ public final class ArrayMap<K, V> implements Map<K, V> {
      * Make the array map empty.  All storage is released.
      */
     /*
-     * 按照当前的逻辑，如果size不是 BASE_SIZE ，那么clear频繁的clear操作会造成频繁的创建新的
-     * 数组对象。慎用clear，但是这样也有个好处，比如当前的ArrayMap的size比较大，那么clear的时候
-     * 就会将之前扩容到很大的数组释放掉。ArrayList就没有这样的操作，这可能就和两个容器的使用场景
-     * 有关了，ArrayMap是针对嵌入式设备设计的，所以内存是重要考量的因素，所以clear的时候尽量释放
-     * 更多的内存，而ArrayList是Java的基础容器，对于速度的要求要高于内存。
+     * ArrayMap的clear与Java通常的容器类不同，会直接释放底层的数组。如果不希望释放底层的数组，可以使用
+     * erase方法。
      */
     @Override
     public void clear() {
@@ -314,6 +341,7 @@ public final class ArrayMap<K, V> implements Map<K, V> {
             for (int i=0; i<N; i++) {
                 array[i] = null;
             }
+            // 为什么没有清空mHashes[]数组？
             mSize = 0;
         }
     }
@@ -465,7 +493,18 @@ public final class ArrayMap<K, V> implements Map<K, V> {
         }
 
         index = ~index;
-        // 扩容的逻辑，Array是当数组填满的时候进行才进行扩容，没有loadFactor
+        /*
+         * 扩容的逻辑
+         * 1.Array是当数组填满的时候进行才进行扩容，没有loadFactor。
+         * 2.size小于4，扩容至4
+         * 3.size小于8，扩容至8
+         * 4.size大于8，扩容size的一半
+         *
+         * 从这里也可以看出，如果使用size小于8的map时，没有必要创建非4和8的map。因为如果创建了非4和8的map，
+         * 比如size=3，第一次扩容就只会扩大到4，如果连续放入两个元素，相当于紧挨着进行了两次扩容操作，这一点
+         * 就不是很好，所以也说明小容量最好还是直接使用4和8的初始容量。或者索性就不初始容量，因为0->4是直接
+         * 复用BaseSize的缓存，而且因为0个元素，也没有复制数组的操作，所以没有性能损耗。
+         */
         if (mSize >= mHashes.length) {
             final int n = mSize >= (BASE_SIZE*2) ? (mSize+(mSize>>1))
                     : (mSize >= BASE_SIZE ? (BASE_SIZE*2) : BASE_SIZE);
@@ -474,8 +513,12 @@ public final class ArrayMap<K, V> implements Map<K, V> {
 
             final int[] ohashes = mHashes;
             final Object[] oarray = mArray;
+            // 这里面将新的数组赋值给了mHashes和mArray
             allocArrays(n);
 
+            /*
+             * 这里即使是0->4的扩容，也需要执行copy操作，因为缓冲池中的hashes数组中保存着回收时旧的hash值。
+             */
             if (mHashes.length > 0) {
                 if (DEBUG) Log.d(TAG, "put: copy 0-" + mSize + " to 0");
                 System.arraycopy(ohashes, 0, mHashes, 0, ohashes.length);
