@@ -99,6 +99,13 @@ public final class ArrayMap<K, V> implements Map<K, V> {
     int mSize;
     MapCollections<K, V> mCollections;
 
+    /*
+     * 搜索的逻辑：
+     * 1.查找hash值：没找到，说明map中没有这个key，直接插入新的key
+     * 2.hash值相同，对比key本身是否相同（使用的是equals方法）：如果hash值相同，key相同，那么就直接在对应
+     *   位置存入新的value
+     * 3.hash值相同，key不同，返回相同hash值最后一个位置的下一个位置
+     */
     int indexOf(Object key, int hash) {
         final int N = mSize;
 
@@ -119,6 +126,15 @@ public final class ArrayMap<K, V> implements Map<K, V> {
             return index;
         }
 
+        /*
+         * 这里为什么对上面二分查找的结果index前后都需要进行相同hash值的查找，是因为二分查找到的index，
+         * 不一定是多个相同hash值中的哪一个，所以这个index前后可能都存在相同的hash值，进而需要前后都
+         * 找一遍
+         *
+         * 向后查找：查找是否存在key和hash值都相同的情况。如果没找到，确定一个暂时的插入位置，如果向前查找
+         *          仍然没找到，那么新的元素就会被插入到end位置。
+         * 向前查找：只是查找是否存在key和hash都相同的情况，不会用来确定新元素的插入位置。
+         */
         // Search for a matching key after the index.
         // 如果key的hash一样，但是key没有在mArray中，那么在相同hash值的下一个位置放置这个键值对
         int end;
@@ -135,9 +151,13 @@ public final class ArrayMap<K, V> implements Map<K, V> {
         // new entry for this key should go.  We use the end of the
         // hash chain to reduce the number of array entries that will
         // need to be copied when inserting.
-        return ~end;
+        return ~end;    // 注意，这里返回的是end，不是i（end是向后移动的最后位置，i是向前移动的位置）
     }
 
+    /*
+     * ArrayMap允许key=null，key为null时，使用0作为其hash值。但是注意，key不为null，hash值也可以是0，
+     * 所以key为null的键值组合不一定保存在map的第一个位置。
+     */
     int indexOfNull() {
         final int N = mSize;
 
@@ -180,6 +200,7 @@ public final class ArrayMap<K, V> implements Map<K, V> {
      * 1.创建的时候，有两个缓存池可以使用，缓存池中的ArrayMap的size=4 or 8，两个缓存池的数量上限都是10个。
      * 2.缓存池的实现比较巧妙，本质是一个链表结构，但是直接利用数组本身实现的链表结构。具体的实现可以
      *   看freeArrays()方法
+     * 3.ArrayMap扩容的逻辑是只有在最必要的时候（已经满了）才扩容
      */
     private void allocArrays(final int size) {
         if (mHashes == EMPTY_IMMUTABLE_INTS) {
@@ -474,6 +495,9 @@ public final class ArrayMap<K, V> implements Map<K, V> {
      * @return Returns the old value that was stored for the given key, or null if there
      * was no such key.
      */
+    /*
+     * key=null,hash值取0
+     */
     @Override
     public V put(K key, V value) {
         final int hash;
@@ -483,8 +507,14 @@ public final class ArrayMap<K, V> implements Map<K, V> {
             index = indexOfNull();
         } else {
             hash = key.hashCode();
+            /*
+             * 如果hash冲突，index会返回相同hash值中最后一个位置的下一个位置
+             * 比如当前插入key的hash值是250，如果mHashes中已经有hash值250了，那么不管有几个，当前要插入的
+             * key的index都在mHash中最有一个250的下一个位置。
+             */
             index = indexOf(key, hash);
         }
+        // index>0，表示当前要插入的key已经在map中。
         if (index >= 0) {
             index = (index<<1) + 1;
             final V old = (V)mArray[index];
@@ -547,6 +577,10 @@ public final class ArrayMap<K, V> implements Map<K, V> {
      * Special fast path for appending items to the end of the array without validation.
      * The array must already be large enough to contain the item.
      * @hide
+     */
+    /*
+     * append操作同样需要满足hash值排序逻辑。只不过一上来不是先二分查找，而是会先判断当前插入的key的hash值是
+     * 否比当前所有hash值都大，都大的话就不需要二分查找，直接放到最后即可。如果不是，重新调用put插入元素。
      */
     public void append(K key, V value) {
         int index = mSize;
@@ -612,6 +646,12 @@ public final class ArrayMap<K, V> implements Map<K, V> {
      * Perform a {@link #put(Object, Object)} of all key/value pairs in <var>array</var>
      * @param array The array whose contents are to be retrieved.
      */
+    /*
+     * putAll()有一点需要注意，如果当前map放不下这些新元素需要给当前map扩容，那么扩容之后的数组正好可以
+     * 装满当前的所有元素，后续只要再插入任何元素，都需要立即扩容。
+     * 这一点对于arraymap来说我认为是可以理解的，这种情况扩容基本是当前容量的一半，作为内存敏感的容器，
+     * 的确没必要提前进行扩容，需要的时候再进行扩容即可。
+     */
     public void putAll(ArrayMap<? extends K, ? extends V> array) {
         final int N = array.mSize;
         ensureCapacity(mSize + N);
@@ -622,7 +662,7 @@ public final class ArrayMap<K, V> implements Map<K, V> {
                 mSize = N;
             }
         } else {
-            // 执行N次put操作，意味着可能后移数组N次
+            // 因为涉及到每个key的重新排序，所以需要逐个加入，比较耗时。
             for (int i=0; i<N; i++) {
                 put(array.keyAt(i), array.valueAt(i));
             }
@@ -650,6 +690,10 @@ public final class ArrayMap<K, V> implements Map<K, V> {
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @return Returns the value that was stored at this index.
      */
+    /*
+     * 1.移除最后一个元素的时候，清空map，释放数组。如果移除的时候容量小于1/3，也会对容量进行缩小。
+
+     */
     public V removeAt(int index) {
         final Object old = mArray[(index << 1) + 1];
         if (mSize <= 1) {
@@ -664,6 +708,10 @@ public final class ArrayMap<K, V> implements Map<K, V> {
                 // Shrunk enough to reduce size of arrays.  We don't allow it to
                 // shrink smaller than (BASE_SIZE*2) to avoid flapping between
                 // that and BASE_SIZE.
+                /*
+                 * 移除元素后size仍然大于8，那么就将当前数组缩小1/4；如果size小于8，不论当前数组的大小有
+                 * 多大，都缩小到8
+                 */
                 final int n = mSize > (BASE_SIZE*2) ? (mSize + (mSize>>1)) : (BASE_SIZE*2);
 
                 if (DEBUG) Log.d(TAG, "remove: shrink from " + mHashes.length + " to " + n);
