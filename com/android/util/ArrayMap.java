@@ -55,6 +55,9 @@ import java.util.Set;
  * 2. 所有键值对都是连续紧凑的排列在mObjects数组中
  * 3. 删除元素的时候会将mObjects进行缩小，即将数组的length降低。
  *
+ * 与SparseArray的差别
+ * 1. ArrayMap的元素在数组中是从左开始连续放置的，SparseArray中的元素在数组中可能是非连续放置的。
+ *
  * 与HashMap的其他区别：
  * 1. 扩容的时候直接复制mObjects中的元素到新的数组中，而不需要像HashMap一样进行rehash
  */
@@ -692,7 +695,7 @@ public final class ArrayMap<K, V> implements Map<K, V> {
      */
     /*
      * 1.移除最后一个元素的时候，清空map，释放数组。如果移除的时候容量小于1/3，也会对容量进行缩小。
-
+     * 2.每删除一个元素，都会立即移动数组；SparseArray删除的时候，只会将value设置为deleted，key仍然保留
      */
     public V removeAt(int index) {
         final Object old = mArray[(index << 1) + 1];
@@ -764,6 +767,9 @@ public final class ArrayMap<K, V> implements Map<K, V> {
      * if the maps have different sizes. Otherwise, for each key in this map,
      * values of both maps are compared. If the values for any key are not
      * equal, the method returns false, otherwise it returns true.
+     */
+    /*
+     * 两个map中的key和value完全对应并相等的情况下，才是equal
      */
     @Override
     public boolean equals(Object object) {

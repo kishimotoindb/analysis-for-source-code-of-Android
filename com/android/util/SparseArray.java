@@ -49,6 +49,11 @@ import libcore.util.EmptyArray;
  * keys in ascending order, or the values corresponding to the keys in ascending
  * order in the case of <code>valueAt(int)</code>.</p>
  */
+/*
+ * 1.SparseArray可以批量remove；ArrayMap不能。并且因为SparseArray并不会在每次移除元素的时候直接移动数组，
+ * 所以并不会有比较大的损耗。
+ * 2.
+ */
 public class SparseArray<E> implements Cloneable {
     private static final Object DELETED = new Object();
     private boolean mGarbage = false;
@@ -70,6 +75,10 @@ public class SparseArray<E> implements Cloneable {
      * number of mappings.  If you supply an initial capacity of 0, the
      * sparse array will be initialized with a light-weight representation
      * not requiring any additional array allocations.
+     */
+    /*
+     * 1. 设置的初始容量只是一个建议值，实际的容量可能稍微有偏差，因为是通过newUnpaddedObjectArray创建的数组
+     * 2. 默认容量是10
      */
     public SparseArray(int initialCapacity) {
         if (initialCapacity == 0) {
@@ -121,6 +130,12 @@ public class SparseArray<E> implements Cloneable {
 
     /**
      * Removes the mapping from the specified key, if there was any.
+     */
+    /*
+     * 1.sparseArray删除的时候，不会立即移动数组，而是设置一个标志位，等到机会一次性处理。
+     * 优点就是避免了频繁的移动数组操作，缺点是会占用额外的空间。
+     * 2.注意这里并没有更新mSize，只有在gc的时候才会更新mSize。调用size()方法的时候为了能够返回正确的size，
+     * 会先执行gc
      */
     public void delete(int key) {
         int i = ContainerHelpers.binarySearch(mKeys, mSize, key);
@@ -184,6 +199,7 @@ public class SparseArray<E> implements Cloneable {
     private void gc() {
         // Log.e("SparseArray", "gc start with " + mSize);
 
+        // 通过双指针极大的降低了删除多个元素时数组移动的次数
         int n = mSize;
         int o = 0;
         int[] keys = mKeys;
@@ -205,6 +221,15 @@ public class SparseArray<E> implements Cloneable {
 
         mGarbage = false;
         mSize = o;
+        /*
+         * gc之后：
+         * 1. mKeys中，在mSize之后的索引位置，仍然可能保存着无效的数值，所以二分查找的之后一定要
+         * 传入size值，根据size值判断有效的搜索范围。
+         * 2. mValue中同样可能包含 DELETED。
+         * 3. SparseArray之所以可以延后gc，是因为key是int值，value会设置为 DELETED，所以没有
+         * 内存泄漏的风险。换成ArrayMap就不行了，key的类型未知。
+         *
+         */
 
         // Log.e("SparseArray", "gc end with " + mSize);
     }
@@ -218,10 +243,29 @@ public class SparseArray<E> implements Cloneable {
         int i = ContainerHelpers.binarySearch(mKeys, mSize, key);
 
         if (i >= 0) {
+            // 正数说明当前的key就在mKeys中，不论当前这个key所在的位置上原本的value是否已经被删除，
+            // 直接将新的value存储到这个位置即可。
             mValues[i] = value;
         } else {
             i = ~i;
 
+            /*
+             * i<size说明是mKeys中不包含这个key，但是key小于mKeys中的某些key，所以需要插入。
+             * mValues[i] == DELETED 说明要插入的这个位置本身是一个已经删除的元素，那么 mKeys[i]
+             * 和 mValue[i]是无用的，可以直接替换为新的key和value
+             *
+             * 比如当前array的值情况如下：
+             * *代表有效值，d代表是DELETED
+             * mKeys:   1 3 5 7 9
+             * mValues: d d * d d
+             *
+             * 如果此时要插入 key=4 value=*
+             * 那么执行到这里的时候，i=3，就会满足下面的条件，从而进入if。进而mKeys中原有的key(5)就会
+             * 被替换为4，value替换为*。
+             *
+             * 这里虽然将无效的key value替换掉了，但是 mGarbage 这个标志位并没有被擦除。所以虽然当前
+             * 这种情况下已经不需要gc了，但是下面还是会执行gc？
+             */
             if (i < mSize && mValues[i] == DELETED) {
                 mKeys[i] = key;
                 mValues[i] = value;
