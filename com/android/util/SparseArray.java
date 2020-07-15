@@ -239,6 +239,9 @@ public class SparseArray<E> implements Cloneable {
      * replacing the previous mapping from the specified key if there
      * was one.
      */
+    /*
+     * 时间复杂度O(logn)，二分查找。
+     */
     public void put(int key, E value) {
         int i = ContainerHelpers.binarySearch(mKeys, mSize, key);
 
@@ -272,6 +275,7 @@ public class SparseArray<E> implements Cloneable {
                 return;
             }
 
+            // 什么情况下会出现mSize>=mKeys.length的情况？
             if (mGarbage && mSize >= mKeys.length) {
                 gc();
 
@@ -279,6 +283,13 @@ public class SparseArray<E> implements Cloneable {
                 i = ~ContainerHelpers.binarySearch(mKeys, mSize, key);
             }
 
+            /*
+             * 包括扩容的逻辑
+             * public static int growSize(int currentSize) {
+             *    return currentSize <= 4 ? 8 : currentSize * 2;
+             * }
+             * ArrayMap是4:8:1.5倍
+             */
             mKeys = GrowingArrayUtils.insert(mKeys, mSize, i, key);
             mValues = GrowingArrayUtils.insert(mValues, mSize, i, value);
             mSize++;
@@ -371,6 +382,9 @@ public class SparseArray<E> implements Cloneable {
      * <p>Note also that unlike most collections' {@code indexOf} methods,
      * this method compares values using {@code ==} rather than {@code equals}.
      */
+    /*
+     * 对mValue进行遍历，所以时间复杂度是O(n)
+     */
     public int indexOfValue(E value) {
         if (mGarbage) {
             gc();
@@ -385,6 +399,9 @@ public class SparseArray<E> implements Cloneable {
 
     /**
      * Removes all key-value mappings from this SparseArray.
+     */
+    /*
+     * 注意，并没有清空mKeys，只是把size设置为了0
      */
     public void clear() {
         int n = mSize;
