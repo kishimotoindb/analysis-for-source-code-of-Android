@@ -618,6 +618,9 @@ public interface WindowManager extends ViewManager {
          * {@link android.R.style#Theme_DeviceDefault_NoActionBar_Fullscreen}, and
          * {@link android.R.style#Theme_DeviceDefault_Light_NoActionBar_Fullscreen}.</p>
          */
+        /*
+         * FullScreen
+         */
         public static final int FLAG_FULLSCREEN      = 0x00000400;
         
         /** Window flag: override {@link #FLAG_FULLSCREEN} and force the

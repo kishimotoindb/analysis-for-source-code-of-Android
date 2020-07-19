@@ -2148,6 +2148,10 @@ public class Activity extends ContextThemeWrapper
      * @see #setContentView(android.view.View, android.view.ViewGroup.LayoutParams)
      */
     public void setContentView(@LayoutRes int layoutResID) {
+        /*
+         * setContentView()直接就是在window里设置View，相当于Activity其实并没有直接持有DecorView，
+         * DecorView是window的一部分。
+         */
         getWindow().setContentView(layoutResID);
         initWindowDecorActionBar();
     }
@@ -6165,7 +6169,11 @@ public class Activity extends ContextThemeWrapper
 
         mFragments.attachHost(null /*parent*/);
 
-        // Activity的phoneWindow的context是Activity
+        /*
+         * Activity的phoneWindow的context是Activity
+         *
+         * Activity的window是在attach的时候创建的。这个时候window还没有关联inputChannel和surface
+         */
         mWindow = new PhoneWindow(this);
         mWindow.setCallback(this);
         mWindow.setOnWindowDismissedCallback(this);

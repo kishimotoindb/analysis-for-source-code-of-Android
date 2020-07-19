@@ -2573,6 +2573,7 @@ public final class ActivityThread {
                 if (DEBUG_CONFIGURATION) Slog.v(TAG, "Launching activity "
                         + r.activityInfo.name + " with config " + config);
                 Window window = null;
+                // PendingRemoveWindow是指configuration change的时候复用前一次的window？
                 if (r.mPendingRemoveWindow != null && r.mPreserveWindow) {
                     window = r.mPendingRemoveWindow;
                     r.mPendingRemoveWindow = null;

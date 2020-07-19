@@ -380,7 +380,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     }
 
     /*
-     * 这里只是new和inflate了decor，但并没有addView，所以onCreate的时候的确UI是不可见的
+     * 这里只是new和inflate了decor，但并没有addView，所以onCreate的时候的确UI是不可见的。即decorView
+     *
      */
     @Override
     public void setContentView(int layoutResID) {
@@ -388,6 +389,9 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         // decor, when theme attributes and the like are crystalized. Do not check the feature
         // before this happens.
         if (mContentParent == null) {
+            /*
+             * 1.构建整体UI骨架
+             */
             installDecor();
         } else if (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) {
             mContentParent.removeAllViews();
@@ -398,6 +402,13 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                     getContext());
             transitionTo(newScene);
         } else {
+            /*
+             * 2.在上面构建的UI骨架中填充ContentView
+             *
+             * inflater只关心inflate，并且最终就是调用mContentParent.addView()将inflatedView
+             * 添加到contentParent中。这个流程并不关心mContentParent中是否已经存在child，如果存在，
+             * 就是正常的addView的逻辑，将view加到最后一个child。
+             */
             mLayoutInflater.inflate(layoutResID, mContentParent);
         }
         // 一直调用的mParent.requestFitSystemWindows()，但是decor的mParent==null，等于最终
@@ -2220,7 +2231,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         private boolean mWatchingForMenu;
         private int mDownY;
 
-        private ActionMode mPrimaryActionMode
+        private ActionMode mPrimaryActionMode;
         private ActionMode mFloatingActionMode;
         private ActionBarContextView mPrimaryActionModeView;
         private PopupWindow mPrimaryActionModePopup;
@@ -3673,15 +3684,32 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         }
 
         mIsFloating = a.getBoolean(R.styleable.Window_windowIsFloating, false);
+        /*
+         * FLAG_LAYOUT_INSET_DECOR：
+         *
+         * 从这个标记位的解释中可以看出，system decorations 应该都是通过另外的window实现的，
+         * 与activity的window不是一个。
+         *
+         * 设置这个标记系统会提供system decorations在decorView中占据的位置信息，DecorView可以通过
+         * 这个信息控制Activity是显示在system decorations前面、后面、还是同一平面。
+         *
+         * 所以说系统默认是将Activity和system decorations放在同一平面内对齐布置的。
+         */
         int flagsToUpdate = (FLAG_LAYOUT_IN_SCREEN|FLAG_LAYOUT_INSET_DECOR)
-                & (~getForcedWindowFlags());
+                & (~getForcedWindowFlags()); // ForcedWindowFlags设置的标记不能被修改
+
+        // Float的含义就是window的宽高都是wrap_content
         if (mIsFloating) {
             setLayout(WRAP_CONTENT, WRAP_CONTENT);
             setFlags(0, flagsToUpdate);
         } else {
+            // 所以说系统默认是将Activity和 system decorations 放在同一平面内对齐布置的。
             setFlags(FLAG_LAYOUT_IN_SCREEN|FLAG_LAYOUT_INSET_DECOR, flagsToUpdate);
         }
 
+        /*
+         * 这里就是为什么需要在setContentView()之前设置window feature的原因
+         */
         if (a.getBoolean(R.styleable.Window_windowNoTitle, false)) {
             requestFeature(FEATURE_NO_TITLE);
         } else if (a.getBoolean(R.styleable.Window_windowActionBar, false)) {
@@ -3793,6 +3821,11 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             mNavigationBarColor = a.getColor(R.styleable.Window_navigationBarColor, 0xFF000000);
         }
         if (a.getBoolean(R.styleable.Window_windowLightStatusBar, false)) {
+            /*
+             * setSystemUiVisibility()这个方法是View这个类提供的方法，最终是调用到了ViewRootImpl的
+             * scheduleTraversal()，触发整个window的重新布局。但是，这里的调用并没有触发进程间通信，
+             * 高度statusbar等系统ui处理操作。
+             */
             decor.setSystemUiVisibility(
                     decor.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
@@ -3827,6 +3860,9 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             }
         }
 
+        /*
+         * window是Activity的，所有window的动画当前也是activity负责完成。
+         */
         if (params.windowAnimations == 0) {
             params.windowAnimations = a.getResourceId(
                     R.styleable.Window_windowAnimationStyle, 0);
@@ -3984,7 +4020,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
     private void installDecor() {
         if (mDecor == null) {
-            mDecor = generateDecor();  // new了一个DecorView而已
+            mDecor = generateDecor();  // new了一个DecorView而已，DecorView继承自FrameLayout
             mDecor.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
             mDecor.setIsRootNamespace(true);
             if (!mInvalidatePanelMenuPosted && mInvalidatePanelMenuFeatures != 0) {

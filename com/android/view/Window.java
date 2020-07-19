@@ -28,6 +28,12 @@ public abstract class Window {
     public static final int FEATURE_OPTIONS_PANEL = 0;
     /** Flag for the "no title" feature, turning off the title at the top
      *  of the screen. */
+    /*
+     * TitleBar不是ActionBar，ActionBar是TitleBar的继任者，所以NO_TITLE、ACTION_BAR_XXX这些flag，
+     * 是对ActionBar和TitleBar都有效的。
+     *
+     * 可以参看FEATURE_ACTION_BAR的注释了解两者的不同点。
+     */
     public static final int FEATURE_NO_TITLE = 1;
     /** Flag for the progress indicator feature */
     public static final int FEATURE_PROGRESS = 2;
@@ -46,6 +52,9 @@ public abstract class Window {
      * This is enabled by default for some devices. The Action Bar
      * replaces the title bar and provides an alternate location
      * for an on-screen menu button on some devices.
+     */
+    /*
+     * TitleBar不是ActionBar
      */
     public static final int FEATURE_ACTION_BAR = 8;
     /**
@@ -839,6 +848,11 @@ public abstract class Window {
      *
      * @param featureId The desired features, defined as constants by Window.
      * @return The features that are now set.
+     */
+    /*
+     * 为什么一定要在ContentParent==null的时候(即setContentView()之前)request feature，因为这里
+     * 并没有类似requestLayout()这种触发重新配置的动作，只是将feature设置上新的标志，所以需要提前
+     * 配置
      */
     public boolean requestFeature(int featureId) {
         final int flag = 1<<featureId;

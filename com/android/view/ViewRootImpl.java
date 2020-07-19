@@ -509,7 +509,7 @@ public final class ViewRootImpl implements ViewParent,
                     collectViewAttributes();
                     res = mWindowSession.addToDisplay(mWindow, mSeq, mWindowAttributes,
                             getHostVisibility(), mDisplay.getDisplayId(),
-                            mAttachInfo.mCowntentInsets, mInputChannel);
+                            mAttachInfo.mContentInsets, mInputChannel);
                 } catch (RemoteException e) {
                     mAdded = false;
                     mView = null;
