@@ -2120,11 +2120,18 @@ public class Activity extends ContextThemeWrapper
      * Creates a new ActionBar, locates the inflated ActionBarView,
      * initializes the ActionBar with the view, and sets mActionBar.
      */
+    /*
+     * setContentView()方法中，PhoneWindow执行setContentView之后，就会调用当前方法配置ActionBar
+     */
     private void initWindowDecorActionBar() {
         Window window = getWindow();
 
         // Initializing the window decor can change window feature flags.
         // Make sure that we have the correct set before performing the test below.
+        /*
+         * decor为空，会先installDecor。也就是说Activity是允许DecorView的contentParent里没有填充
+         * 用户通过setContentView()设置的自定义布局。
+         */
         window.getDecorView();
 
         if (isChild() || !window.hasFeature(Window.FEATURE_ACTION_BAR) || mActionBar != null) {
@@ -6181,6 +6188,10 @@ public class Activity extends ContextThemeWrapper
         if (info.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED) {
             mWindow.setSoftInputMode(info.softInputMode);
         }
+
+        /*
+         * uiOptions是在Activity回调attach的时候传入的
+         */
         if (info.uiOptions != 0) {
             mWindow.setUiOptions(info.uiOptions);
         }

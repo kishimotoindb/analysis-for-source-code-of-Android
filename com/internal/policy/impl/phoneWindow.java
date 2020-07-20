@@ -20,6 +20,7 @@ import com.android.internal.widget.ActionBarContainer;
 import com.android.internal.widget.ActionBarContextView;
 import com.android.internal.widget.ActionBarOverlayLayout;
 import com.android.internal.widget.ActionBarView;
+import com.android.server.policy.PhoneWindowManager;
 
 import android.app.KeyguardManager;
 import android.content.Context;

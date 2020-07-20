@@ -4018,6 +4018,9 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         mAlwaysReadCloseOnTouchAttr = true;
     }
 
+    /*
+     * 只要调用了这个方法，Activity的PhoneWindow中就已经填充了基础的布局，比如screen_action_bar.xml等
+     */
     private void installDecor() {
         if (mDecor == null) {
             mDecor = generateDecor();  // new了一个DecorView而已，DecorView继承自FrameLayout
