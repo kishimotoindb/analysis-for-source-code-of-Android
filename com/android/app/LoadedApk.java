@@ -373,6 +373,7 @@ public final class LoadedApk {
                 // as this is early and necessary.
                 StrictMode.ThreadPolicy oldPolicy = StrictMode.allowThreadDiskReads();
 
+                // 这里的baseClassLoader应该是SystemClassLoader
                 mClassLoader = ApplicationLoaders.getDefault().getClassLoader(zip, lib,
                         mBaseClassLoader);
 

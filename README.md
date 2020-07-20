@@ -1,3 +1,15 @@
-### 目前采用的方式是直接上传.java文件，在其上进行注释。文件目录的结构按照源码的包结构。
-通过对安卓系统源码、JDK源码、OkHttp源码进行分析和注释，达到学习源码和提高自己的目的。
-本人QQ：519376470
+# androidx.recyclerview
+
+RecyclerView library provides a flexible View for displaying a limited window into a large data set.
+
+[Library owners](OWNERS)
+
+[Release notes](https://developer.android.com/jetpack/androidx/releases/recyclerview)
+
+[Browse source](https://android.googlesource.com/platform/frameworks/support/+/androidx-master-dev/recyclerview/)
+
+[Reference documentation](https://developer.android.com/reference/androidx/classes.html)
+
+[Existing open bugs](https://issuetracker.google.com/issues?q=componentid:460887%20status:open)
+
+[File a new bug](https://issuetracker.google.com/issues/new?component=460887)
