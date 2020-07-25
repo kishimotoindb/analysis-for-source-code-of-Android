@@ -474,8 +474,14 @@ public abstract class Window {
         mHardwareAccelerated = hardwareAccelerated
                 || SystemProperties.getBoolean(PROPERTY_HARDWARE_UI, false);
         if (wm == null) {
+            /*
+             * 这里是new了一个WindowManagerImpl对象，但是只传入了Display对象
+             */
             wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
         }
+        /*
+         * 这里在wm中额外传入了Window对象
+         */
         mWindowManager = ((WindowManagerImpl)wm).createLocalWindowManager(this);
     }
 

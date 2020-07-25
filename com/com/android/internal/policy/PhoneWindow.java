@@ -162,6 +162,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     /*
      * window 的视图层级结构：
      * decor -> contentRoot -> contentParent
+     * window里存储的就只有View，ViewRootImpl是WindowManagerGlobal中的元素
      */
     // This is the top-level view of the window, containing the window decor.
     private DecorView mDecor;
