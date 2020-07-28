@@ -255,6 +255,12 @@ public final class LoadedApk {
         return ai.sharedLibraryFiles;
     }
 
+    /*
+     * 进程第一次启动（不完全准确，单进程多apk）创建LoadedApk时，并没有配置classLoader。只有在通过这个
+     * 方法获取classLoader的时候才会确定classLoader。
+     *
+     * 估计手动创建contextImpl的时候，
+     */
     public ClassLoader getClassLoader() {
         synchronized (this) {
             if (mClassLoader != null) {
@@ -374,6 +380,13 @@ public final class LoadedApk {
                 StrictMode.ThreadPolicy oldPolicy = StrictMode.allowThreadDiskReads();
 
                 // 这里的baseClassLoader应该是SystemClassLoader
+                /*
+                 * 按照流程，第一次启动进程的时候创建LoadedApk时，没有传入classLoader，所有BaseClassLoader
+                 * 是null。
+                 *
+                 * 返回的一定是PathClassLoader，只不过PathClassLoader的parent class loader是谁，可能
+                 * 会有变化，一般是SystemClassLoader。
+                 */
                 mClassLoader = ApplicationLoaders.getDefault().getClassLoader(zip, lib,
                         mBaseClassLoader);
 

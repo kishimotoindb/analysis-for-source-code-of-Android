@@ -1915,6 +1915,9 @@ public final class ActivityThread {
                 registerPackage);
     }
 
+    /*
+     * handle bind application的时候创建的LoadedApk
+     */
     public final LoadedApk getPackageInfoNoCheck(ApplicationInfo ai,
             CompatibilityInfo compatInfo) {
         return getPackageInfo(ai, compatInfo, null, false, true, false);
@@ -1932,6 +1935,9 @@ public final class ActivityThread {
         }
     }
 
+    /*
+     * 进程启动的时候传入的参数：baseLoader=null,securityViolation=false,includeCode=true,registerPackage=false
+     */
     private LoadedApk getPackageInfo(ApplicationInfo aInfo, CompatibilityInfo compatInfo,
             ClassLoader baseLoader, boolean securityViolation, boolean includeCode,
             boolean registerPackage) {
@@ -1947,6 +1953,9 @@ public final class ActivityThread {
                 ref = mResourcePackages.get(aInfo.packageName);
             }
 
+            /*
+             * 进程第一次启动packageInfo一定是null
+             */
             LoadedApk packageInfo = ref != null ? ref.get() : null;
             if (packageInfo == null || (packageInfo.mResources != null
                     && !packageInfo.mResources.getAssets().isUpToDate())) {
@@ -1955,6 +1964,11 @@ public final class ActivityThread {
                         + " (in " + (mBoundApplication != null
                                 ? mBoundApplication.processName : null)
                         + ")");
+
+                /*
+                 * 进程第一次启动调用handleBindApplication的时候，baseLoader传入的是null，也就是说
+                 * 最初创建LoadedApk的时候并没有PathClassLoader
+                 */
                 packageInfo =
                     new LoadedApk(this, aInfo, compatInfo, baseLoader,
                             securityViolation, includeCode &&
@@ -5173,6 +5187,7 @@ public final class ActivityThread {
             applyCompatConfiguration(mCurDefaultDisplayDpi);
         }
 
+        // 创建的LoadedApk会放到data.info中
         data.info = getPackageInfoNoCheck(data.appInfo, data.compatInfo);
 
         /**
@@ -5235,6 +5250,9 @@ public final class ActivityThread {
                     throw ex.rethrowFromSystemServer();
                 }
 
+                /*
+                 * adb shell am set-debug ... 就是通过这里生效的
+                 */
                 Debug.waitForDebugger();
 
                 try {
@@ -5299,6 +5317,10 @@ public final class ActivityThread {
             ii = null;
         }
 
+        /*
+         * 上面已经创建了一个LoadedApk，并且存到了data.info，但是loadedApk里没有classLoader
+         * 执行完下面的代码，仍然还是没有classLoader，但是resource完成了初始化
+         */
         final ContextImpl appContext = ContextImpl.createAppContext(this, data.info);
         updateLocaleListFromAppContext(appContext,
                 mResourcesManager.getConfiguration().getLocales());

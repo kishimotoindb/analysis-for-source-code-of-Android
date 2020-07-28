@@ -106,6 +106,9 @@ class ReceiverRestrictedContext extends ContextWrapper {
  * Common implementation of Context API, which provides the base
  * context object for Activity and other application components.
  */
+/*
+ * ClassLoader并不是保存在context中的
+ */
 class ContextImpl extends Context {
     private final static String TAG = "ContextImpl";
     private final static boolean DEBUG = false;
@@ -1820,7 +1823,13 @@ class ContextImpl extends Context {
         mDisplay = (createDisplayWithId == Display.INVALID_DISPLAY) ? display
                 : ResourcesManager.getInstance().getAdjustedDisplay(displayId, mDisplayAdjustments);
 
-        // 如果手机配置没有改变，resource只会初始化一次，然后之后用现成的
+        /*
+         * 如果手机配置没有改变，resource只会初始化一次，然后之后用现成的。
+         * 这里是进程初始化resources的位置：（待看）
+         * 1. 但是具体是只保存了路径？
+         * 2. 资源以什么形式加载到内存？
+         * 3. 比如drawable中的图片是全部直接加载到内存，还是使用的时候才加载到内存？
+         */
         Resources resources = packageInfo.getResources(mainThread);
         if (resources != null) {
             if (displayId != Display.DEFAULT_DISPLAY
