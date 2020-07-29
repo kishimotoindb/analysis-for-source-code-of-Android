@@ -35,6 +35,10 @@ import java.util.ArrayList;
  * <p>You can retrieve the MessageQueue for the current thread with
  * {@link Looper#myQueue() Looper.myQueue()}.
  */
+/*
+ * 1.MessageQueue是个单链表，内部就是Message的一个链表
+ * 2.触发下一条未到开始时间的消息的机制也是睡眠，然后到时间唤醒执行消息，只不过这个定时是native代码实现的。
+ */
 public final class MessageQueue {
     private static final String TAG = "MessageQueue";
     private static final boolean DEBUG = false;
