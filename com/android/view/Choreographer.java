@@ -835,6 +835,11 @@ public final class Choreographer {
             mFrame = frame;
             Message msg = Message.obtain(mHandler, this);
             msg.setAsynchronous(true);
+            /*
+             * 1.和直接在这个时间点插入一个同步消息有什么区别？
+             * 2.异步消息从之前的systrace中来看，如果一个同步消息的执行时间在syncBarrier之前，在syncBarrier
+             *   生效之前，一样会被执行，而且如果执行耗时较长，会造成后面的异步消息延时。
+             */
             mHandler.sendMessageAtTime(msg, timestampNanos / TimeUtils.NANOS_PER_MS);
         }
 

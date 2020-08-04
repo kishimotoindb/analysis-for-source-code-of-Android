@@ -328,9 +328,11 @@ public final class MessageQueue {
              * 这是个native函数，其主要作用是设置一个定时的睡眠，其参数timeoutMillis，不同的值意义不同
              * timeoutMillis =0 ：无需睡眠，直接返回
              * timeoutMillis >0 ：睡眠如果超过timeoutMillis，就返回
-             * timeoutMillis =-1：一直睡眠，直到其他线程唤醒它
+             * timeoutMillis =-1：一直睡眠，直到其他线程唤醒它。enqueueMessage的时候会按需唤醒睡眠
              *
              * 定时为什么需要使用native实现？
+             * 1.定时更准确吧
+             * 2.另外这里只是延时的作用，不是从native获取消息
              */
             nativePollOnce(ptr, nextPollTimeoutMillis);
 
@@ -339,6 +341,30 @@ public final class MessageQueue {
                 final long now = SystemClock.uptimeMillis();
                 Message prevMsg = null;
                 Message msg = mMessages;
+                /*
+                 * msg1 mgs2 barrier msg3 asyncMsg1 msg4 asyncMsg2
+                 *
+                 * 1.执行时间早于barrier的msg，正常执行。
+                 *
+                 * barrier msg3 asyncMsg1 msg4 asyncMsg2
+                 *
+                 * 2.msg1、msg2执行结束，barrier的时间节点到了，从这个时间节点开始，到移除barrier之前，
+                 * 只依次执行异步任务，先asyncMsg1，后asyncMsg2。
+                 *
+                 * barrier的目的不在于保证barrier执行时间点之前的asyncMsg的准时运行，而在于保证：
+                 * 如果我想保证从10点开始，不论10点后有没有同步msg，以及同步msg和异步msg的时间先后顺序，
+                 * 都必须先执行异步msg（此时这个任务还没有创建），那么我就在10点位置插入一个barrier，
+                 * 这样到10点的时候，barrier就会阻止同步msg的执行，然后按照异步msg要求的时间节点按时
+                 * 执行异步msg。
+                 *
+                 * 注意，
+                 * 1）barrier之前的同步msg耗时，可能造成barrier的执行延时。比如barrier设置到10点，但是他
+                 *    之前有个同步msg在10点还没有执行结束，那么barrier就没办法在10点开始执行。
+                 * 2）barrier按时触发拦截机制之后，也不是说异步msg立即执行，异步msg还是按照自己要求的时间点
+                 *    开始执行。
+                 * 3) barrier的本质作用：阻拦barrier之后的同步msg执行。
+                 *
+                 */
                 if (msg != null && msg.target == null) {
                     // Stalled by a barrier.  Find the next asynchronous message in the queue.
                     do {
