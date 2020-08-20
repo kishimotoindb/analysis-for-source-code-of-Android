@@ -2531,6 +2531,10 @@ public final class ActivityThread {
                     Context.CONTEXT_INCLUDE_CODE);
         }
 
+        /*
+         * 如果是通过Action启动的activity，并且在开启时没有设置component，那么在目标进程启动这个activity的
+         * 时候，会自动解析出component。
+         */
         ComponentName component = r.intent.getComponent();
         if (component == null) {
             component = r.intent.resolveActivity(
@@ -2546,7 +2550,10 @@ public final class ActivityThread {
         Activity activity = null;
         try {
             java.lang.ClassLoader cl = r.packageInfo.getClassLoader();
-            // mInstrumentation仅仅是通过反射创建了一个Activity对象
+            /*
+             * mInstrumentation仅仅是通过反射创建了一个Activity对象。Instrumentaion是一个测试框架，
+             * 通过adb命令可以替换成自定义的Instrumentation实现
+             */
             activity = mInstrumentation.newActivity(
                     cl, component.getClassName(), r.intent);
             StrictMode.incrementExpectedActivityCount(activity.getClass());
