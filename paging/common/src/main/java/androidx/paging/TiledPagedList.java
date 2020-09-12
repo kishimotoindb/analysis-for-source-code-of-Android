@@ -30,13 +30,13 @@ class TiledPagedList<T> extends PagedList<T>
     final PositionalDataSource<T> mDataSource;
 
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    PageResult.Receiver<T> mReceiver = new PageResult.Receiver<T>() {
+    androidx.paging.PageResult.Receiver<T> mReceiver = new androidx.paging.PageResult.Receiver<T>() {
         // Creation thread for initial synchronous load, otherwise main thread
         // Safe to access main thread only state - no other thread has reference during construction
         @AnyThread
         @Override
-        public void onPageResult(@PageResult.ResultType int type,
-                @NonNull PageResult<T> pageResult) {
+        public void onPageResult(@androidx.paging.PageResult.ResultType int type,
+                @NonNull androidx.paging.PageResult<T> pageResult) {
             if (pageResult.isInvalid()) {
                 detach();
                 return;
@@ -47,7 +47,7 @@ class TiledPagedList<T> extends PagedList<T>
                 return;
             }
 
-            if (type != PageResult.INIT && type != PageResult.TILE) {
+            if (type != androidx.paging.PageResult.INIT && type != androidx.paging.PageResult.TILE) {
                 throw new IllegalArgumentException("unexpected resultType" + type);
             }
 
@@ -73,8 +73,8 @@ class TiledPagedList<T> extends PagedList<T>
                         && pageResult.positionOffset == 0;
                 int size = size();
                 boolean deferEnd = !deferEmpty
-                        && ((type == PageResult.INIT && pageResult.trailingNulls == 0)
-                                || (type == PageResult.TILE
+                        && ((type == androidx.paging.PageResult.INIT && pageResult.trailingNulls == 0)
+                                || (type == androidx.paging.PageResult.TILE
                                         && (pageResult.positionOffset + mConfig.pageSize >= size)));
                 deferBoundaryCallbacks(deferEmpty, deferBegin, deferEnd);
             }
@@ -104,6 +104,9 @@ class TiledPagedList<T> extends PagedList<T>
             final int idealStart = position - firstLoadSize / 2;
             final int roundedPageStart = Math.max(0, idealStart / pageSize * pageSize);
 
+            /*
+             * 数据初始化逻辑
+             */
             mDataSource.dispatchLoadInitial(true, roundedPageStart, firstLoadSize,
                     pageSize, mMainThreadExecutor, mReceiver);
         }
@@ -207,7 +210,7 @@ class TiledPagedList<T> extends PagedList<T>
                     int startPosition = pageIndex * pageSize;
                     int count = Math.min(pageSize, mStorage.size() - startPosition);
                     mDataSource.dispatchLoadRange(
-                            PageResult.TILE, startPosition, count, mMainThreadExecutor, mReceiver);
+                            androidx.paging.PageResult.TILE, startPosition, count, mMainThreadExecutor, mReceiver);
                 }
             }
         });

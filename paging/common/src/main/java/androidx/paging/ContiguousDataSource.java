@@ -21,33 +21,38 @@ import androidx.annotation.Nullable;
 
 import java.util.concurrent.Executor;
 
-abstract class ContiguousDataSource<Key, Value> extends DataSource<Key, Value> {
+abstract class ContiguousDataSource<Key, Value> extends androidx.paging.DataSource<Key, Value> {
     @Override
     boolean isContiguous() {
         return true;
     }
 
+    /*
+     * 1.从ContiguousDataSource和PositionalDataSource的dispatchLoadInitial()来看，均没有传入对整个数据集
+     * 进行排序的参数，所以也就是说，比如数据库查询，不同的sql语句的是不同的DataSource，所以loadInitial已经
+     * 是在确定的数据全集下进行的操作。从这里也能看到"DataSource是数据快照"的理念。
+     */
     abstract void dispatchLoadInitial(
             @Nullable Key key,
             int initialLoadSize,
             int pageSize,
             boolean enablePlaceholders,
             @NonNull Executor mainThreadExecutor,
-            @NonNull PageResult.Receiver<Value> receiver);
+            @NonNull androidx.paging.PageResult.Receiver<Value> receiver);
 
     abstract void dispatchLoadAfter(
             int currentEndIndex,
             @NonNull Value currentEndItem,
             int pageSize,
             @NonNull Executor mainThreadExecutor,
-            @NonNull PageResult.Receiver<Value> receiver);
+            @NonNull androidx.paging.PageResult.Receiver<Value> receiver);
 
     abstract void dispatchLoadBefore(
             int currentBeginIndex,
             @NonNull Value currentBeginItem,
             int pageSize,
             @NonNull Executor mainThreadExecutor,
-            @NonNull PageResult.Receiver<Value> receiver);
+            @NonNull androidx.paging.PageResult.Receiver<Value> receiver);
 
     /**
      * Get the key from either the position, or item, or null if position/item invalid.

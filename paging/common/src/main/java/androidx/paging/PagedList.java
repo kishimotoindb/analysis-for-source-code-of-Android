@@ -135,7 +135,7 @@ public abstract class PagedList<T> extends AbstractList<T> {
     @NonNull
     final Config mConfig;
     @NonNull
-    final PagedStorage<T> mStorage;
+    final androidx.paging.PagedStorage<T> mStorage;
 
     /**
      * Last access location, in total position space (including offset).
@@ -164,7 +164,7 @@ public abstract class PagedList<T> extends AbstractList<T> {
 
     private final ArrayList<WeakReference<Callback>> mCallbacks = new ArrayList<>();
 
-    PagedList(@NonNull PagedStorage<T> storage,
+    PagedList(@NonNull androidx.paging.PagedStorage<T> storage,
             @NonNull Executor mainThreadExecutor,
             @NonNull Executor backgroundThreadExecutor,
             @Nullable BoundaryCallback<T> boundaryCallback,
@@ -196,24 +196,24 @@ public abstract class PagedList<T> extends AbstractList<T> {
      */
     @NonNull
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    static <K, T> PagedList<T> create(@NonNull DataSource<K, T> dataSource,
+    static <K, T> PagedList<T> create(@NonNull androidx.paging.DataSource<K, T> dataSource,
             @NonNull Executor notifyExecutor,
             @NonNull Executor fetchExecutor,
             @Nullable BoundaryCallback<T> boundaryCallback,
             @NonNull Config config,
             @Nullable K key) {
         if (dataSource.isContiguous() || !config.enablePlaceholders) {
-            int lastLoad = ContiguousPagedList.LAST_LOAD_UNSPECIFIED;
+            int lastLoad = androidx.paging.ContiguousPagedList.LAST_LOAD_UNSPECIFIED;
             if (!dataSource.isContiguous()) {
                 //noinspection unchecked
-                dataSource = (DataSource<K, T>) ((PositionalDataSource<T>) dataSource)
+                dataSource = (androidx.paging.DataSource<K, T>) ((androidx.paging.PositionalDataSource<T>) dataSource)
                         .wrapAsContiguousWithoutPlaceholders();
                 if (key != null) {
                     lastLoad = (Integer) key;
                 }
             }
-            ContiguousDataSource<K, T> contigDataSource = (ContiguousDataSource<K, T>) dataSource;
-            return new ContiguousPagedList<>(contigDataSource,
+            androidx.paging.ContiguousDataSource<K, T> contigDataSource = (androidx.paging.ContiguousDataSource<K, T>) dataSource;
+            return new androidx.paging.ContiguousPagedList<>(contigDataSource,
                     notifyExecutor,
                     fetchExecutor,
                     boundaryCallback,
@@ -221,7 +221,7 @@ public abstract class PagedList<T> extends AbstractList<T> {
                     key,
                     lastLoad);
         } else {
-            return new TiledPagedList<>((PositionalDataSource<T>) dataSource,
+            return new androidx.paging.TiledPagedList<>((androidx.paging.PositionalDataSource<T>) dataSource,
                     notifyExecutor,
                     fetchExecutor,
                     boundaryCallback,
@@ -248,7 +248,7 @@ public abstract class PagedList<T> extends AbstractList<T> {
      */
     @SuppressWarnings("WeakerAccess")
     public static final class Builder<Key, Value> {
-        private final DataSource<Key, Value> mDataSource;
+        private final androidx.paging.DataSource<Key, Value> mDataSource;
         private final Config mConfig;
         private Executor mNotifyExecutor;
         private Executor mFetchExecutor;
@@ -261,7 +261,7 @@ public abstract class PagedList<T> extends AbstractList<T> {
          * @param dataSource DataSource the PagedList will load from.
          * @param config Config that defines how the PagedList loads data from its DataSource.
          */
-        public Builder(@NonNull DataSource<Key, Value> dataSource, @NonNull Config config) {
+        public Builder(@NonNull androidx.paging.DataSource<Key, Value> dataSource, @NonNull Config config) {
             //noinspection ConstantConditions
             if (dataSource == null) {
                 throw new IllegalArgumentException("DataSource may not be null");
@@ -286,7 +286,7 @@ public abstract class PagedList<T> extends AbstractList<T> {
          * @param dataSource DataSource the PagedList will load from.
          * @param pageSize Config that defines how the PagedList loads data from its DataSource.
          */
-        public Builder(@NonNull DataSource<Key, Value> dataSource, int pageSize) {
+        public Builder(@NonNull androidx.paging.DataSource<Key, Value> dataSource, int pageSize) {
             this(dataSource, new PagedList.Config.Builder().setPageSize(pageSize).build());
         }
         /**
@@ -404,6 +404,9 @@ public abstract class PagedList<T> extends AbstractList<T> {
      *
      * @see #size()
      */
+    /*
+     * 仅仅是获取数据的逻辑，有数据就返回，没有就返回空，不会触发任何数据加载流程。
+     */
     @Override
     @Nullable
     public T get(int index) {
@@ -424,9 +427,21 @@ public abstract class PagedList<T> extends AbstractList<T> {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
         }
 
+        /*
+         * 从这里来看，加载数据的控制也是交给子类控制的，PagedList只负责更新参数，没有任何的控制逻辑。
+         * 比如需要提前10个item加载下一页，那么index为倒数第10项的时候触发加载下一页的操作，然后在
+         * index为倒数第9项进入到当前方法的时候，不需要再次触发加载逻辑的代码是子类自己实现的。
+         *
+         * 完全不控制，给子类最大的控制权。这么做也是对的，谁知道子类要怎么实现控制逻辑，即使目前看似
+         * 是最最基础的通用控制逻辑，如果后面需要扩展了，就没有办法修改了。
+         */
         mLastLoad = index + getPositionOffset();
         loadAroundInternal(index);
 
+        /*
+         * adapter.getItem(int)调用的时候，会调用loadAround(int)，所以mLowestIndexAccessed和
+         * mHighestIndexAccessed表示的就是adapter获取过的数据的最小索引和最大索引
+         */
         mLowestIndexAccessed = Math.min(mLowestIndexAccessed, index);
         mHighestIndexAccessed = Math.max(mHighestIndexAccessed, index);
 
@@ -606,7 +621,7 @@ public abstract class PagedList<T> extends AbstractList<T> {
         if (isImmutable()) {
             return this;
         }
-        return new SnapshotPagedList<>(this);
+        return new androidx.paging.SnapshotPagedList<>(this);
     }
 
     abstract boolean isContiguous();
@@ -627,7 +642,7 @@ public abstract class PagedList<T> extends AbstractList<T> {
      * @return the DataSource of this PagedList.
      */
     @NonNull
-    public abstract DataSource<?, T> getDataSource();
+    public abstract androidx.paging.DataSource<?, T> getDataSource();
 
     /**
      * Return the key for the position passed most recently to {@link #loadAround(int)}.

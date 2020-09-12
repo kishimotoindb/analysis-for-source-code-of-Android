@@ -40,9 +40,9 @@ import java.util.concurrent.Executor;
  */
 public final class LivePagedListBuilder<Key, Value> {
     private Key mInitialLoadKey;
-    private PagedList.Config mConfig;
-    private DataSource.Factory<Key, Value> mDataSourceFactory;
-    private PagedList.BoundaryCallback mBoundaryCallback;
+    private androidx.paging.PagedList.Config mConfig;
+    private androidx.paging.DataSource.Factory<Key, Value> mDataSourceFactory;
+    private androidx.paging.PagedList.BoundaryCallback mBoundaryCallback;
     @SuppressLint("RestrictedApi")
     private Executor mFetchExecutor = ArchTaskExecutor.getIOThreadExecutor();
 
@@ -52,8 +52,8 @@ public final class LivePagedListBuilder<Key, Value> {
      * @param dataSourceFactory DataSource factory providing DataSource generations.
      * @param config Paging configuration.
      */
-    public LivePagedListBuilder(@NonNull DataSource.Factory<Key, Value> dataSourceFactory,
-            @NonNull PagedList.Config config) {
+    public LivePagedListBuilder(@NonNull androidx.paging.DataSource.Factory<Key, Value> dataSourceFactory,
+            @NonNull androidx.paging.PagedList.Config config) {
         //noinspection ConstantConditions
         if (config == null) {
             throw new IllegalArgumentException("PagedList.Config must be provided");
@@ -79,9 +79,9 @@ public final class LivePagedListBuilder<Key, Value> {
      * @param dataSourceFactory DataSource.Factory providing DataSource generations.
      * @param pageSize Size of pages to load.
      */
-    public LivePagedListBuilder(@NonNull DataSource.Factory<Key, Value> dataSourceFactory,
+    public LivePagedListBuilder(@NonNull androidx.paging.DataSource.Factory<Key, Value> dataSourceFactory,
             int pageSize) {
-        this(dataSourceFactory, new PagedList.Config.Builder().setPageSize(pageSize).build());
+        this(dataSourceFactory, new androidx.paging.PagedList.Config.Builder().setPageSize(pageSize).build());
     }
 
     /**
@@ -122,7 +122,7 @@ public final class LivePagedListBuilder<Key, Value> {
     @SuppressWarnings("unused")
     @NonNull
     public LivePagedListBuilder<Key, Value> setBoundaryCallback(
-            @Nullable PagedList.BoundaryCallback<Value> boundaryCallback) {
+            @Nullable androidx.paging.PagedList.BoundaryCallback<Value> boundaryCallback) {
         mBoundaryCallback = boundaryCallback;
         return this;
     }
@@ -153,7 +153,7 @@ public final class LivePagedListBuilder<Key, Value> {
      */
     @NonNull
     @SuppressLint("RestrictedApi")
-    public LiveData<PagedList<Value>> build() {
+    public LiveData<androidx.paging.PagedList<Value>> build() {
         return create(mInitialLoadKey, mConfig, mBoundaryCallback, mDataSourceFactory,
                 ArchTaskExecutor.getMainThreadExecutor(), mFetchExecutor);
     }
@@ -161,21 +161,26 @@ public final class LivePagedListBuilder<Key, Value> {
     @AnyThread
     @NonNull
     @SuppressLint("RestrictedApi")
-    private static <Key, Value> LiveData<PagedList<Value>> create(
+    private static <Key, Value> LiveData<androidx.paging.PagedList<Value>> create(
             @Nullable final Key initialLoadKey,
-            @NonNull final PagedList.Config config,
-            @Nullable final PagedList.BoundaryCallback boundaryCallback,
-            @NonNull final DataSource.Factory<Key, Value> dataSourceFactory,
+            @NonNull final androidx.paging.PagedList.Config config,
+            @Nullable final androidx.paging.PagedList.BoundaryCallback boundaryCallback,
+            @NonNull final androidx.paging.DataSource.Factory<Key, Value> dataSourceFactory,
             @NonNull final Executor notifyExecutor,
             @NonNull final Executor fetchExecutor) {
-        return new ComputableLiveData<PagedList<Value>>(fetchExecutor) {
-            @Nullable
-            private PagedList<Value> mList;
-            @Nullable
-            private DataSource<Key, Value> mDataSource;
 
-            private final DataSource.InvalidatedCallback mCallback =
-                    new DataSource.InvalidatedCallback() {
+        /*
+         * LivePagedListBuilder是在创建ComputableLiveData的时候，将PagedList的操作切换到了fetchExecutor的。
+         * 具体的代码逻辑可以参见ComputableLiveData的构造函数。
+         */
+        return new ComputableLiveData<androidx.paging.PagedList<Value>>(fetchExecutor) {
+            @Nullable
+            private androidx.paging.PagedList<Value> mList;
+            @Nullable
+            private androidx.paging.DataSource<Key, Value> mDataSource;
+
+            private final androidx.paging.DataSource.InvalidatedCallback mCallback =
+                    new androidx.paging.DataSource.InvalidatedCallback() {
                         @Override
                         public void onInvalidated() {
                             invalidate();
@@ -184,7 +189,7 @@ public final class LivePagedListBuilder<Key, Value> {
 
             @SuppressWarnings("unchecked") // for casting getLastKey to Key
             @Override
-            protected PagedList<Value> compute() {
+            protected androidx.paging.PagedList<Value> compute() {
                 @Nullable Key initializeKey = initialLoadKey;
                 if (mList != null) {
                     initializeKey = (Key) mList.getLastKey();
@@ -198,7 +203,7 @@ public final class LivePagedListBuilder<Key, Value> {
                     mDataSource = dataSourceFactory.create();
                     mDataSource.addInvalidatedCallback(mCallback);
 
-                    mList = new PagedList.Builder<>(mDataSource, config)
+                    mList = new androidx.paging.PagedList.Builder<>(mDataSource, config)
                             .setNotifyExecutor(notifyExecutor)
                             .setFetchExecutor(fetchExecutor)
                             .setBoundaryCallback(boundaryCallback)

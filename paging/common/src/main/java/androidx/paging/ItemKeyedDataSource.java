@@ -40,7 +40,7 @@ import java.util.concurrent.Executor;
  * @param <Key> Type of data used to query Value types out of the DataSource.
  * @param <Value> Type of items being loaded by the DataSource.
  */
-public abstract class ItemKeyedDataSource<Key, Value> extends ContiguousDataSource<Key, Value> {
+public abstract class ItemKeyedDataSource<Key, Value> extends androidx.paging.ContiguousDataSource<Key, Value> {
 
     /**
      * Holder object for inputs to {@link #loadInitial(LoadInitialParams, LoadInitialCallback)}.
@@ -189,8 +189,8 @@ public abstract class ItemKeyedDataSource<Key, Value> extends ContiguousDataSour
         final LoadCallbackHelper<Value> mCallbackHelper;
         private final boolean mCountingEnabled;
         LoadInitialCallbackImpl(@NonNull ItemKeyedDataSource dataSource, boolean countingEnabled,
-                @NonNull PageResult.Receiver<Value> receiver) {
-            mCallbackHelper = new LoadCallbackHelper<>(dataSource, PageResult.INIT, null, receiver);
+                @NonNull androidx.paging.PageResult.Receiver<Value> receiver) {
+            mCallbackHelper = new LoadCallbackHelper<>(dataSource, androidx.paging.PageResult.INIT, null, receiver);
             mCountingEnabled = countingEnabled;
         }
 
@@ -201,10 +201,10 @@ public abstract class ItemKeyedDataSource<Key, Value> extends ContiguousDataSour
 
                 int trailingUnloadedCount = totalCount - position - data.size();
                 if (mCountingEnabled) {
-                    mCallbackHelper.dispatchResultToReceiver(new PageResult<>(
+                    mCallbackHelper.dispatchResultToReceiver(new androidx.paging.PageResult<>(
                             data, position, trailingUnloadedCount, 0));
                 } else {
-                    mCallbackHelper.dispatchResultToReceiver(new PageResult<>(data, position));
+                    mCallbackHelper.dispatchResultToReceiver(new androidx.paging.PageResult<>(data, position));
                 }
             }
         }
@@ -212,7 +212,7 @@ public abstract class ItemKeyedDataSource<Key, Value> extends ContiguousDataSour
         @Override
         public void onResult(@NonNull List<Value> data) {
             if (!mCallbackHelper.dispatchInvalidResultIfInvalid()) {
-                mCallbackHelper.dispatchResultToReceiver(new PageResult<>(data, 0, 0, 0));
+                mCallbackHelper.dispatchResultToReceiver(new androidx.paging.PageResult<>(data, 0, 0, 0));
             }
         }
     }
@@ -220,9 +220,9 @@ public abstract class ItemKeyedDataSource<Key, Value> extends ContiguousDataSour
     static class LoadCallbackImpl<Value> extends LoadCallback<Value> {
         final LoadCallbackHelper<Value> mCallbackHelper;
 
-        LoadCallbackImpl(@NonNull ItemKeyedDataSource dataSource, @PageResult.ResultType int type,
+        LoadCallbackImpl(@NonNull ItemKeyedDataSource dataSource, @androidx.paging.PageResult.ResultType int type,
                 @Nullable Executor mainThreadExecutor,
-                @NonNull PageResult.Receiver<Value> receiver) {
+                @NonNull androidx.paging.PageResult.Receiver<Value> receiver) {
             mCallbackHelper = new LoadCallbackHelper<>(
                     dataSource, type, mainThreadExecutor, receiver);
         }
@@ -230,7 +230,7 @@ public abstract class ItemKeyedDataSource<Key, Value> extends ContiguousDataSour
         @Override
         public void onResult(@NonNull List<Value> data) {
             if (!mCallbackHelper.dispatchInvalidResultIfInvalid()) {
-                mCallbackHelper.dispatchResultToReceiver(new PageResult<>(data, 0, 0, 0));
+                mCallbackHelper.dispatchResultToReceiver(new androidx.paging.PageResult<>(data, 0, 0, 0));
             }
         }
     }
@@ -242,13 +242,14 @@ public abstract class ItemKeyedDataSource<Key, Value> extends ContiguousDataSour
             return null;
         }
 
+        // 根据item获取相应的key
         return getKey(item);
     }
 
     @Override
     final void dispatchLoadInitial(@Nullable Key key, int initialLoadSize, int pageSize,
             boolean enablePlaceholders, @NonNull Executor mainThreadExecutor,
-            @NonNull PageResult.Receiver<Value> receiver) {
+            @NonNull androidx.paging.PageResult.Receiver<Value> receiver) {
         LoadInitialCallbackImpl<Value> callback =
                 new LoadInitialCallbackImpl<>(this, enablePlaceholders, receiver);
         loadInitial(new LoadInitialParams<>(key, initialLoadSize, enablePlaceholders), callback);
@@ -262,17 +263,17 @@ public abstract class ItemKeyedDataSource<Key, Value> extends ContiguousDataSour
     @Override
     final void dispatchLoadAfter(int currentEndIndex, @NonNull Value currentEndItem,
             int pageSize, @NonNull Executor mainThreadExecutor,
-            @NonNull PageResult.Receiver<Value> receiver) {
+            @NonNull androidx.paging.PageResult.Receiver<Value> receiver) {
         loadAfter(new LoadParams<>(getKey(currentEndItem), pageSize),
-                new LoadCallbackImpl<>(this, PageResult.APPEND, mainThreadExecutor, receiver));
+                new LoadCallbackImpl<>(this, androidx.paging.PageResult.APPEND, mainThreadExecutor, receiver));
     }
 
     @Override
     final void dispatchLoadBefore(int currentBeginIndex, @NonNull Value currentBeginItem,
             int pageSize, @NonNull Executor mainThreadExecutor,
-            @NonNull PageResult.Receiver<Value> receiver) {
+            @NonNull androidx.paging.PageResult.Receiver<Value> receiver) {
         loadBefore(new LoadParams<>(getKey(currentBeginItem), pageSize),
-                new LoadCallbackImpl<>(this, PageResult.PREPEND, mainThreadExecutor, receiver));
+                new LoadCallbackImpl<>(this, androidx.paging.PageResult.PREPEND, mainThreadExecutor, receiver));
     }
 
     /**

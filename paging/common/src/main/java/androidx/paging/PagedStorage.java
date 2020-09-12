@@ -69,7 +69,7 @@ final class PagedStorage<T> extends AbstractList<T> {
      */
     private int mStorageCount;
 
-    // If mPageSize > 0, tiling is enabled, 'mPages' may have gaps, and leadingPages is set
+    // If mPageSize > 0, tiling(大概是"填充"的意思，拼图，填瓦) is enabled, 'mPages' may have gaps, and leadingPages is set
     private int mPageSize;
 
     private int mNumberPrepended;

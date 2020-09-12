@@ -269,18 +269,18 @@ public abstract class DataSource<Key, Value> {
             }
         }
 
-        @PageResult.ResultType
+        @androidx.paging.PageResult.ResultType
         final int mResultType;
         private final DataSource mDataSource;
-        final PageResult.Receiver<T> mReceiver;
+        final androidx.paging.PageResult.Receiver<T> mReceiver;
 
         // mSignalLock protects mPostExecutor, and mHasSignalled
         private final Object mSignalLock = new Object();
         private Executor mPostExecutor = null;
         private boolean mHasSignalled = false;
 
-        LoadCallbackHelper(@NonNull DataSource dataSource, @PageResult.ResultType int resultType,
-                @Nullable Executor mainThreadExecutor, @NonNull PageResult.Receiver<T> receiver) {
+        LoadCallbackHelper(@NonNull DataSource dataSource, @androidx.paging.PageResult.ResultType int resultType,
+                @Nullable Executor mainThreadExecutor, @NonNull androidx.paging.PageResult.Receiver<T> receiver) {
             mDataSource = dataSource;
             mResultType = resultType;
             mPostExecutor = mainThreadExecutor;
@@ -293,20 +293,20 @@ public abstract class DataSource<Key, Value> {
             }
         }
 
-        /**
-         * Call before verifying args, or dispatching actul results
+       /**
+         * Call before verifying args, or dispatching actual results
          *
          * @return true if DataSource was invalid, and invalid result dispatched
          */
         boolean dispatchInvalidResultIfInvalid() {
             if (mDataSource.isInvalid()) {
-                dispatchResultToReceiver(PageResult.<T>getInvalidResult());
+                dispatchResultToReceiver(androidx.paging.PageResult.<T>getInvalidResult());
                 return true;
             }
             return false;
         }
 
-        void dispatchResultToReceiver(final @NonNull PageResult<T> result) {
+        void dispatchResultToReceiver(final @NonNull androidx.paging.PageResult<T> result) {
             Executor executor;
             synchronized (mSignalLock) {
                 if (mHasSignalled) {

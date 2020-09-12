@@ -28,9 +28,9 @@ import java.lang.annotation.Retention;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-class ContiguousPagedList<K, V> extends PagedList<V> implements PagedStorage.Callback {
+class ContiguousPagedList<K, V> extends androidx.paging.PagedList<V> implements androidx.paging.PagedStorage.Callback {
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    final ContiguousDataSource<K, V> mDataSource;
+    final androidx.paging.ContiguousDataSource<K, V> mDataSource;
 
     @Retention(SOURCE)
     @IntDef({READY_TO_FETCH, FETCHING, DONE_FETCHING})
@@ -59,13 +59,13 @@ class ContiguousPagedList<K, V> extends PagedList<V> implements PagedStorage.Cal
     final boolean mShouldTrim;
 
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    PageResult.Receiver<V> mReceiver = new PageResult.Receiver<V>() {
+    androidx.paging.PageResult.Receiver<V> mReceiver = new androidx.paging.PageResult.Receiver<V>() {
         // Creation thread for initial synchronous load, otherwise main thread
         // Safe to access main thread only state - no other thread has reference during construction
         @AnyThread
         @Override
-        public void onPageResult(@PageResult.ResultType int resultType,
-                @NonNull PageResult<V> pageResult) {
+        public void onPageResult(@androidx.paging.PageResult.ResultType int resultType,
+                @NonNull androidx.paging.PageResult<V> pageResult) {
             if (pageResult.isInvalid()) {
                 detach();
                 return;
@@ -77,7 +77,7 @@ class ContiguousPagedList<K, V> extends PagedList<V> implements PagedStorage.Cal
             }
 
             List<V> page = pageResult.page;
-            if (resultType == PageResult.INIT) {
+            if (resultType == androidx.paging.PageResult.INIT) {
                 mStorage.init(pageResult.leadingNulls, page, pageResult.trailingNulls,
                         pageResult.positionOffset, ContiguousPagedList.this);
                 if (mLastLoad == LAST_LOAD_UNSPECIFIED) {
@@ -95,7 +95,7 @@ class ContiguousPagedList<K, V> extends PagedList<V> implements PagedStorage.Cal
                         && mStorage.shouldPreTrimNewPage(
                                 mConfig.maxSize, mRequiredRemainder, page.size());
 
-                if (resultType == PageResult.APPEND) {
+                if (resultType == androidx.paging.PageResult.APPEND) {
                     if (skipNewPage && !trimFromFront) {
                         // don't append this data, drop it
                         mAppendItemsRequested = 0;
@@ -103,7 +103,7 @@ class ContiguousPagedList<K, V> extends PagedList<V> implements PagedStorage.Cal
                     } else {
                         mStorage.appendPage(page, ContiguousPagedList.this);
                     }
-                } else if (resultType == PageResult.PREPEND) {
+                } else if (resultType == androidx.paging.PageResult.PREPEND) {
                     if (skipNewPage && trimFromFront) {
                         // don't append this data, drop it
                         mPrependItemsRequested = 0;
@@ -144,10 +144,10 @@ class ContiguousPagedList<K, V> extends PagedList<V> implements PagedStorage.Cal
             if (mBoundaryCallback != null) {
                 boolean deferEmpty = mStorage.size() == 0;
                 boolean deferBegin = !deferEmpty
-                        && resultType == PageResult.PREPEND
+                        && resultType == androidx.paging.PageResult.PREPEND
                         && pageResult.page.size() == 0;
                 boolean deferEnd = !deferEmpty
-                        && resultType == PageResult.APPEND
+                        && resultType == androidx.paging.PageResult.APPEND
                         && pageResult.page.size() == 0;
                 deferBoundaryCallbacks(deferEmpty, deferBegin, deferEnd);
             }
@@ -157,14 +157,14 @@ class ContiguousPagedList<K, V> extends PagedList<V> implements PagedStorage.Cal
     static final int LAST_LOAD_UNSPECIFIED = -1;
 
     ContiguousPagedList(
-            @NonNull ContiguousDataSource<K, V> dataSource,
+            @NonNull androidx.paging.ContiguousDataSource<K, V> dataSource,
             @NonNull Executor mainThreadExecutor,
             @NonNull Executor backgroundThreadExecutor,
             @Nullable BoundaryCallback<V> boundaryCallback,
             @NonNull Config config,
             final @Nullable K key,
             int lastLoad) {
-        super(new PagedStorage<V>(), mainThreadExecutor, backgroundThreadExecutor,
+        super(new androidx.paging.PagedStorage<V>(), mainThreadExecutor, backgroundThreadExecutor,
                 boundaryCallback, config);
         mDataSource = dataSource;
         mLastLoad = lastLoad;
@@ -172,6 +172,9 @@ class ContiguousPagedList<K, V> extends PagedList<V> implements PagedStorage.Cal
         if (mDataSource.isInvalid()) {
             detach();
         } else {
+            /*
+             * 创建PagedList对象的时候完成了数据的初始化
+             */
             mDataSource.dispatchLoadInitial(key,
                     mConfig.initialLoadSizeHint,
                     mConfig.pageSize,
@@ -186,8 +189,8 @@ class ContiguousPagedList<K, V> extends PagedList<V> implements PagedStorage.Cal
     @MainThread
     @Override
     void dispatchUpdatesSinceSnapshot(
-            @NonNull PagedList<V> pagedListSnapshot, @NonNull Callback callback) {
-        final PagedStorage<V> snapshot = pagedListSnapshot.mStorage;
+            @NonNull androidx.paging.PagedList<V> pagedListSnapshot, @NonNull Callback callback) {
+        final androidx.paging.PagedStorage<V> snapshot = pagedListSnapshot.mStorage;
 
         final int newlyAppended = mStorage.getNumberAppended() - snapshot.getNumberAppended();
         final int newlyPrepended = mStorage.getNumberPrepended() - snapshot.getNumberPrepended();
@@ -323,7 +326,7 @@ class ContiguousPagedList<K, V> extends PagedList<V> implements PagedStorage.Cal
 
     @NonNull
     @Override
-    public DataSource<?, V> getDataSource() {
+    public androidx.paging.DataSource<?, V> getDataSource() {
         return mDataSource;
     }
 
