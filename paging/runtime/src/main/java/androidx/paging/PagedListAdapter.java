@@ -109,12 +109,12 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public abstract class PagedListAdapter<T, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
-    final AsyncPagedListDiffer<T> mDiffer;
-    private final AsyncPagedListDiffer.PagedListListener<T> mListener =
-            new AsyncPagedListDiffer.PagedListListener<T>() {
+    final androidx.paging.AsyncPagedListDiffer<T> mDiffer;
+    private final androidx.paging.AsyncPagedListDiffer.PagedListListener<T> mListener =
+            new androidx.paging.AsyncPagedListDiffer.PagedListListener<T>() {
         @Override
         public void onCurrentListChanged(
-                @Nullable PagedList<T> previousList, @Nullable PagedList<T> currentList) {
+                @Nullable androidx.paging.PagedList<T> previousList, @Nullable androidx.paging.PagedList<T> currentList) {
             PagedListAdapter.this.onCurrentListChanged(currentList);
             PagedListAdapter.this.onCurrentListChanged(previousList, currentList);
         }
@@ -131,12 +131,26 @@ public abstract class PagedListAdapter<T, VH extends RecyclerView.ViewHolder>
      *                     compare items in the list.
      */
     protected PagedListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
-        mDiffer = new AsyncPagedListDiffer<>(this, diffCallback);
+        /*
+         * 这里将adapter传入AsyncPagedListDiffer，就是为了后面数据发生变化的时候，直接可以拿到adapter，
+         * 然后调用notifyXX()系列方法（详见AdapterListUpdateCallback的实现)。
+         *
+         * 同时也说明PagedList发生数据更新，需要更新UI的时候，直接就在AsyncPagedListDiffer中执行了全部
+         * 的操作，并没有回到PagedListAdapter中进行任何操作。这个是不是也算是业务和UI的解耦,View层不处理
+         * 哪怕一丁点业务逻辑。
+         */
+        mDiffer = new androidx.paging.AsyncPagedListDiffer<>(this, diffCallback);
+
+        /*
+         * 为Adapter提供一个外部感知数据变化的机会？因为通过PagedList加载更多的时候（loadMore)，直接在
+         * AsyncPagedListDiffer中调用了adapter.notifyXX()，没有在流程中给PagedListAdapter提供任何
+         * 做自定义处理的时机。
+         */
         mDiffer.addPagedListListener(mListener);
     }
 
     protected PagedListAdapter(@NonNull AsyncDifferConfig<T> config) {
-        mDiffer = new AsyncPagedListDiffer<>(new AdapterListUpdateCallback(this), config);
+        mDiffer = new androidx.paging.AsyncPagedListDiffer<>(new AdapterListUpdateCallback(this), config);
         mDiffer.addPagedListListener(mListener);
     }
 
@@ -148,7 +162,7 @@ public abstract class PagedListAdapter<T, VH extends RecyclerView.ViewHolder>
      *
      * @param pagedList The new list to be displayed.
      */
-    public void submitList(@Nullable PagedList<T> pagedList) {
+    public void submitList(@Nullable androidx.paging.PagedList<T> pagedList) {
         mDiffer.submitList(pagedList);
     }
 
@@ -166,7 +180,7 @@ public abstract class PagedListAdapter<T, VH extends RecyclerView.ViewHolder>
      * @param commitCallback Optional runnable that is executed when the PagedList is committed, if
      *                       it is committed.
      */
-    public void submitList(@Nullable PagedList<T> pagedList,
+    public void submitList(@Nullable androidx.paging.PagedList<T> pagedList,
             @Nullable final Runnable commitCallback) {
         mDiffer.submitList(pagedList, commitCallback);
     }
@@ -193,7 +207,7 @@ public abstract class PagedListAdapter<T, VH extends RecyclerView.ViewHolder>
      * @see #onCurrentListChanged(PagedList, PagedList)
      */
     @Nullable
-    public PagedList<T> getCurrentList() {
+    public androidx.paging.PagedList<T> getCurrentList() {
         return mDiffer.getCurrentList();
     }
 
@@ -218,7 +232,7 @@ public abstract class PagedListAdapter<T, VH extends RecyclerView.ViewHolder>
      */
     @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
-    public void onCurrentListChanged(@Nullable PagedList<T> currentList) {
+    public void onCurrentListChanged(@Nullable androidx.paging.PagedList<T> currentList) {
     }
 
     /**
@@ -239,6 +253,6 @@ public abstract class PagedListAdapter<T, VH extends RecyclerView.ViewHolder>
      * @see #getCurrentList()
      */
     public void onCurrentListChanged(
-            @Nullable PagedList<T> previousList, @Nullable PagedList<T> currentList) {
+            @Nullable androidx.paging.PagedList<T> previousList, @Nullable androidx.paging.PagedList<T> currentList) {
     }
 }

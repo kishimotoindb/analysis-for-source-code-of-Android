@@ -119,7 +119,14 @@ public class AsyncPagedListDiffer<T> {
     // updateCallback notifications must only be notified *after* new data and item count are stored
     // this ensures Adapter#notifyItemRangeInserted etc are accessing the new data
     @SuppressWarnings("WeakerAccess") /* synthetic access */
+    /*
+     * 用来关联Adapter，完成notifyItemXX()操作
+     */
     final ListUpdateCallback mUpdateCallback;
+
+    /*
+     * 提供differ操作使用的主线程、子线程和DiffUtil#ItemCallback
+     */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
     final AsyncDifferConfig<T> mConfig;
 
@@ -139,15 +146,19 @@ public class AsyncPagedListDiffer<T> {
          * @param currentList The new current list, may be null.
          */
         void onCurrentListChanged(
-                @Nullable PagedList<T> previousList, @Nullable PagedList<T> currentList);
+                @Nullable androidx.paging.PagedList<T> previousList, @Nullable androidx.paging.PagedList<T> currentList);
     }
 
     private final List<PagedListListener<T>> mListeners = new CopyOnWriteArrayList<>();
 
     private boolean mIsContiguous;
 
-    private PagedList<T> mPagedList;
-    private PagedList<T> mSnapshot;
+    /*
+     * mPagedList保存的是AsyncPagedListDiffer中正在使用的pagedList
+     * mSnapshot保存的是正在子线程进行diff操作的旧PagedList
+     */
+    private androidx.paging.PagedList<T> mPagedList;
+    private androidx.paging.PagedList<T> mSnapshot;
 
     // Max generation of currently scheduled runnable
     @SuppressWarnings("WeakerAccess") /* synthetic access */
@@ -165,9 +176,16 @@ public class AsyncPagedListDiffer<T> {
     public AsyncPagedListDiffer(@NonNull RecyclerView.Adapter adapter,
             @NonNull DiffUtil.ItemCallback<T> diffCallback) {
         mUpdateCallback = new AdapterListUpdateCallback(adapter);
+        // 这种构建方式没有配置MainThread
         mConfig = new AsyncDifferConfig.Builder<>(diffCallback).build();
     }
 
+    /*
+     * 这个构造函数就是直接传入了两个构造好的参数进来。从这里来看代码还是比较整洁的，但是从PagedListAdapter
+     * 中的调用处来看，有点莫名其妙的感觉，在传入adapter之前创建了AdapterListUpdateCallback对象。
+     *
+     * 上面的构造函数传入的参数都是组成部分，所以在构造函数内部创建了成员变量需要的两个对象。
+     */
     @SuppressWarnings("WeakerAccess")
     public AsyncPagedListDiffer(@NonNull ListUpdateCallback listUpdateCallback,
             @NonNull AsyncDifferConfig<T> config) {
@@ -175,7 +193,11 @@ public class AsyncPagedListDiffer<T> {
         mConfig = config;
     }
 
-    private PagedList.Callback mPagedListCallback = new PagedList.Callback() {
+    /*
+     * AsyncPagedListDiffer通过AdapterListUpdateCallback与PagedListAdapter进行关联，PagedList通过
+     * PagedList#Callback与AsyncPagedListDiffer进行关联。
+     */
+    private androidx.paging.PagedList.Callback mPagedListCallback = new androidx.paging.PagedList.Callback() {
         @Override
         public void onInserted(int position, int count) {
             mUpdateCallback.onInserted(position, count);
@@ -206,6 +228,10 @@ public class AsyncPagedListDiffer<T> {
     public T getItem(int index) {
         if (mPagedList == null) {
             if (mSnapshot == null) {
+                /*
+                 * getItemCount>0才会调用getItem()，RV正常的逻辑既如此，只有可能是外部自定义的代码
+                 * 中才可能出现这种错误的调用。
+                 */
                 throw new IndexOutOfBoundsException(
                         "Item count is zero, getItem() call is invalid");
             } else {
@@ -242,7 +268,7 @@ public class AsyncPagedListDiffer<T> {
      *
      * @param pagedList The new PagedList.
      */
-    public void submitList(@Nullable final PagedList<T> pagedList) {
+    public void submitList(@Nullable final androidx.paging.PagedList<T> pagedList) {
         submitList(pagedList, null);
     }
 
@@ -261,10 +287,20 @@ public class AsyncPagedListDiffer<T> {
      * @param pagedList The new PagedList.
      * @param commitCallback Optional runnable that is executed when the PagedList is committed, if
      *                       it is committed.
+     *                       mPagedList更新为提交的pagedList之后，调用commitCallback
+     */
+    /*
+     * 1. 提交场景：
+     *     1）有新数据，提交给PagedListAdapter
+     *     2）新数据和整套数据加载逻辑，提交给PagedListAdapter
+     *    正常的场景更多的是第二种。
      */
     @SuppressWarnings("ReferenceEquality")
-    public void submitList(@Nullable final PagedList<T> pagedList,
+    public void submitList(@Nullable final androidx.paging.PagedList<T> pagedList,
             @Nullable final Runnable commitCallback) {
+        /*
+         * 更新 mIsContiguous 变量
+         */
         if (pagedList != null) {
             if (mPagedList == null && mSnapshot == null) {
                 mIsContiguous = pagedList.isContiguous();
@@ -277,6 +313,13 @@ public class AsyncPagedListDiffer<T> {
         }
 
         // incrementing generation means any currently-running diffs are discarded when they finish
+        /*
+         * 多次submitList，通过generation来取消之前的submit操作。
+         *
+         * 这种方式有没有问题？如果连续提交了三次PagedList，第一次的PagedList正在子线程diff，第二次的
+         * 还在等待处理，第三个的提交会使前两次提交的diff结果失效。那么在第三次提交的时候，不应该是直接
+         * 取消掉第二次的提交更有效率么？为什么还要让第二次执行完成？
+         */
         final int runGeneration = ++mMaxScheduledGeneration;
 
         if (pagedList == mPagedList) {
@@ -287,11 +330,12 @@ public class AsyncPagedListDiffer<T> {
             return;
         }
 
-        final PagedList<T> previous = (mSnapshot != null) ? mSnapshot : mPagedList;
+        final androidx.paging.PagedList<T> previous = (mSnapshot != null) ? mSnapshot : mPagedList;
 
         if (pagedList == null) {
             int removedCount = getItemCount();
             if (mPagedList != null) {
+                // 移除当前的pagedList之前，移除PagedListCallback
                 mPagedList.removeWeakCallback(mPagedListCallback);
                 mPagedList = null;
             } else if (mSnapshot != null) {
@@ -319,7 +363,7 @@ public class AsyncPagedListDiffer<T> {
             // first update scheduled on this list, so capture mPages as a snapshot, removing
             // callbacks so we don't have resolve updates against a moving target
             mPagedList.removeWeakCallback(mPagedListCallback);
-            mSnapshot = (PagedList<T>) mPagedList.snapshot();
+            mSnapshot = (androidx.paging.PagedList<T>) mPagedList.snapshot();
             mPagedList = null;
         }
 
@@ -327,13 +371,16 @@ public class AsyncPagedListDiffer<T> {
             throw new IllegalStateException("must be in snapshot state to diff");
         }
 
-        final PagedList<T> oldSnapshot = mSnapshot;
-        final PagedList<T> newSnapshot = (PagedList<T>) pagedList.snapshot();
+        /*
+         * 连续多次submit，子线程的diff操作的确会执行多次，只不过只有最后一次会在主线程进行输出。
+         */
+        final androidx.paging.PagedList<T> oldSnapshot = mSnapshot;
+        final androidx.paging.PagedList<T> newSnapshot = (androidx.paging.PagedList<T>) pagedList.snapshot();
         mConfig.getBackgroundThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 final DiffUtil.DiffResult result;
-                result = PagedStorageDiffHelper.computeDiff(
+                result = androidx.paging.PagedStorageDiffHelper.computeDiff(
                         oldSnapshot.mStorage,
                         newSnapshot.mStorage,
                         mConfig.getDiffCallback());
@@ -342,6 +389,9 @@ public class AsyncPagedListDiffer<T> {
                     @Override
                     public void run() {
                         if (mMaxScheduledGeneration == runGeneration) {
+                            /*
+                             * latch是门闩的意思，动词是闩上，所以这里的意思就是将结果闩到Diff上。
+                             */
                             latchPagedList(pagedList, newSnapshot, result,
                                     oldSnapshot.mLastLoad, commitCallback);
                         }
@@ -353,8 +403,8 @@ public class AsyncPagedListDiffer<T> {
 
     @SuppressWarnings("WeakerAccess") /* synthetic access */
     void latchPagedList(
-            @NonNull PagedList<T> newList,
-            @NonNull PagedList<T> diffSnapshot,
+            @NonNull androidx.paging.PagedList<T> newList,
+            @NonNull androidx.paging.PagedList<T> diffSnapshot,
             @NonNull DiffUtil.DiffResult diffResult,
             int lastAccessIndex,
             @Nullable Runnable commitCallback) {
@@ -362,12 +412,12 @@ public class AsyncPagedListDiffer<T> {
             throw new IllegalStateException("must be in snapshot state to apply diff");
         }
 
-        PagedList<T> previousSnapshot = mSnapshot;
+        androidx.paging.PagedList<T> previousSnapshot = mSnapshot;
         mPagedList = newList;
         mSnapshot = null;
 
         // dispatch update callback after updating mPagedList/mSnapshot
-        PagedStorageDiffHelper.dispatchDiff(mUpdateCallback,
+        androidx.paging.PagedStorageDiffHelper.dispatchDiff(mUpdateCallback,
                 previousSnapshot.mStorage, newList.mStorage, diffResult);
 
         newList.addWeakCallback(diffSnapshot, mPagedListCallback);
@@ -379,7 +429,7 @@ public class AsyncPagedListDiffer<T> {
             // Note: we don't take into account loads between new list snapshot and new list, but
             // this is only a problem in rare cases when placeholders are disabled, and a load
             // starts (for some reason) and finishes before diff completes.
-            int newPosition = PagedStorageDiffHelper.transformAnchorIndex(
+            int newPosition = androidx.paging.PagedStorageDiffHelper.transformAnchorIndex(
                     diffResult, previousSnapshot.mStorage, diffSnapshot.mStorage, lastAccessIndex);
 
             // Trigger load in new list at this position, clamped to list bounds.
@@ -393,8 +443,8 @@ public class AsyncPagedListDiffer<T> {
     }
 
     private void onCurrentListChanged(
-            @Nullable PagedList<T> previousList,
-            @Nullable PagedList<T> currentList,
+            @Nullable androidx.paging.PagedList<T> previousList,
+            @Nullable androidx.paging.PagedList<T> currentList,
             @Nullable Runnable commitCallback) {
         for (PagedListListener<T> listener : mListeners) {
             listener.onCurrentListChanged(previousList, currentList);
@@ -438,7 +488,7 @@ public class AsyncPagedListDiffer<T> {
      */
     @SuppressWarnings("WeakerAccess")
     @Nullable
-    public PagedList<T> getCurrentList() {
+    public androidx.paging.PagedList<T> getCurrentList() {
         if (mSnapshot != null) {
             return mSnapshot;
         }
