@@ -218,7 +218,18 @@ public class ProgressBar extends View {
     private boolean mHasAnimation;
 
     private Drawable mIndeterminateDrawable;
+    /*
+     * mProgressDrawale一般来说是一个LayerDrawable，保存着backgroundDrawable、ProgessDrawable、
+     * SecondaryProgessDrawable，并且各自都是用系统定义的android.R.id标识。使用的时候，会根据id
+     * 获取对应的Drawable，然后进行绘制。具体见doRefreshProgress()方法
+     *
+     * 从这里来看，为什么RatingBar在设置了自定义的ProgressDrawable之后，所有星星都是挨着的？
+     * 因为对于ProgressBar来说，他就是根据progress连续绘制对应的drawable，所以肯定是挨着的。
+     */
     private Drawable mProgressDrawable;
+    /*
+     * mIndeterminateDrawable和mProgressDrawable中的一个
+     */
     private Drawable mCurrentDrawable;
     private ProgressTintInfo mProgressTintInfo;
 
@@ -1294,6 +1305,12 @@ public class ProgressBar extends View {
             }
 
             final int level = (int) (scale * MAX_LEVEL);
+
+            /*
+             * ========= ProgressBar控制进度条展示的重点 ==========
+             * 通过设置Drawable的level实现。所以对于progressBar来说，drawable必须继承自ClipDrawable，
+             * 不然进度条就不会根据进度值改变，一直会是填充整个进度框的情形。
+             */
             (progressDrawable != null ? progressDrawable : d).setLevel(level);
         } else {
             invalidate();
@@ -1729,6 +1746,11 @@ public class ProgressBar extends View {
 
         updateDrawableState();
 
+        /*
+         * 从这里的计算逻辑来看，progressBar的padding是可用的。（已经验证过可用，能够完成正常的
+         * padding功能）。但是ratingbar只有paddingTop和paddingBottom可用，paddingStart和paddingEnd
+         * 不可用。
+         */
         dw += mPaddingLeft + mPaddingRight;
         dh += mPaddingTop + mPaddingBottom;
 

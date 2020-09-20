@@ -46,6 +46,22 @@ import com.android.internal.R;
  * @attr ref android.R.styleable#RatingBar_stepSize
  * @attr ref android.R.styleable#RatingBar_isIndicator
  */
+/*
+ * RatingBar的逻辑说明：
+ * 1. 原生的实现也是通过在"五角星"的切图中增加空白区域来实现"星星"之间的间距的，并没有单独的计算，因为父类
+ * ProgressBar并没有计算逻辑，RatingBar继承ProgressBar并没有重写drawTrack方法。
+ * 2. 绘制的时候，ProgressDrawable、SecondaryProgressDrawable、BackgroudDrawable依次绘制，相互覆盖
+ * 之后得到最终的视觉效果。所以也就是说，在显示完整"星星"的位置，实际上是在同一个位置先绘制了backgroundDrawable，再
+ * 绘制secondaryProgressDrawable，最后绘制progressDrawable，绘制了三层，最后覆盖之后得到最终的视觉效果。
+ *
+ * 3. 半颗星的绘制逻辑：
+ * 比如rating=1.4，因为progress是四舍五入，所以完整的星星绘制一颗；然后在这里计算secondaryProgress的
+ * 时候，是向上取整，所以相当于绘制两个"半颗星"。最终UI的效果就是一颗完整的星，加半颗星。
+ *
+ * 4. 疑问：
+ * 1）minHeight和maxHeight的作用是什么？
+ * 2）ProgressBar是怎么绘制多个星星的？
+ */
 public class RatingBar extends AbsSeekBar {
 
     /**
@@ -266,6 +282,11 @@ public class RatingBar extends AbsSeekBar {
      * with the progress.
      *
      * @param progress The primary progress level.
+     */
+    /*
+     * 半颗星的绘制逻辑：
+     * 比如rating=1.4，因为progress是四舍五入，所以完整的星星绘制一颗；然后在这里计算secondaryProgress的
+     * 时候，是向上取整，所以相当于绘制两个"半颗星"。最终UI的效果就是一颗完整的星，加半颗星。
      */
     private void updateSecondaryProgress(int progress) {
         final float ratio = getProgressPerStar();
