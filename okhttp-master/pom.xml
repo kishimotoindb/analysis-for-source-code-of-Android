@@ -53,7 +53,7 @@
     <okio.version>1.13.0</okio.version>
 
     <!-- Test Dependencies -->
-    <junit.version>4.12</junit.version>
+    <junit.version>4.13.1</junit.version>
 
     <!-- platform test mode -->
     <okhttp.platform>platform</okhttp.platform>
