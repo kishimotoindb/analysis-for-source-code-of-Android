@@ -2830,9 +2830,9 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * hide the action bar.
      * <p>
      * <p>This approach to going fullscreen is best used over the window flag when
-     * it is a transient state -- that is, the application does this at certain
+     * it is a transient(这里的transient表示的是只有当前页面受影响，离开进入到别的页面，就不生效了) state -- that is, the application does this at certain
      * points in its user interaction where it wants to allow the user to focus
-     * on content, but not as a continuous state.  For situations where the application
+     * on content, but not as a continuous（设置之后，所有页面均生效） state.  For situations where the application
      * would like to simply stay full screen the entire time (such as a game that
      * wants to take over the screen), the
      * {@link android.view.WindowManager.LayoutParams#FLAG_FULLSCREEN window flag}
