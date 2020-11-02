@@ -53,6 +53,8 @@ public interface TextWatcher extends NoCopySpan {
      * 3) 删除：start-被删除字符（串）的第一个字符的位置；count-删除的字符数量；after=0，删除字符没有新字符，所以
      *  after为零
      *
+     * 这里的s不要直接保存成成员变量进行使用，内容会变化。如果需要提前保存before的字符串，应该mBefore=s.toString()
+     *
      */
     public void beforeTextChanged(CharSequence s/*输入前的字符串*/, int start,
                                   int count, int after);
@@ -91,6 +93,10 @@ public interface TextWatcher extends NoCopySpan {
      *
      * 这个回调可以直接修改s，并且修改结果会反应到TextView上。不需要调用textView.setText()，直接修改
      * Editable然后返回，修改后的结果就会展示到TextView上。
+     *
+     * 在afterTextChanged()中对Editable进行append、delete等操作，不会退出当前的afterTextChanged()，
+     * 直接在它内部就会调用beforeTextChanged、onTextChanged和afterTextChanged，是嵌套的，也即是Editable
+     * 内部直接触发了再一次的回调。
      */
     public void afterTextChanged(Editable s);
 }
