@@ -1697,6 +1697,7 @@ public class ProgressBar extends View {
      * Draws the progress bar track.
      */
     void drawTrack(Canvas canvas) {
+        // mProgressDrawable和mIndeterminateDrawable中的一个
         final Drawable d = mCurrentDrawable;
         if (d != null) {
             // Translate canvas so a indeterminate circular progress bar with padding
@@ -1707,6 +1708,10 @@ public class ProgressBar extends View {
                 canvas.translate(getWidth() - mPaddingRight, mPaddingTop);
                 canvas.scale(-1.0f, 1.0f);
             } else {
+                /*
+                 * ProgressBar在measure的时候，View的总宽度是将padding计算在内的，所以这里将canvas
+                 * 的坐标系移动到（paddingLeft，paddingTop）是没有问题的。
+                 */
                 canvas.translate(mPaddingLeft, mPaddingTop);
             }
 

@@ -189,6 +189,17 @@ public class BitmapFactory {
          * @see Bitmap#setDensity(int)
          * @see android.util.DisplayMetrics#densityDpi
          */
+        /*
+         * 当前图片被定义的屏幕密度，这个是人为定义的，定义成什么密度都可以，相当于一个人为定义的基准值，后续
+         * 缩放等操作，需要根据这个基准值来实现。这个值和Bitmap中的getDensity()得到的是一个值。从drawable-xhdpi
+         * 这些文件夹加载的bitmap，在加载时density就会被设置为与文件夹density一样的density。
+         *
+         * Options中为什么需要有这个变量？因为从图片加载时，BitmapFactory不知道这张图片被人为定义为了什么density，
+         * 可以通过这个字段告诉BitmapFactory，从而在decode过程中实现相关的处理（比如同时定义了inTargetDensity，
+         * 在decode的时候就会根据图片的density和当前需要的density(inTargetDensity)控制bitmap的缩放。
+         *
+         * 比如这张切图是3倍图，那么这张图片的inDensity就被人为的定义为480。
+         */
         public int inDensity;
 
         /**
@@ -210,6 +221,9 @@ public class BitmapFactory {
          * @see #inScreenDensity
          * @see #inScaled
          * @see android.util.DisplayMetrics#densityDpi
+         */
+        /*
+         * 期望得到的图片的密度，即最终decode后得到的bitmap的density
          */
         public int inTargetDensity;
         

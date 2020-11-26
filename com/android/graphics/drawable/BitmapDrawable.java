@@ -212,6 +212,10 @@ public class BitmapDrawable extends Drawable {
     private void computeBitmapSize() {
         final Bitmap bitmap = mBitmapState.mBitmap;
         if (bitmap != null) {
+            // 如果只有drawable-xxhdpi文件中有图片，xhdpi文件夹中没有，那么在xhdpi机型上使用图片时，
+            // 会从xxhdpi加载图片，这个图片的mDensity是480，这里的mTargetDensity是320，然后反馈给
+            // 外部的bitmap宽高是scale之后的。
+            //
             mBitmapWidth = bitmap.getScaledWidth(mTargetDensity);
             mBitmapHeight = bitmap.getScaledHeight(mTargetDensity);
         } else {

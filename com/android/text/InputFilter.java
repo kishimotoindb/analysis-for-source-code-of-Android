@@ -39,6 +39,13 @@ public interface InputFilter
      * copied into the filtered result (i.e. the non-null return value). 
      * {@link TextUtils#copySpansFrom} can be used for convenience.
      */
+    /*
+     * 按照EditText使用场景描述：
+     * source是用户输入
+     * dest是"当前屏幕上正在展示的内容"
+     *
+     * 注：禁止修改dest
+     */
     public CharSequence filter(CharSequence source, int start, int end,
                                Spanned dest, int dstart, int dend);
 
@@ -83,12 +90,21 @@ public interface InputFilter
 
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
                 int dstart, int dend) {
+            /*
+             * 以EditText输入为场景进行说明
+             * dest是当前控件上展示的内容，dend-dstart表示dest中将要被替换的部分的字符长度
+             * 所以keep就是当前可以插入的最大字符数量
+             */
             int keep = mMax - (dest.length() - (dend - dstart));
+            // 可插入的字符数为0，所以不允许新输入的内容上屏
             if (keep <= 0) {
                 return "";
             } else if (keep >= end - start) {
+                // 新输入的字符序列的字符数小于最大可插入字符数，原封不动的插入source
                 return null; // keep original
             } else {
+                // dest没有空间插入所有新输入的字符，从输入的字符序列中截取keep长度的字符串，然后插入到
+                // dest中。
                 keep += start;
                 if (Character.isHighSurrogate(source.charAt(keep - 1))) {
                     --keep;

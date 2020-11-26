@@ -27,6 +27,9 @@ import android.graphics.Paint;
  * but more graphical control is available if you instead pass
  * it to a {@link android.graphics.drawable.ShapeDrawable}.
  */
+/*
+ * Shape描述的是形状的Path，不包括颜色信息。颜色信息还是保存在drawable中。
+ */
 public abstract class Shape implements Cloneable {
     private float mWidth;
     private float mHeight;
