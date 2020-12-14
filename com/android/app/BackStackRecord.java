@@ -709,6 +709,8 @@ final class BackStackRecord extends FragmentTransaction implements
         // key是fragment的containerId，因为containerId的大小是系统编译时确定的，所以这个数组可以认为是无序的？
         SparseArray<Fragment> lastInFragments = new SparseArray<Fragment>();
         calculateFragments(firstOutFragments, lastInFragments);
+        // firstOutFragments和lastInFragments中已经包括了PendingActions的所有Op保存的Fragment
+        // 注意，这里是transition，不是transaction，只是动画的逻辑，不涉及到transaction这个主流程
         beginTransition(firstOutFragments, lastInFragments, false);
 
         Op op = mHead;
@@ -720,6 +722,9 @@ final class BackStackRecord extends FragmentTransaction implements
                     mManager.addFragment(f, false);
                 }
                 break;
+                /*
+                 * replace是先removeFragment，后addFragment的过程。add是直接addFragment的过程。
+                 */
                 case OP_REPLACE: {
                     Fragment f = op.fragment;
                     int containerId = f.mContainerId;
@@ -826,6 +831,10 @@ final class BackStackRecord extends FragmentTransaction implements
     }
 
     /**
+     * Fragment transition 动画机制的一部分，记录哪些Fragment是enter动画，哪些Fragment是exit动画。
+     * 被添加到集合中的Fragment包括当前所有PendingActions中的Fragment，以及将要从Activity移除的已有
+     * 的Fragment。
+     *
      * Finds the first removed fragment and last added fragments when going forward.
      * If none of the fragments have transitions, then both lists will be empty.
      *
@@ -850,6 +859,16 @@ final class BackStackRecord extends FragmentTransaction implements
                     if (mManager.mAdded != null) {
                         for (int i = 0; i < mManager.mAdded.size(); i++) {
                             Fragment old = mManager.mAdded.get(i);
+                            /*
+                             * f==null,表示要执行replace操作的fragment已经在FragmentManager中了，
+                             * 对其执行replace操作，相当于把在它上面的所有Fragment都移出。
+                             * 所以也就是说，对一个已经存在于Activity中的Fragment执行replace操作，
+                             * 会将它之后添加到Activity的所有Fragment都移除。
+                             *
+                             * 正常如果一个Fragment是首次通过replace添加到Activity中，与它使用同一个
+                             * container的Fragment，会被移除，所以需要加入到firstOut集合。
+                             *
+                             */
                             if (f == null || old.mContainerId == f.mContainerId) {
                                 if (old == f) {
                                     f = null;
