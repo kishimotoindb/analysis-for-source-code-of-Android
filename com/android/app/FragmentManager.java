@@ -1179,6 +1179,9 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
         }
     }
 
+    /*
+     * 在addFragment的时候，会将Fragment添加到mActive列表中
+     */
     void makeActive(Fragment f) {
         if (f.mIndex >= 0) {
             return;
@@ -1211,7 +1214,11 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
         mHost.inactivateFragment(f.mWho);
         f.initState();
     }
-    
+
+    /*
+     * executePendingActions()的时候，如果没有要求立即状态同步，Fragment也仅仅是被添加到了
+     * mActive和mAdded列表中，并没有回调生命周期。
+     */
     public void addFragment(Fragment fragment, boolean moveToStateNow) {
         if (mAdded == null) {
             mAdded = new ArrayList<Fragment>();
@@ -1219,6 +1226,8 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
         if (DEBUG) Log.v(TAG, "add: " + fragment);
         makeActive(fragment);
         if (!fragment.mDetached) {
+            // 同一个Fragment被多次添加到同一个Manager中，是不允许的。但是从这里来看，可以同时添加到多个
+            // Manager中。
             if (mAdded.contains(fragment)) {
                 throw new IllegalStateException("Fragment already added: " + fragment);
             }

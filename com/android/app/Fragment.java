@@ -644,6 +644,7 @@ public class Fragment implements ComponentCallbacks2, OnCreateContextMenuListene
         }
     }
 
+    // index是Fragment在FragmentManager的mActive列表中的索引，不是mAdd列表中的索引
     final void setIndex(int index, Fragment parent) {
         mIndex = index;
         if (parent != null) {

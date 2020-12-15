@@ -221,6 +221,8 @@ final class BackStackRecord extends FragmentTransaction implements
         int exitAnim;
         int popEnterAnim;
         int popExitAnim;
+        // replace操作的时候使用。保存与当前Op.fragment相同containerId的已添加到Manager.mAdded列表中的
+        // Fragment
         ArrayList<Fragment> removed;
     }
 
@@ -713,9 +715,18 @@ final class BackStackRecord extends FragmentTransaction implements
         // 注意，这里是transition，不是transaction，只是动画的逻辑，不涉及到transaction这个主流程
         beginTransition(firstOutFragments, lastInFragments, false);
 
+        /*
+         * 对于FragmentManager来说，Fragment没有replace，只有向mAdded中添加或者从mAdded中移除。
+         * 先add的Fragment在mAdded列表的底部（越先add，在mAdded中的index越小）。
+         */
         Op op = mHead;
         while (op != null) {
             switch (op.cmd) {
+                /*
+                 * 1.在相同的Container中add不同的Fragment，从这里来看，Fragment都会被add到mAdded列表中。
+                 *   但是View会不会被同时add到ContainerView中，需要确认。另外，如果container不是FrameLayout，
+                 *   而是LinearLayout，会不会有问题？
+                 */
                 case OP_ADD: {
                     Fragment f = op.fragment;
                     f.mNextAnim = op.enterAnim;
@@ -728,7 +739,13 @@ final class BackStackRecord extends FragmentTransaction implements
                 case OP_REPLACE: {
                     Fragment f = op.fragment;
                     int containerId = f.mContainerId;
+                    /*
+                     * 1.如果当前没有Fragment被add过，replace相当于add
+                     */
                     if (mManager.mAdded != null) {
+                        /*
+                         * 遍历mAdded列表，查找containerId相同的Fragment，以及自己是否已经add了
+                         */
                         for (int i = 0; i < mManager.mAdded.size(); i++) {
                             Fragment old = mManager.mAdded.get(i);
                             if (FragmentManagerImpl.DEBUG) {
@@ -737,8 +754,13 @@ final class BackStackRecord extends FragmentTransaction implements
                             }
                             if (old.mContainerId == containerId) {
                                 if (old == f) {
+                                    // 如果Fragment已经在Manager中了，那么这个replace操作就不会再执行后面
+                                    // 的addFragment操作。
                                     op.fragment = f = null;
                                 } else {
+                                    // 所有和replace操作的这个fragment使用相同container的Fragment，都
+                                    // 会被remove掉。
+                                    // 但是没有像Activity的BackStack那种把自己上面的Activity都清掉的操作。
                                     if (op.removed == null) {
                                         op.removed = new ArrayList<Fragment>();
                                     }
