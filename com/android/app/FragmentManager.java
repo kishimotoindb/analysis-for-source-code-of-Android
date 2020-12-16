@@ -1242,9 +1242,12 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
             }
         }
     }
-    
+
     public void removeFragment(Fragment fragment, int transition, int transitionStyle) {
         if (DEBUG) Log.v(TAG, "remove: " + fragment + " nesting=" + fragment.mBackStackNesting);
+        /*
+         * Fragment回退的是add到backStack的Transaction，如果没有add，那么在执行Transaction的时候就不会记录
+         */
         final boolean inactive = !fragment.isInBackStack();
         if (!fragment.mDetached || inactive) {
             if (false) {
@@ -1449,6 +1452,12 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
                 mPendingActions = new ArrayList<Runnable>();
             }
             mPendingActions.add(action);
+            // 如果是正常在Activity的onCreate、onStart、onResume回调中commit fragment transaction，
+            // 其实这个runnable是不会被执行的。因为在onStart、onResume的时候，Activity都会主动触发
+            // executePendingActions()。只有在onPause、onStop、onDestroy等回调中commit，才需要通过这个
+            // Runnable触发executePendingActions()。
+            //
+            // Activity只有在onStart和onResume时会主动触发executePendingActions()（不是生命周期回调内）
             if (mPendingActions.size() == 1) {
                 mHost.getHandler().removeCallbacks(mExecCommit);
                 mHost.getHandler().post(mExecCommit);
@@ -1955,7 +1964,11 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
     public void noteStateNotSaved() {
         mStateSaved = false;
     }
-    
+
+    /*
+     * 从这些方法可以看出，Fragment的生命周期和Activity的生命周期是同步的，与这个Activity中其他Fragment
+     * 的出现消失没有关系（待确认，因为replace的时候好像有关系）
+     */
     public void dispatchCreate() {
         mStateSaved = false;
         moveToState(Fragment.CREATED, false);

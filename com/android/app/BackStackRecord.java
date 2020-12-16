@@ -630,6 +630,7 @@ final class BackStackRecord extends FragmentTransaction implements
         return this;
     }
 
+    // 这里主要是给addBackStack的Transaction中的所有Fragment进行标记，表示这个fragment是被addBackStack的
     void bumpBackStackNesting(int amt) {
         if (!mAddToBackStack) {
             return;
@@ -761,12 +762,20 @@ final class BackStackRecord extends FragmentTransaction implements
                                     // 所有和replace操作的这个fragment使用相同container的Fragment，都
                                     // 会被remove掉。
                                     // 但是没有像Activity的BackStack那种把自己上面的Activity都清掉的操作。
+                                    /*
+                                     * 这里为什么需要记录被remove掉的fragment，因为如果是addBackStack，
+                                     * 那么后面需要把remove掉的fragment恢复回来。
+                                     */
                                     if (op.removed == null) {
                                         op.removed = new ArrayList<Fragment>();
                                     }
                                     op.removed.add(old);
                                     old.mNextAnim = op.exitAnim;
                                     if (mAddToBackStack) {
+                                        /*
+                                         * 系统通过Fragment的mBackStackNesting>0来判断其是不是在backStack里。
+                                         * 只有被remove的fragment才会设置这个值。
+                                         */
                                         old.mBackStackNesting += 1;
                                         if (FragmentManagerImpl.DEBUG) {
                                             Log.v(TAG, "Bump nesting of "
