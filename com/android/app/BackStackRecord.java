@@ -662,6 +662,7 @@ final class BackStackRecord extends FragmentTransaction implements
         }
     }
 
+    // commit返回的int值，是这个FragmentTransaction在BackStack中的索引
     public int commit() {
         return commitInternal(false);
     }
@@ -688,8 +689,9 @@ final class BackStackRecord extends FragmentTransaction implements
         } else {
             mIndex = -1;
         }
-        // 虽然这里是插入队列，并且post到handler的队列中，但是并不是说一定要等下一个主线程事件才能处理。
-        // Activity在onStart()的时候会直接调用FragmentManager.execPendingActions()
+        // 虽然这里是插入队列，并且post到handler的队列中，但是并不是说一定要等下一个主线程事件才能被处理，
+        // 在这之前，如果Activity执行了onStart()，此时会直接调用FragmentManager.execPendingActions()
+        // 执行pendingActions
         mManager.enqueueAction(this, allowStateLoss);
         return mIndex;
     }

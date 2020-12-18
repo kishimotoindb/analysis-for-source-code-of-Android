@@ -1423,6 +1423,9 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
     }
     
     private void checkStateLoss() {
+        // Activity的onSaveInstanceState()是在onPause()和onStop()之间执行的，所以要是在onStop()及之后
+        // 调用BackStackRecord（FragmentTransaction）的commit方法，不允许状态丢失的话，就会抛异常
+        // allowStateLoss还有其他的限制么？
         if (mStateSaved) {
             throw new IllegalStateException(
                     "Can not perform this action after onSaveInstanceState");
@@ -1441,6 +1444,7 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
      * @throws IllegalStateException if the activity has been destroyed
      */
     public void enqueueAction(Runnable action, boolean allowStateLoss) {
+        // 这有这里对allowStateLoss做了处理
         if (!allowStateLoss) {
             checkStateLoss();
         }
@@ -1475,7 +1479,6 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
                 if (DEBUG) Log.v(TAG, "Setting back stack index " + index + " to " + bse);
                 mBackStackIndices.add(bse);
                 return index;
-
             } else {
                 int index = mAvailBackStackIndices.remove(mAvailBackStackIndices.size()-1);
                 if (DEBUG) Log.v(TAG, "Adding back stack index " + index + " with " + bse);
