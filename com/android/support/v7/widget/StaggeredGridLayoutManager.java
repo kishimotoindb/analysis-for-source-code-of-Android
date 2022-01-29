@@ -1370,7 +1370,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager {
             affectedRangeEnd = positionStart + itemCountOrToPosition;
         }
 
-        mLazySpanLookup.invalidateAfter(affectedRangeStart);
+        mLazySpanLookup.processAdapterUpdatesAndSetAnimationFlagsinvalidateAfter(affectedRangeStart);
         switch (cmd) {
             case AdapterHelper.UpdateOp.ADD:
                 mLazySpanLookup.offsetForAddition(positionStart, itemCountOrToPosition);
