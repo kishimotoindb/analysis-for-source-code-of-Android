@@ -20,6 +20,10 @@ package android.text;
  * InputFilters can be attached to {@link Editable}s to constrain the
  * changes that can be made to them.
  */
+/*
+ * InputFilter的职责更多是处理新输入的字符，而不改变已经输入的内容。TextWatcher
+ * 适用于根据新输入字符处理全部内容（已输入和新输入）的场景。
+ */
 public interface InputFilter
 {
     /**
