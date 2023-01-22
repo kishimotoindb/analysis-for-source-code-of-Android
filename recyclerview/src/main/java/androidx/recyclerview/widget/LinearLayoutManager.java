@@ -64,8 +64,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     /**
      * Current orientation. Either {@link #HORIZONTAL} or {@link #VERTICAL}
      */
-    @RecyclerView.Orientation
-    int mOrientation = RecyclerView.DEFAULT_ORIENTATION;
+    @androidx.recyclerview.widget.RecyclerView.Orientation
+    int mOrientation = androidx.recyclerview.widget.RecyclerView.DEFAULT_ORIENTATION;
 
     /**
      * Helper class that keeps temporary layout state.
@@ -156,7 +156,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @param context Current context, will be used to access resources.
      */
     public LinearLayoutManager(Context context) {
-        this(context, RecyclerView.DEFAULT_ORIENTATION, false);
+        this(context, androidx.recyclerview.widget.RecyclerView.DEFAULT_ORIENTATION, false);
     }
 
     /**
@@ -165,7 +165,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      *                      #VERTICAL}.
      * @param reverseLayout When set to true, layouts from end to start.
      */
-    public LinearLayoutManager(Context context, @RecyclerView.Orientation int orientation,
+    public LinearLayoutManager(Context context, @androidx.recyclerview.widget.RecyclerView.Orientation int orientation,
             boolean reverseLayout) {
         setOrientation(orientation);
         setReverseLayout(reverseLayout);
@@ -230,7 +230,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     }
 
     @Override
-    public void onDetachedFromWindow(RecyclerView view, RecyclerView.Recycler recycler) {
+    public void onDetachedFromWindow(androidx.recyclerview.widget.RecyclerView view, RecyclerView.Recycler recycler) {
         super.onDetachedFromWindow(view, recycler);
         if (mRecycleChildrenOnDetach) {
             removeAndRecycleAllViews(recycler);
@@ -325,7 +325,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @return Current orientation,  either {@link #HORIZONTAL} or {@link #VERTICAL}
      * @see #setOrientation(int)
      */
-    @RecyclerView.Orientation
+    @androidx.recyclerview.widget.RecyclerView.Orientation
     public int getOrientation() {
         return mOrientation;
     }
@@ -336,7 +336,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      *
      * @param orientation {@link #HORIZONTAL} or {@link #VERTICAL}
      */
-    public void setOrientation(@RecyclerView.Orientation int orientation) {
+    public void setOrientation(@androidx.recyclerview.widget.RecyclerView.Orientation int orientation) {
         if (orientation != HORIZONTAL && orientation != VERTICAL) {
             throw new IllegalArgumentException("invalid orientation:" + orientation);
         }
@@ -627,6 +627,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         }
 
         onAnchorReady(recycler, state, mAnchorInfo, firstLayoutDirection);
+        // 在layout之前，detach所有屏幕中的view
         detachAndScrapAttachedViews(recycler);
         mLayoutState.mInfinite = resolveIsInfinite();
         mLayoutState.mIsPreLayout = state.isPreLayout();
@@ -1163,7 +1164,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             return 0;
         }
         ensureLayoutState();
-        return ScrollbarHelper.computeScrollOffset(state, mOrientationHelper,
+        return androidx.recyclerview.widget.ScrollbarHelper.computeScrollOffset(state, mOrientationHelper,
                 findFirstVisibleChildClosestToStart(!mSmoothScrollbarEnabled, true),
                 findFirstVisibleChildClosestToEnd(!mSmoothScrollbarEnabled, true),
                 this, mSmoothScrollbarEnabled, mShouldReverseLayout);
@@ -1174,7 +1175,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             return 0;
         }
         ensureLayoutState();
-        return ScrollbarHelper.computeScrollExtent(state, mOrientationHelper,
+        return androidx.recyclerview.widget.ScrollbarHelper.computeScrollExtent(state, mOrientationHelper,
                 findFirstVisibleChildClosestToStart(!mSmoothScrollbarEnabled, true),
                 findFirstVisibleChildClosestToEnd(!mSmoothScrollbarEnabled, true),
                 this,  mSmoothScrollbarEnabled);
@@ -1185,7 +1186,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             return 0;
         }
         ensureLayoutState();
-        return ScrollbarHelper.computeScrollRange(state, mOrientationHelper,
+        return androidx.recyclerview.widget.ScrollbarHelper.computeScrollRange(state, mOrientationHelper,
                 findFirstVisibleChildClosestToStart(!mSmoothScrollbarEnabled, true),
                 findFirstVisibleChildClosestToEnd(!mSmoothScrollbarEnabled, true),
                 this, mSmoothScrollbarEnabled);
@@ -1581,11 +1582,11 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         LayoutChunkResult layoutChunkResult = mLayoutChunkResult;
         while ((layoutState.mInfinite || remainingSpace > 0) && layoutState.hasMore(state)) {
             layoutChunkResult.resetInternal();
-            if (RecyclerView.VERBOSE_TRACING) {
+            if (androidx.recyclerview.widget.RecyclerView.VERBOSE_TRACING) {
                 TraceCompat.beginSection("LLM LayoutChunk");
             }
             layoutChunk(recycler, state, layoutState, layoutChunkResult);
-            if (RecyclerView.VERBOSE_TRACING) {
+            if (androidx.recyclerview.widget.RecyclerView.VERBOSE_TRACING) {
                 TraceCompat.endSection();
             }
             if (layoutChunkResult.mFinished) {
@@ -1988,18 +1989,18 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     View findOneVisibleChild(int fromIndex, int toIndex, boolean completelyVisible,
             boolean acceptPartiallyVisible) {
         ensureLayoutState();
-        @ViewBoundsCheck.ViewBounds int preferredBoundsFlag = 0;
-        @ViewBoundsCheck.ViewBounds int acceptableBoundsFlag = 0;
+        @androidx.recyclerview.widget.ViewBoundsCheck.ViewBounds int preferredBoundsFlag = 0;
+        @androidx.recyclerview.widget.ViewBoundsCheck.ViewBounds int acceptableBoundsFlag = 0;
         if (completelyVisible) {
-            preferredBoundsFlag = (ViewBoundsCheck.FLAG_CVS_GT_PVS | ViewBoundsCheck.FLAG_CVS_EQ_PVS
-                    | ViewBoundsCheck.FLAG_CVE_LT_PVE | ViewBoundsCheck.FLAG_CVE_EQ_PVE);
+            preferredBoundsFlag = (androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_GT_PVS | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_EQ_PVS
+                    | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_LT_PVE | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_EQ_PVE);
         } else {
-            preferredBoundsFlag = (ViewBoundsCheck.FLAG_CVS_LT_PVE
-                    | ViewBoundsCheck.FLAG_CVE_GT_PVS);
+            preferredBoundsFlag = (androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_LT_PVE
+                    | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_GT_PVS);
         }
         if (acceptPartiallyVisible) {
-            acceptableBoundsFlag = (ViewBoundsCheck.FLAG_CVS_LT_PVE
-                    | ViewBoundsCheck.FLAG_CVE_GT_PVS);
+            acceptableBoundsFlag = (androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_LT_PVE
+                    | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_GT_PVS);
         }
         return (mOrientation == HORIZONTAL) ? mHorizontalBoundCheck
                 .findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag,
@@ -2014,19 +2015,19 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (next == 0) {
             return getChildAt(fromIndex);
         }
-        @ViewBoundsCheck.ViewBounds int preferredBoundsFlag = 0;
-        @ViewBoundsCheck.ViewBounds int acceptableBoundsFlag = 0;
+        @androidx.recyclerview.widget.ViewBoundsCheck.ViewBounds int preferredBoundsFlag = 0;
+        @androidx.recyclerview.widget.ViewBoundsCheck.ViewBounds int acceptableBoundsFlag = 0;
         if (mOrientationHelper.getDecoratedStart(getChildAt(fromIndex))
                 < mOrientationHelper.getStartAfterPadding()) {
-            preferredBoundsFlag = (ViewBoundsCheck.FLAG_CVS_LT_PVS | ViewBoundsCheck.FLAG_CVE_LT_PVE
-                    | ViewBoundsCheck.FLAG_CVE_GT_PVS);
-            acceptableBoundsFlag = (ViewBoundsCheck.FLAG_CVS_LT_PVS
-                    | ViewBoundsCheck.FLAG_CVE_LT_PVE);
+            preferredBoundsFlag = (androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_LT_PVS | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_LT_PVE
+                    | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_GT_PVS);
+            acceptableBoundsFlag = (androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_LT_PVS
+                    | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_LT_PVE);
         } else {
-            preferredBoundsFlag = (ViewBoundsCheck.FLAG_CVE_GT_PVE | ViewBoundsCheck.FLAG_CVS_GT_PVS
-                    | ViewBoundsCheck.FLAG_CVS_LT_PVE);
-            acceptableBoundsFlag = (ViewBoundsCheck.FLAG_CVE_GT_PVE
-                    | ViewBoundsCheck.FLAG_CVS_GT_PVS);
+            preferredBoundsFlag = (androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_GT_PVE | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_GT_PVS
+                    | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_LT_PVE);
+            acceptableBoundsFlag = (androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_GT_PVE
+                    | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_GT_PVS);
         }
         return (mOrientation == HORIZONTAL) ? mHorizontalBoundCheck
                 .findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag,

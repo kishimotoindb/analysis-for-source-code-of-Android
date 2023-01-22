@@ -1140,6 +1140,7 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
             throw new IllegalStateException("No activity");
         }
 
+        // 注意，这里判断的是FragmentManager的状态新状态是否一致。不是具体某个Fragment的状态。
         if (!always && mCurState == newState) {
             return;
         }

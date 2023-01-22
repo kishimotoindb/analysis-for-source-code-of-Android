@@ -376,12 +376,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     /**
      * Handles abstraction between LayoutManager children and RecyclerView children
      */
-    ChildHelper mChildHelper;
+    androidx.recyclerview.widget.ChildHelper mChildHelper;
 
     /**
      * Keeps data about views to be used for animations
      */
-    final ViewInfoStore mViewInfoStore = new ViewInfoStore();
+    final androidx.recyclerview.widget.ViewInfoStore mViewInfoStore = new androidx.recyclerview.widget.ViewInfoStore();
 
     /**
      * Prior to L, there is no way to query this variable which is why we override the setter and
@@ -548,9 +548,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     final ViewFlinger mViewFlinger = new ViewFlinger();
 
-    GapWorker mGapWorker;
-    GapWorker.LayoutPrefetchRegistryImpl mPrefetchRegistry =
-            ALLOW_THREAD_GAP_WORK ? new GapWorker.LayoutPrefetchRegistryImpl() : null;
+    androidx.recyclerview.widget.GapWorker mGapWorker;
+    androidx.recyclerview.widget.GapWorker.LayoutPrefetchRegistryImpl mPrefetchRegistry =
+            ALLOW_THREAD_GAP_WORK ? new androidx.recyclerview.widget.GapWorker.LayoutPrefetchRegistryImpl() : null;
 
     final State mState = new State();
 
@@ -606,8 +606,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     /**
      * The callback to convert view info diffs into animations.
      */
-    private final ViewInfoStore.ProcessCallback mViewInfoProcessCallback =
-            new ViewInfoStore.ProcessCallback() {
+    private final androidx.recyclerview.widget.ViewInfoStore.ProcessCallback mViewInfoProcessCallback =
+            new androidx.recyclerview.widget.ViewInfoStore.ProcessCallback() {
                 @Override
                 public void processDisappeared(ViewHolder viewHolder, @NonNull ItemHolderInfo info,
                         @Nullable ItemHolderInfo postInfo) {
@@ -842,7 +842,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     private void initChildrenHelper() {
-        mChildHelper = new ChildHelper(new ChildHelper.Callback() {
+        mChildHelper = new androidx.recyclerview.widget.ChildHelper(new androidx.recyclerview.widget.ChildHelper.Callback() {
             @Override
             public int getChildCount() {
                 return RecyclerView.this.getChildCount();
@@ -965,7 +965,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     void initAdapterManager() {
-        mAdapterHelper = new AdapterHelper(new AdapterHelper.Callback() {
+        mAdapterHelper = new AdapterHelper(new androidx.recyclerview.widget.AdapterHelper.Callback() {
             @Override
             public ViewHolder findViewHolder(int position) {
                 final ViewHolder vh = findViewHolderForPosition(position, true);
@@ -1005,30 +1005,30 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             }
 
             @Override
-            public void onDispatchFirstPass(AdapterHelper.UpdateOp op) {
+            public void onDispatchFirstPass(androidx.recyclerview.widget.AdapterHelper.UpdateOp op) {
                 dispatchUpdate(op);
             }
 
-            void dispatchUpdate(AdapterHelper.UpdateOp op) {
+            void dispatchUpdate(androidx.recyclerview.widget.AdapterHelper.UpdateOp op) {
                 switch (op.cmd) {
-                    case AdapterHelper.UpdateOp.ADD:
+                    case androidx.recyclerview.widget.AdapterHelper.UpdateOp.ADD:
                         mLayout.onItemsAdded(RecyclerView.this, op.positionStart, op.itemCount);
                         break;
-                    case AdapterHelper.UpdateOp.REMOVE:
+                    case androidx.recyclerview.widget.AdapterHelper.UpdateOp.REMOVE:
                         mLayout.onItemsRemoved(RecyclerView.this, op.positionStart, op.itemCount);
                         break;
-                    case AdapterHelper.UpdateOp.UPDATE:
+                    case androidx.recyclerview.widget.AdapterHelper.UpdateOp.UPDATE:
                         mLayout.onItemsUpdated(RecyclerView.this, op.positionStart, op.itemCount,
                                 op.payload);
                         break;
-                    case AdapterHelper.UpdateOp.MOVE:
+                    case androidx.recyclerview.widget.AdapterHelper.UpdateOp.MOVE:
                         mLayout.onItemsMoved(RecyclerView.this, op.positionStart, op.itemCount, 1);
                         break;
                 }
             }
 
             @Override
-            public void onDispatchSecondPass(AdapterHelper.UpdateOp op) {
+            public void onDispatchSecondPass(androidx.recyclerview.widget.AdapterHelper.UpdateOp op) {
                 dispatchUpdate(op);
             }
 
@@ -1874,9 +1874,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         // if it is only an item change (no add-remove-notifyDataSetChanged) we can check if any
         // of the visible items is affected and if not, just ignore the change.
-        if (mAdapterHelper.hasAnyUpdateTypes(AdapterHelper.UpdateOp.UPDATE) && !mAdapterHelper
-                .hasAnyUpdateTypes(AdapterHelper.UpdateOp.ADD | AdapterHelper.UpdateOp.REMOVE
-                        | AdapterHelper.UpdateOp.MOVE)) {
+        if (mAdapterHelper.hasAnyUpdateTypes(androidx.recyclerview.widget.AdapterHelper.UpdateOp.UPDATE) && !mAdapterHelper
+                .hasAnyUpdateTypes(androidx.recyclerview.widget.AdapterHelper.UpdateOp.ADD | androidx.recyclerview.widget.AdapterHelper.UpdateOp.REMOVE
+                        | androidx.recyclerview.widget.AdapterHelper.UpdateOp.MOVE)) {
             TraceCompat.beginSection(TRACE_HANDLE_ADAPTER_UPDATES_TAG);
             startInterceptRequestLayout();
             onEnterLayoutOrScroll();
@@ -2968,9 +2968,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         if (ALLOW_THREAD_GAP_WORK) {
             // Register with gap worker
-            mGapWorker = GapWorker.sGapWorker.get();
+            mGapWorker = androidx.recyclerview.widget.GapWorker.sGapWorker.get();
             if (mGapWorker == null) {
-                mGapWorker = new GapWorker();
+                mGapWorker = new androidx.recyclerview.widget.GapWorker();
 
                 // break 60 fps assumption if data from display appears valid
                 // NOTE: we only do this query once, statically, because it's very expensive (> 1ms)
@@ -2983,7 +2983,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     }
                 }
                 mGapWorker.mFrameIntervalNs = (long) (1000000000 / refreshRate);
-                GapWorker.sGapWorker.set(mGapWorker);
+                androidx.recyclerview.widget.GapWorker.sGapWorker.set(mGapWorker);
             }
             mGapWorker.add(this);
         }
@@ -5536,6 +5536,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             assertNotInLayoutOrScroll(null);
             mState.mStructureChanged = true;
 
+            // notifyDataSetChanged，会将屏幕中所有ViewHolder都标记为updated & Invalid
             processDataSetCompletelyChanged(true);
             if (!mAdapterHelper.hasPendingUpdates()) {
                 requestLayout();
@@ -6307,10 +6308,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     return;
                 }
                 AccessibilityDelegateCompat itemDelegate = mAccessibilityDelegate.getItemDelegate();
-                if (itemDelegate instanceof RecyclerViewAccessibilityDelegate.ItemDelegate) {
+                if (itemDelegate instanceof androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate.ItemDelegate) {
                     // If there was already an a11y delegate set on the itemView, store it in the
                     // itemDelegate and then set the itemDelegate as the a11y delegate.
-                    ((RecyclerViewAccessibilityDelegate.ItemDelegate) itemDelegate)
+                    ((androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate.ItemDelegate) itemDelegate)
                             .saveOriginalDelegate(itemView);
                 }
                 ViewCompat.setAccessibilityDelegate(itemView, itemDelegate);
@@ -6526,9 +6527,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (mAccessibilityDelegate != null) {
                 AccessibilityDelegateCompat itemDelegate = mAccessibilityDelegate.getItemDelegate();
                 AccessibilityDelegateCompat originalDelegate = null;
-                if (itemDelegate instanceof RecyclerViewAccessibilityDelegate.ItemDelegate) {
+                if (itemDelegate instanceof androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate.ItemDelegate) {
                     originalDelegate =
-                            ((RecyclerViewAccessibilityDelegate.ItemDelegate) itemDelegate)
+                            ((androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate.ItemDelegate) itemDelegate)
                                     .getAndRemoveOriginalDelegateForItem(itemView);
                 }
                 // Set the a11y delegate back to whatever the original delegate was.
@@ -6557,7 +6558,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         /**
          * Mark an attached view as scrap.
          *
-         * <p>"Scrap" views are still attached to their parent RecyclerView but are eligible
+         * <p>"Scrap" views are still attached to their parent RecyclerView but are eligible(合格的)
          * for rebinding and reuse. Requests for a view for a given position may return a
          * reused or rebound scrap view instance.</p>
          *
@@ -7580,15 +7581,15 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
      *
      */
     public abstract static class LayoutManager {
-        ChildHelper mChildHelper;
+        androidx.recyclerview.widget.ChildHelper mChildHelper;
         RecyclerView mRecyclerView;
 
         /**
          * The callback used for retrieving information about a RecyclerView and its children in the
          * horizontal direction.
          */
-        private final ViewBoundsCheck.Callback mHorizontalBoundCheckCallback =
-                new ViewBoundsCheck.Callback() {
+        private final androidx.recyclerview.widget.ViewBoundsCheck.Callback mHorizontalBoundCheckCallback =
+                new androidx.recyclerview.widget.ViewBoundsCheck.Callback() {
                     @Override
                     public View getChildAt(int index) {
                         return LayoutManager.this.getChildAt(index);
@@ -7623,8 +7624,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * The callback used for retrieving information about a RecyclerView and its children in the
          * vertical direction.
          */
-        private final ViewBoundsCheck.Callback mVerticalBoundCheckCallback =
-                new ViewBoundsCheck.Callback() {
+        private final androidx.recyclerview.widget.ViewBoundsCheck.Callback mVerticalBoundCheckCallback =
+                new androidx.recyclerview.widget.ViewBoundsCheck.Callback() {
                     @Override
                     public View getChildAt(int index) {
                         return LayoutManager.this.getChildAt(index);
@@ -7663,8 +7664,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * {@link LinearLayoutManager#findOneVisibleChild(int, int, boolean, boolean)},
          * and {@link LinearLayoutManager#findOnePartiallyOrCompletelyInvisibleChild(int, int)}.
          */
-        ViewBoundsCheck mHorizontalBoundCheck = new ViewBoundsCheck(mHorizontalBoundCheckCallback);
-        ViewBoundsCheck mVerticalBoundCheck = new ViewBoundsCheck(mVerticalBoundCheckCallback);
+        androidx.recyclerview.widget.ViewBoundsCheck mHorizontalBoundCheck = new androidx.recyclerview.widget.ViewBoundsCheck(mHorizontalBoundCheckCallback);
+        androidx.recyclerview.widget.ViewBoundsCheck mVerticalBoundCheck = new androidx.recyclerview.widget.ViewBoundsCheck(mVerticalBoundCheckCallback);
 
         @Nullable
         SmoothScroller mSmoothScroller;
@@ -9941,8 +9942,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          */
         public boolean isViewPartiallyVisible(@NonNull View child, boolean completelyVisible,
                 boolean acceptEndPointInclusion) {
-            int boundsFlag = (ViewBoundsCheck.FLAG_CVS_GT_PVS | ViewBoundsCheck.FLAG_CVS_EQ_PVS
-                    | ViewBoundsCheck.FLAG_CVE_LT_PVE | ViewBoundsCheck.FLAG_CVE_EQ_PVE);
+            int boundsFlag = (androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_GT_PVS | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVS_EQ_PVS
+                    | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_LT_PVE | androidx.recyclerview.widget.ViewBoundsCheck.FLAG_CVE_EQ_PVE);
             boolean isViewFullyVisible = mHorizontalBoundCheck.isViewWithinBoundFlags(child,
                     boundsFlag)
                     && mVerticalBoundCheck.isViewWithinBoundFlags(child, boundsFlag);
@@ -11065,6 +11066,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         // If non-null, view is currently considered scrap and may be reused for other data by the
         // scrap container.
+        /*
+         * ViewHolder在放入mAttachScraps或者mChangedScraps中时，会将Recycler赋值给mScrapContainer，
+         * 表示这个view可能被复用。
+         * 所以这里也间接的表明，在recyclerView的onLayout执行结束后，mAttachScrap和mChangeScrap会被
+         * 清空
+         */
         Recycler mScrapContainer = null;
         // Keeps whether this ViewHolder lives in Change scrap or Attached scrap
         boolean mInChangeScrap = false;
@@ -11514,7 +11521,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
 
         Resources resources = getContext().getResources();
-        new FastScroller(this, verticalThumbDrawable, verticalTrackDrawable,
+        new androidx.recyclerview.widget.FastScroller(this, verticalThumbDrawable, verticalTrackDrawable,
                 horizontalThumbDrawable, horizontalTrackDrawable,
                 resources.getDimensionPixelSize(R.dimen.fastscroll_default_thickness),
                 resources.getDimensionPixelSize(R.dimen.fastscroll_minimum_range),
